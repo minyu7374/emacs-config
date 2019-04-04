@@ -30,6 +30,7 @@ This function should only modify configuration layer settings."
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
+   ;; dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
@@ -98,6 +99,9 @@ This function should only modify configuration layer settings."
      (chinese :packages youdao-dictionary pyim pangu-spacing
               chinese-enable-youdao-dict t)
      xclipboard
+
+     ;; (minyu :location local)
+     ;; minyu
      )
 
    ;; List of additional packages that will be installed without being
@@ -233,9 +237,9 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(sanityinc-tomorrow-blue
+   dotspacemacs-themes '(gotham
+                         sanityinc-tomorrow-blue
                          solarized-dark
-                         gotham
                          ;; spacemacs-dark
                          sanityinc-tomorrow-day
                          solarized-light)
@@ -522,9 +526,8 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (if (display-graphic-p)
-      ;; (load-theme 'solarized-dark t)
-      (load-theme 'sanityinc-tomorrow-blue t)
-    (load-theme 'gotham t))
+      ;; (load-theme 'solarized-dark t))
+      (load-theme 'sanityinc-tomorrow-blue t))
   ;; disable mouse
   (xterm-mouse-mode -1)
   (dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]
@@ -546,7 +549,7 @@ before packages are loaded."
   (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
 
   ;; (setq default-input-method "pyim")
-  (setq pyim-default-scheme 'rime-quanpin)
+  ;; (setq pyim-default-scheme 'rime)
   ;; (setq pyim-page-style 'one-line)
   (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
   (global-set-key (kbd "C-\\") 'toggle-input-method)

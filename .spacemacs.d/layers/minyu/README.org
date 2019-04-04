@@ -1,0 +1,28 @@
+#+TITLE: minyu layer
+
+# The maximum height of the logo should be 200 pixels.
+[[img/minyu.png]]
+
+# TOC links should be GitHub style anchors.
+* Table of Contents                                        :TOC_4_gh:noexport:
+- [[#description][Description]]
+  - [[#features][Features:]]
+- [[#install][Install]]
+- [[#key-bindings][Key bindings]]
+
+* Description
+This layer adds support for self use by minyu.
+
+** Features:
+  - liberime
+
+* Install
+To use this configuration layer, add it to your =~/.spacemacs=. You will need to
+add =minyu= to the existing =dotspacemacs-configuration-layers= list in this
+file.
+
+* Key bindings
+
+| Key Binding | Description |
+|-------------+-------------|
+|             |             |
