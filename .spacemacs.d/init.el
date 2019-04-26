@@ -30,7 +30,6 @@ This function should only modify configuration layer settings."
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
-   ;; dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
@@ -54,33 +53,35 @@ This function should only modify configuration layer settings."
      (javascript :variables javascript-disable-tern-port-files nil)
      lua
      sql
+     rust
      yaml
      json
      emacs-lisp
      (markdown :variables markdown-live-preview-engine 'eww)
-     ;; latex
-     ;; git
+     csv
+     pdf
+     latex
      (git :variables
-          ;; git-magit-status-fullscreen t
+          git-magit-status-fullscreen t
           magit-push-always-verify nil
           magit-save-repository-buffers 'dontask
           magit-revert-buffers 'silent
           magit-refs-show-commit-count 'all
           magit-revision-show-gravatars nil)
 
+     colors
+     tmux
      imenu-list
      syntax-checking
      ;; auto-completion
      (auto-completion :variables auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
                       :disabled-for org markdown)
-     (gtags :disabled-for emacs-lisp javascript latex shell-scripts)
+     gtags
+     ;; (gtags :disabled-for emacs-lisp javascript latex shell-scripts)
      (spell-checking :variables spell-checking-enable-by-default nil)
 
-     pdf
-     colors
-     tmux
-     spotify
+     ;; spotify
      search-engine
      helm
      better-defaults
@@ -91,16 +92,16 @@ This function should only modify configuration layer settings."
             shell-default-shell 'eshell
             shell-default-position 'bottom
             shell-default-height 30)
-     ;; (chinese :packages youdao-dictionary fcitx
      ;; (chinese :packages youdao-dictionary fcitx pangu-spacing
-     ;;          :variables chinese-default-input-method 'pinyin
+     ;;          :variables
+     ;;          chinese-default-input-method 'pinyin
      ;;          chinese-enable-fcitx t
      ;;          chinese-enable-youdao-dict t)
      (chinese :packages youdao-dictionary pyim pangu-spacing
+              :variables
               chinese-enable-youdao-dict t)
      xclipboard
 
-     ;; (minyu :location local)
      ;; minyu
      )
 
@@ -112,9 +113,8 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
-                                     autopair
-                                     ;; pangu-spacing
-                                     )
+                                      ;; exec-path-from-shell
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -240,7 +240,6 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-themes '(gotham
                          sanityinc-tomorrow-blue
                          solarized-dark
-                         ;; spacemacs-dark
                          sanityinc-tomorrow-day
                          solarized-light)
 
@@ -259,13 +258,11 @@ It should only modify the values of Spacemacs settings."
 
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   ;; dotspacemacs-default-font '("Source Code Pro"
    dotspacemacs-default-font '("Consolas"
                                :slant italic
                                :size 38
                                :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
+                               :width normal)
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -369,12 +366,12 @@ It should only modify the values of Spacemacs settings."
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
-   dotspacemacs-active-transparency 90
+   dotspacemacs-active-transparency 98
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
-   dotspacemacs-inactive-transparency 90
+   dotspacemacs-inactive-transparency 98
 
    ;; If non-nil show the titles of transient states. (default t)
    dotspacemacs-show-transient-state-title t
@@ -405,7 +402,15 @@ It should only modify the values of Spacemacs settings."
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers 'relative
+   ;; dotspacemacs-line-numbers `relative
+   dotspacemacs-line-numbers '(:relative t
+                                :disabled-for-modes dired-mode
+                                                    doc-view-mode
+                                                    markdown-mode
+                                                    org-mode
+                                                    pdf-view-mode
+                                                    text-mode
+                                :size-limit-kb 1000)
 
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
@@ -498,18 +503,6 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  ;; ;; copy from https://github.com/zilongshanren/spacemacs-private
-  ;; (setq-default configuration-layer-elpa-archives
-  ;;               '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
-  ;;                 ("org-cn"   . "http://elpa.emacs-china.org/org/")
-  ;;                 ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
-  ;; ;; https://github.com/syl20bnr/spacemacs/issues/2705
-  ;; ;; (setq tramp-mode nil)
-  ;; (setq tramp-ssh-controlmaster-options
-  ;;       "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
-  ;; ;; ss proxy. But it will cause anacond-mode failed.
-  ;; (setq socks-server '("Default server" "127.0.0.1" 1080 5))
-
   )
 
 (defun dotspacemacs/user-load ()
@@ -525,64 +518,14 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (if (display-graphic-p)
-      ;; (load-theme 'solarized-dark t))
-      (load-theme 'sanityinc-tomorrow-blue t))
-  ;; disable mouse
-  (xterm-mouse-mode -1)
-  (dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]
-               [mouse-2] [down-mouse-2] [drag-mouse-2] [double-mouse-2] [triple-mouse-2]
-               [mouse-3] [down-mouse-3] [drag-mouse-3] [double-mouse-3] [triple-mouse-3]
-               [mouse-4] [down-mouse-4] [drag-mouse-4] [double-mouse-4] [triple-mouse-4]
-               [mouse-5] [down-mouse-5] [drag-mouse-5] [double-mouse-5] [triple-mouse-5]))
-  (global-unset-key k))
+  (add-to-list 'load-path "~/.spacemacs.d/config-lisp")
 
-  ;; (global-hl-line-mode 0)
-  (spacemacs/enable-transparency)
+  (require 'theme)
+  (require 'hook)
+  ;; (require 'exec-shell-path)
+  (require 'auto-insert-header)
+  (require 'personal-preference)
 
-  ;; no need to type Chinese in minibuffer
-  ;; (fcitx-aggressive-setup)
-  ;; 设置等宽字体
-  ;; (spacemacs//set-monospaced-font "Consolas" "FZTieJinLiShu-S17S" 38 40)
-  ;; (spacemacs//set-monospaced-font "Consolas" "FZWeiBei-S03" 40 42)
-  (global-set-key (kbd "\C-xy") 'youdao-dictionary-search-at-point+)
-  (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
-
-  ;; (setq default-input-method "pyim")
-  ;; (setq pyim-default-scheme 'rime)
-  ;; (setq pyim-page-style 'one-line)
-  (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
-  (global-set-key (kbd "C-\\") 'toggle-input-method)
-  (global-set-key (kbd "M-i") 'pyim-convert-string-at-point) ;将光标处的拼音或者五笔字符串转换为中文
-
-  ;; tab
-  ;; (global-set-key (kbd "TAB") 'self-insert-command)
-  (setq-default default-tab-width 4)
-  (setq-default indent-tabs-mode nil)
-
-  ;; auto-pairs
-  ;; (autopair-global-mode t)
-
-  ;; add space between Chinese and English characters
-  ;; 全域展示(通过chinese layer安装时已经设置)
-  ;; (global-pangu-spacing-mode 1)
-  ;; 仅org-mode真实写入
-  (add-hook 'org-mode-hook
-            '(lambda ()
-               (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
-
-  ;; org-mode自动折行
-  ;; (add-hook 'org-mode-hook (lambda () (setq toggle-truncate-lines t)))
-  (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
-
-  ; insert current datetime
-  (defun insert-current-datetime ()
-    "Insert date at point."
-      (interactive)
-      ;; (insert (format-time-string "%Y-%m-%d %H:%M:%S")))
-      (insert (format-time-string "%Y-%m-%d %r")))
-  (global-set-key (kbd "\C-xt") 'insert-current-datetime)
-  (spacemacs/set-leader-keys "ot" 'insert-current-datetime)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -597,51 +540,17 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector
-   (vector "#003f8e" "#ff9da4" "#d1f1a9" "#ffeead" "#bbdaff" "#ebbbff" "#99ffff" "#ffffff"))
- '(beacon-color "#ff9da4")
- '(custom-safe-themes
-   (quote
-    ("725a0ac226fc6a7372074c8924c18394448bb011916c05a87518ad4563738668" default)))
- '(evil-want-Y-yank-to-eol nil)
- '(fci-rule-color "#003f8e")
- '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
- '(frame-background-mode (quote dark))
  '(package-selected-packages
    (quote
-    (pyim pyim-basedict pangu-spacing gotham-theme youdao-dictionary yasnippet-snippets yapfify yaml-mode xterm-color x86-lookup ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill treemacs-projectile treemacs-evil toc-org tagedit symon string-inflection sql-indent spotify spaceline-all-the-icons solarized-theme smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nasm-mode nameless mwim multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode link-hint json-navigator json-mode js2-refactor js-doc intero indent-guide importmagic impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-spotify-plus helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-hoogle helm-gtags helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate google-c-style golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy font-lock+ flyspell-correct-helm flycheck-rtags flycheck-pos-tip flycheck-haskell flx-ido fill-column-indicator fcitx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help engine-mode emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline disaster diminish define-word cython-mode counsel-projectile company-web company-tern company-statistics company-rtags company-lua company-go company-cabal company-c-headers company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-identifiers-mode cmm-mode clean-aindent-mode clang-format centered-cursor-mode autopair auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
+    (csv-mode youdao-dictionary names chinese-word-at-point yasnippet-snippets yapfify yaml-mode xterm-color x86-lookup ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill treemacs-projectile treemacs-evil toml-mode toc-org tagedit symon string-inflection sql-indent spaceline-all-the-icons solarized-theme smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyim pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator paradox pangu-spacing overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nasm-mode nameless mwim multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint json-navigator json-mode js2-refactor js-doc intero indent-guide importmagic import-js impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-hoogle helm-gtags helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gotham-theme google-translate google-c-style golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-haskell flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help engine-mode emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline disaster diminish define-word dante cython-mode counsel-projectile company-web company-tern company-statistics company-rtags company-lua company-go company-ghci company-ghc company-cabal company-c-headers company-auctex company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-identifiers-mode cmm-mode clean-aindent-mode clang-format centered-cursor-mode cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
  '(pyim-dicts
    (quote
-    ((:name "area" :file "/home/wmy/.pyim_dict/area.pyim")
-     (:name "big-dict" :file "/home/wmy/.pyim_dict/pyim-bigdict.pyim"))))
- '(vc-annotate-background nil)
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#ff9da4")
-     (40 . "#ffc58f")
-     (60 . "#ffeead")
-     (80 . "#d1f1a9")
-     (100 . "#99ffff")
-     (120 . "#bbdaff")
-     (140 . "#ebbbff")
-     (160 . "#ff9da4")
-     (180 . "#ffc58f")
-     (200 . "#ffeead")
-     (220 . "#d1f1a9")
-     (240 . "#99ffff")
-     (260 . "#bbdaff")
-     (280 . "#ebbbff")
-     (300 . "#ff9da4")
-     (320 . "#ffc58f")
-     (340 . "#ffeead")
-     (360 . "#d1f1a9"))))
- '(vc-annotate-very-old-color nil))
+    ((:name "bigdict" :file "/home/wmy/.pyim_dict/pyim-bigdict.pyim")
+     (:name "area" :file "/home/wmy/.pyim_dict/area.pyim")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background nil)))))
+ )
 )
