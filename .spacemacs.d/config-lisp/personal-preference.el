@@ -15,10 +15,6 @@
 ;; no need to type Chinese in minibuffer
 ;; (fcitx-aggressive-setup)
 
-;; 设置等宽字体
-;; (spacemacs//set-monospaced-font "Consolas" "FZTieJinLiShu-S17S" 38 40)
-;; (spacemacs//set-monospaced-font "Consolas" "FZWeiBei-S03" 40 42)
-
 ;; youdao
 (global-set-key (kbd "\C-xy") 'youdao-dictionary-search-at-point+)
 (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
