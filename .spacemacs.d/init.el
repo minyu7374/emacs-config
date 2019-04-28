@@ -47,17 +47,20 @@ This function should only modify configuration layer settings."
              python-enable-yapf-format-on-save t
              python-fill-column 80)
      asm
-     (haskell :variables haskell-enable-hindent t
+     (haskell :variables
+              haskell-enable-hindent t
               haskell-completion-backend 'intero)
      html
-     (javascript :variables javascript-disable-tern-port-files nil)
+     (javascript :variables
+                 javascript-disable-tern-port-files nil)
      lua
      sql
      rust
      yaml
      json
      emacs-lisp
-     (markdown :variables markdown-live-preview-engine 'eww)
+     (markdown :variables
+               markdown-live-preview-engine 'eww)
      csv
      pdf
      latex
@@ -72,14 +75,23 @@ This function should only modify configuration layer settings."
      colors
      tmux
      imenu-list
-     syntax-checking
+     ;; syntax-checking
+     (syntax-checking :variables
+                      syntax-checking-enable-tooltips nil)
      ;; auto-completion
-     (auto-completion :variables auto-completion-enable-sort-by-usage t
+     (auto-completion :variables
+                      auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
-                      :disabled-for org markdown)
-     gtags
-     ;; (gtags :disabled-for emacs-lisp javascript latex shell-scripts)
-     (spell-checking :variables spell-checking-enable-by-default nil)
+                      :disabled-for
+                      org
+                      markdown)
+     ;; gtags
+     (gtags :disabled-for
+            ;; emacs-lisp
+            ;; javascript
+            latex)
+     (spell-checking :variables
+                     spell-checking-enable-by-default nil)
 
      ;; spotify
      search-engine
@@ -87,18 +99,20 @@ This function should only modify configuration layer settings."
      better-defaults
      multiple-cursors
      treemacs
-     (org :variables org-want-todo-bindings t)
+     (org :variables
+          org-want-todo-bindings t)
      (shell :variables
             shell-default-shell 'eshell
             shell-default-position 'bottom
             shell-default-height 30)
-     ;; (chinese :packages youdao-dictionary fcitx pangu-spacing
-     ;;          :variables
-     ;;          chinese-default-input-method 'pinyin
-     ;;          chinese-enable-fcitx t
-     ;;          chinese-enable-youdao-dict t)
-     (chinese :packages youdao-dictionary pyim pangu-spacing
+     (chinese :packages
+              youdao-dictionary
+              ;; fcitx
+              pyim
+              pangu-spacing
               :variables
+              ;; chinese-default-input-method 'pinyin
+              ;; chinese-enable-fcitx t
               chinese-enable-youdao-dict t)
      xclipboard
 
@@ -520,7 +534,7 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (add-to-list 'load-path "~/.spacemacs.d/config-lisp")
 
-  (require 'graphic)
+  (require 'graphic-xterm)
   (require 'hook)
   (require 'exec-shell-path)
   (require 'auto-insert-header)
