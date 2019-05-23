@@ -65,7 +65,7 @@ This function should only modify configuration layer settings."
      pdf
      latex
      (git :variables
-          git-magit-status-fullscreen t
+          ;; git-magit-status-fullscreen t
           magit-push-always-verify nil
           magit-save-repository-buffers 'dontask
           magit-revert-buffers 'silent
@@ -418,13 +418,14 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    ;; dotspacemacs-line-numbers `relative
    dotspacemacs-line-numbers '(:relative t
-                                :disabled-for-modes dired-mode
-                                                    doc-view-mode
-                                                    markdown-mode
-                                                    org-mode
-                                                    pdf-view-mode
-                                                    text-mode
-                                :size-limit-kb 1000)
+                               :disabled-for-modes
+                               dired-mode
+                               doc-view-mode
+                               markdown-mode
+                               org-mode
+                               pdf-view-mode
+                               text-mode
+                               :size-limit-kb 1000)
 
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
@@ -540,6 +541,13 @@ before packages are loaded."
   (require 'auto-insert-header)
   (require 'personal-preference)
 
+  (autoload 'bash-completion-dynamic-complete
+    "bash-completion"
+    "BASH completion hook")
+  (add-hook 'shell-dynamic-complete-functions
+            'bash-completion-dynamic-complete)
+  ;; (require 'bash-completion)
+  ;; (bash-completion-setup)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
