@@ -32,4 +32,12 @@
 (global-set-key (kbd "\C-xt") 'insert-current-datetime)
 (spacemacs/set-leader-keys "ot" 'insert-current-datetime)
 
+;;;; program language
+;; Bind clang-format-region to C-M-tab in all modes:
+(global-set-key [C-M-tab] 'clang-format-region)
+
+;; js indent
+(setq-default js2-basic-offset 2)
+(setq-default js-indent-level 2)
+
 (provide 'personal-preference)

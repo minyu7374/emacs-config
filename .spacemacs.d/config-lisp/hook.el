@@ -10,4 +10,9 @@
 ;; flycheck shellcheck
 (add-hook 'sh-mode-hook 'flycheck-mode)
 
+;; Bind clang-format-buffer to tab on the c++-mode only:
+(add-hook 'c++-mode-hook 'clang-format-bindings)
+(defun clang-format-bindings ()
+  (define-key c++-mode-map [tab] 'clang-format-buffer))
+
 (provide 'hook)
