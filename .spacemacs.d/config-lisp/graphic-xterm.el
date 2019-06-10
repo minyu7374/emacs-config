@@ -7,6 +7,8 @@
       (spacemacs//set-monospaced-font "Consolas NF" "FZTieJinLiShu-S17S" 38 46)
       )
   (progn
+    ;; (load-theme 'gotham t)
+    ;; 设置等宽字体
     ;;;; disable mouse
     (xterm-mouse-mode -1)
     (dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]
