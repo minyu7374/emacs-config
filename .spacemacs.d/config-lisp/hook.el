@@ -7,8 +7,9 @@
 ;; (add-hook 'org-mode-hook (lambda () (setq toggle-truncate-lines t)))
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 
-;; flycheck shellcheck
+;; flycheck
 (add-hook 'sh-mode-hook 'flycheck-mode)
+;; (add-hook 'python-mode-hook 'flycheck-mode)
 
 ;; icons
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
