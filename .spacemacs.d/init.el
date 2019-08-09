@@ -557,8 +557,13 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  ;; (setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
-                                            ;; ("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
+  ;;(setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
+                                            ;;("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+  (setq configuration-layer-elpa-archives
+      '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
+        ("org-cn"   . "http://elpa.emacs-china.org/org/")
+        ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
   )
 
 (defun dotspacemacs/user-load ()
