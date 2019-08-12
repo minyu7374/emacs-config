@@ -50,4 +50,10 @@
   (treemacs-resize-icons 14)
   )
 
+;; lsp-ui
+(setq lsp-ui-sideline-enable nil)
+(setq lsp-ui-sideline-show-symbol nil)
+(setq lsp-ui-sideline-show-diagnostics nil)
+;; (setq lsp-ui-doc-position 'at-point)
+
 (provide 'personal-preference)

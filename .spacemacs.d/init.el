@@ -72,6 +72,7 @@ This function should only modify configuration layer settings."
      asm
      (haskell :variables
               ;; haskell-completion-backend 'intero
+              haskell-completion-backend 'lsp
               haskell-enable-hindent t
               haskell-enable-hindent-style "johan-tibell")
      octave
@@ -93,7 +94,8 @@ This function should only modify configuration layer settings."
      emacs-lisp
      (markdown :variables
                ;; markdown-live-preview-engine 'eww)
-               markdown-live-preview-engine 'vmd)
+               markdown-live-preview-engine 'vmd
+               markdown-mmm-auto-modes '("c" "c++" "go" "haskell" "python" "sh" ("elisp" "emacs-lisp")))
      ;; chrome
 
      csv
