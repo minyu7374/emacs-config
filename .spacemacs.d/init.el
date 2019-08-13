@@ -71,8 +71,9 @@ This function should only modify configuration layer settings."
              python-fill-column 80)
      asm
      (haskell :variables
-              ;; haskell-completion-backend 'intero
-              haskell-completion-backend 'lsp
+              ;; haskell-completion-backend 'company-ghci
+              haskell-completion-backend 'intero
+              ;; haskell-completion-backend 'lsp
               haskell-enable-hindent t
               haskell-enable-hindent-style "johan-tibell")
      octave
