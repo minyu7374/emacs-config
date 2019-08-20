@@ -62,8 +62,8 @@ This function should only modify configuration layer settings."
          ;; go-linter 'golangci-lint
          go-backend 'lsp)
      (python :variables
-             python-backend 'lsp
-             python-lsp-server 'pyls
+             python-backend 'anaconda
+             ;; python-lsp-server 'pyls
              ;; python-enable-yapf-format-on-save t
              python-formatter 'yapf
              python-format-on-save t
@@ -563,10 +563,10 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;;(setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
                                             ;;("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-  (setq configuration-layer-elpa-archives
-      '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
-        ("org-cn"   . "http://elpa.emacs-china.org/org/")
-        ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
+  ;; (setq configuration-layer-elpa-archives
+      ;; '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
+      ;;  ("org-cn"   . "http://elpa.emacs-china.org/org/")
+      ;;  ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
   )
 
 (defun dotspacemacs/user-load ()
