@@ -53,6 +53,8 @@ This function should only modify configuration layer settings."
             ;; c-c++-enable-rtags-completion nil
             c-c++-adopt-subprojects t
             c-c++-backend 'lsp-ccls
+            c-c++-lsp-sem-highlight-method 'font-lock
+            c-c++-lsp-cache-dir "./.cache"
             c-c++-lsp-sem-highlight-rainbow t)
      (go :variables
          go-tab-width 4
@@ -63,6 +65,7 @@ This function should only modify configuration layer settings."
          go-backend 'lsp)
      (python :variables
              python-backend 'anaconda
+             ;; python-backend 'lsp
              ;; python-lsp-server 'pyls
              ;; python-enable-yapf-format-on-save t
              python-formatter 'yapf
