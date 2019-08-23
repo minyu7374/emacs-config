@@ -39,7 +39,12 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     lsp
+     (lsp :variables
+          lsp-ui-sideline-enable nil
+          lsp-ui-sideline-show-symbol nil
+          lsp-ui-sideline-show-diagnostics nil
+          ;; lsp-ui-doc-position 'at-point
+      )
      dap
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
@@ -120,14 +125,16 @@ This function should only modify configuration layer settings."
      ;; syntax-checking
      (syntax-checking :variables
                       syntax-checking-enable-tooltips nil)
-     ;; auto-completion
      (auto-completion :variables
+                      company-idle-delay 0
+                      company-show-numbers t
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
+                      ;; spacemacs-default-company-backends '(company-tabnine company-lsp)
+                      ;; company-backends '(company-tabnine company-lsp)
                       :disabled-for
                       org
                       markdown)
-     ;; gtags
      (gtags :disabled-for
             ;; emacs-lisp
             ;; javascript
@@ -159,6 +166,7 @@ This function should only modify configuration layer settings."
      xclipboard
 
      ;; minyu
+     tabnine
      )
 
    ;; List of additional packages that will be installed without being
@@ -173,6 +181,7 @@ This function should only modify configuration layer settings."
                                       toml-mode
                                       ;; all-the-icons
                                       all-the-icons-dired
+                                      ;; company-tabnine
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -616,7 +625,7 @@ This function is called at the very end of Spacemacs initialization."
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (toml-mode exec-path-from-shell all-the-icons-dired youdao-dictionary yasnippet-snippets yapfify yaml-mode xterm-color x86-lookup ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unfill treemacs-projectile treemacs-evil toc-org tagedit symon symbol-overlay string-inflection stickyfunc-enhance srefactor sqlup-mode sql-indent spaceline-all-the-icons solarized-theme smeargle slim-mode shell-pop seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe restart-emacs rbenv rake rainbow-mode rainbow-identifiers rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools password-generator paradox pangu-spacing overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file nodejs-repl nginx-mode nasm-mode nameless mwim multi-term move-text mmm-mode minitest markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-treemacs lsp-python-ms lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint json-snatcher json-reformat json-navigator json-mode js2-refactor js-doc intero indent-guide importmagic impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-hoogle helm-gtags helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gotham-theme google-translate google-c-style golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy font-lock+ flyspell-correct-helm flycheck-rtags flycheck-pos-tip flycheck-package flycheck-haskell flx-ido fill-column-indicator fcitx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help engine-mode emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline disaster diminish devdocs define-word dap-mode dante cython-mode csv-mode cquery cpp-auto-include company-web company-tern company-statistics company-rtags company-reftex company-lua company-lsp company-go company-ghci company-ghc company-cabal company-c-headers company-auctex company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-identifiers-mode cmm-mode clean-aindent-mode clang-format chruby centered-cursor-mode ccls bundler blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap aggressive-indent ace-link ace-jump-helm-line ac-ispell))))
+    (company-tabnine unicode-escape toml-mode exec-path-from-shell all-the-icons-dired youdao-dictionary yasnippet-snippets yapfify yaml-mode xterm-color x86-lookup ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unfill treemacs-projectile treemacs-evil toc-org tagedit symon symbol-overlay string-inflection stickyfunc-enhance srefactor sqlup-mode sql-indent spaceline-all-the-icons solarized-theme smeargle slim-mode shell-pop seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe restart-emacs rbenv rake rainbow-mode rainbow-identifiers rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools password-generator paradox pangu-spacing overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file nodejs-repl nginx-mode nasm-mode nameless mwim multi-term move-text mmm-mode minitest markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-treemacs lsp-python-ms lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint json-snatcher json-reformat json-navigator json-mode js2-refactor js-doc intero indent-guide importmagic impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-hoogle helm-gtags helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets gotham-theme google-translate google-c-style golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy font-lock+ flyspell-correct-helm flycheck-rtags flycheck-pos-tip flycheck-package flycheck-haskell flx-ido fill-column-indicator fcitx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help engine-mode emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline disaster diminish devdocs define-word dap-mode dante cython-mode csv-mode cquery cpp-auto-include company-web company-tern company-statistics company-rtags company-reftex company-lua company-lsp company-go company-ghci company-ghc company-cabal company-c-headers company-auctex company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-identifiers-mode cmm-mode clean-aindent-mode clang-format chruby centered-cursor-mode ccls bundler blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap aggressive-indent ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
