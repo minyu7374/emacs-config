@@ -19,4 +19,13 @@
 (defun clang-format-bindings ()
   (define-key c++-mode-map [tab] 'clang-format-buffer))
 
+;; gtpl
+(defun go-web-template-mode ()
+  (when (and (stringp buffer-file-name)
+             (string-match "\\.gtpl\\'" buffer-file-name))
+    (web-mode)
+    (web-mode-set-engine 'go)))
+
+(add-hook 'find-file-hook 'go-web-template-mode)
+
 (provide 'hook)

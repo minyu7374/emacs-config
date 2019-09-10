@@ -59,7 +59,8 @@ This function should only modify configuration layer settings."
             c-c++-adopt-subprojects t
             c-c++-backend 'lsp-ccls
             c-c++-lsp-sem-highlight-method 'font-lock
-            c-c++-lsp-cache-dir "./.cache"
+            ;; c-c++-lsp-cache-dir "./.cache"
+            c-c++-lsp-cache-dir "~/.cache/lsp-c-c++"
             c-c++-lsp-sem-highlight-rainbow t)
      (go :variables
          go-tab-width 4
@@ -88,9 +89,17 @@ This function should only modify configuration layer settings."
 
      ;; web-beautify
      prettier
-     (html :variables web-fmt-tool 'prettier)
+     (html :variables
+           css-enable-lsp t
+           less-enable-lsp t
+           scss-enable-lsp t
+           web-fmt-tool 'prettier)
      (javascript :variables
-                 javascript-disable-tern-port-files nil)
+                 javascript-backend 'lsp
+                 javascript-lsp-linter nil
+                 ;; javascript-backend 'tern
+                 javascript-disable-tern-port-files nil
+                 javascript-import-tool 'import-js)
      lua
      (sql :variables
           sql-capitalize-keywords t
@@ -281,7 +290,9 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   ;; dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner '100
+   ;; dotspacemacs-startup-banner '001
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -622,6 +633,10 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (sanityinc-tomorrow-blue)))
+ '(custom-safe-themes
+   (quote
+    ("82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" default)))
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
