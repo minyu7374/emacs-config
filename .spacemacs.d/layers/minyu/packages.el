@@ -31,21 +31,23 @@
 
 (defconst minyu-packages
   '(
-      (liberime :location (recipe
+      (liberime-config :location (recipe
                         :fetcher gitlab
-                        :repo "liberime/liberime"))
+                        :repo "liberime/liberime"
+                        :files ("CMakeLists.txt" "Makefile" "src" "liberime-config.el")))
       )
   )
 
-(defun minyu/init-liberime ()
-  (use-package liberime
-    :load-path "~/.local/lib64/liberime/liberime.so"
+(defun minyu/init-liberime-config ()
+  (use-package liberime-config
+    ;; :load-path "~/Workspace/gitlab/liberime/build/liberime.so"
     :config
     (defun setup-liberime ()
       ;; incase hooks not running
       (interactive)
       (liberime-start "/usr/share/rime-data" "~/.emacs.d/rime/")
       (liberime-select-schema "luna_pinyin_simp")))
+      ;; (liberime-select-schema "terra_pinyin")))
 
   ;; work with pyim
   (add-hook 'pyim-load-hook 'setup-liberime)

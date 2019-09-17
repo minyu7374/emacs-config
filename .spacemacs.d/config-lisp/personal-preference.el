@@ -8,20 +8,56 @@
 (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
 
 ;; input
+(global-set-key (kbd "C-\\") 'toggle-input-method)
+
+;; fcitx
 ;; Make sure the following comes before `(fcitx-aggressive-setup)'
-(setq fcitx-active-evil-states '(insert emacs hybrid)) ; if you use hybrid mode
-(fcitx-aggressive-setup)
-(fcitx-prefix-keys-add "M-m") ; M-m is common in Spacemacs
-(fcitx-prefix-keys-turn-on)
-(fcitx-isearch-turn-on)
-(setq fcitx-use-dbus t) ; uncomment if you're using Linux
-;; (global-set-key (kbd "C-\\") 'toggle-input-method)
+;; (setq fcitx-active-evil-states '(insert emacs hybrid)) ; if you use hybrid mode
+;; (fcitx-aggressive-setup)
+;; (fcitx-prefix-keys-add "M-m") ; M-m is common in Spacemacs
+;; (fcitx-prefix-keys-turn-on)
+;; (fcitx-isearch-turn-on)
+;; (setq fcitx-use-dbus t) ; uncomment if you're using Linux
+
 ;; (setq default-input-method "chinese-py")
-;; (setq default-input-method "pyim")
-;; (setq pyim-default-scheme 'rime)
+
+;; pyim
+(setq default-input-method "pyim")
+(setq pyim-default-scheme 'rime)
+
+;; 默认双行，使用popup可能会有显示错位，而单行数字和文字连一起展示不方便确认选项
 ;; (setq pyim-page-style 'one-line)
-;; (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
-;; (global-set-key (kbd "M-i") 'pyim-convert-string-at-point) ;将光标处的拼音或者五笔字符串转换为中文
+;; (setq pyim-page-length 5)
+;; emacs26, 改用posframe, 速度很快并且菜单不会变形，不过需要用户手动安装 posframe 包。
+;; (setq pyim-page-tooltip 'popup)
+(setq pyim-page-tooltip 'posframe)
+
+;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+;; 中英文动态切换规则是：
+;; 1. 光标只有在注释里面时，才可以输入中文。
+;; 2. 光标前是汉字字符时，才能输入中文。
+;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+(setq-default pyim-english-input-switch-functions
+              '(pyim-probe-dynamic-english
+                pyim-probe-isearch-mode
+                pyim-probe-program-mode
+                pyim-probe-org-structure-template))
+
+(setq-default pyim-punctuation-half-width-functions
+              '(pyim-probe-punctuation-line-beginning
+                pyim-probe-punctuation-after-punctuation))
+
+;; 开启拼音搜索功能
+(pyim-isearch-mode 1)
+
+;; 标点符号
+;; (setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
+;; (setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
+(setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
+
+;; 将光标处的拼音或者五笔字符串转换为中文
+(global-set-key (kbd "M-i") 'pyim-convert-string-at-point)
+(global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
 
 ;;;; tab
 ;; (global-set-key (kbd "TAB") 'self-insert-command)
