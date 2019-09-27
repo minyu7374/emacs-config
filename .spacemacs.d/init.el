@@ -60,7 +60,7 @@ This function should only modify configuration layer settings."
             c-c++-backend 'lsp-ccls
             c-c++-lsp-sem-highlight-method 'font-lock
             ;; c-c++-lsp-cache-dir "./.cache"
-            c-c++-lsp-cache-dir "~/.cache/lsp-c-c++"
+            c-c++-lsp-cache-dir ".cache/lsp-c-c++"
             c-c++-lsp-sem-highlight-rainbow t)
      (go :variables
          go-tab-width 4
@@ -111,7 +111,7 @@ This function should only modify configuration layer settings."
      json
      emacs-lisp
      (markdown :variables
-               ;; markdown-live-preview-engine 'eww)
+               ;; markdown-live-preview-engine 'eww
                markdown-live-preview-engine 'vmd
                markdown-mmm-auto-modes '("c" "c++" "go" "haskell" "python" "sh" ("elisp" "emacs-lisp")))
      ;; chrome

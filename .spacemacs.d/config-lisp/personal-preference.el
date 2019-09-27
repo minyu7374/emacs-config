@@ -48,7 +48,7 @@
                 pyim-probe-punctuation-after-punctuation))
 
 ;; 开启拼音搜索功能
-(pyim-isearch-mode 1)
+;; (pyim-isearch-mode 1)
 
 ;; 标点符号
 ;; (setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
