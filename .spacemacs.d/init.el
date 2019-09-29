@@ -585,6 +585,8 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  (setq package-check-signature nil)
+
   ;;(setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
                                             ;;("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
