@@ -585,6 +585,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  ;; https://stackoverflow.com/questions/26108655/error-updating-emacs-packages-failed-to-download-gnu-archive
   (setq package-check-signature nil)
 
   ;;(setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
