@@ -56,8 +56,10 @@ This function should only modify configuration layer settings."
             ;; c-c++-enable-clang-support t)
             ;; c-c++-backend 'rtags
             ;; c-c++-enable-rtags-completion nil
+            ;; c-c++-backend 'lsp-ccls
+            c-c++-backend 'lsp
+            c-c++-lsp-server 'ccls
             c-c++-adopt-subprojects t
-            c-c++-backend 'lsp-ccls
             c-c++-lsp-sem-highlight-method 'font-lock
             ;; c-c++-lsp-cache-dir "./.cache"
             c-c++-lsp-cache-dir ".cache/lsp-c-c++"
@@ -318,9 +320,9 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(gotham
-                         sanityinc-tomorrow-blue
+   dotspacemacs-themes '(sanityinc-tomorrow-blue
                          solarized-dark
+                         gotham
                          sanityinc-tomorrow-day
                          solarized-light)
 
