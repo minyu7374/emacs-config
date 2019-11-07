@@ -2,6 +2,9 @@
 ;; (global-hl-line-mode 0)
 (spacemacs/enable-transparency)
 
+;;;; zeal(offline API documentation browser inspired by Dash)
+(global-set-key "\C-cd" 'zeal-at-point)
+
 ;;;; chinese
 ;; youdao
 (global-set-key (kbd "\C-xy") 'youdao-dictionary-search-at-point+)

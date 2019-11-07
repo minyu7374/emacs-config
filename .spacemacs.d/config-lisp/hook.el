@@ -11,6 +11,10 @@
 (add-hook 'sh-mode-hook 'flycheck-mode)
 ;; (add-hook 'python-mode-hook 'flycheck-mode)
 
+;; zeal
+(add-hook 'python-mode-hook
+          (lambda () (setq zeal-at-point-docset '("python" "django"))))
+
 ;; icons
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 

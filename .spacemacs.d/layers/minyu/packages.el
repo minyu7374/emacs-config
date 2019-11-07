@@ -46,7 +46,6 @@
       ;; incase hooks not running
       (interactive)
       ;; (liberime-start "/usr/share/rime-data" "~/.emacs.d/rime/")
-      (liberime-start "/usr/share/rime-data" ".emacs.d/rime/")
       (liberime-select-schema "luna_pinyin_simp")))
       ;; (liberime-select-schema "terra_pinyin")))
 
