@@ -1,13 +1,20 @@
-# spacemacs-config
+# emacs-config
 
-个人epacemacs配置文件及相关资源
+个人emacs配置文件及相关资源
 
 - emacs版本: GNU Emacs 26.1
 - spacemacs分支: develop
+- doom分支: develop
 
 ## .spacemacs.d
 
 spacemacs配置目录
+
+### TODO 主要配置记录
+
+## .doom.d
+
+doom-emacs配置目录
 
 ### TODO 主要配置记录
 
