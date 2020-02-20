@@ -14,23 +14,29 @@
 (global-set-key (kbd "C-\\") 'toggle-input-method)
 
 ;; fcitx
-;; Make sure the following comes before `(fcitx-aggressive-setup)'
+;; ;; Make sure the following comes before `(fcitx-aggressive-setup)'
 ;; (setq fcitx-active-evil-states '(insert emacs hybrid)) ; if you use hybrid mode
 ;; (fcitx-aggressive-setup)
 ;; (fcitx-prefix-keys-add "M-m") ; M-m is common in Spacemacs
 ;; (fcitx-prefix-keys-turn-on)
 ;; (fcitx-isearch-turn-on)
-;; (setq fcitx-use-dbus t) ; uncomment if you're using Linux
+;; ;; (setq fcitx-use-dbus t) ; for Linux
 
 ;; (setq default-input-method "chinese-py")
 
 ;; pyim
 (setq default-input-method "pyim")
-(setq pyim-default-scheme 'rime)
+;; (setq pyim-default-scheme 'rime)
+
+;; 兼容地球拼音声调输入
+(define-key pyim-mode-map "]" 'pyim-page-next-page)
+(define-key pyim-mode-map "[" 'pyim-page-previous-page)
+(define-key pyim-mode-map "-" 'pyim-self-insert-command)
+(define-key pyim-mode-map "=" 'pyim-self-insert-command)
 
 ;; 默认双行，使用popup可能会有显示错位，而单行数字和文字连一起展示不方便确认选项
 ;; (setq pyim-page-style 'one-line)
-;; (setq pyim-page-length 5)
+(setq pyim-page-length 7)
 ;; emacs26, 改用posframe, 速度很快并且菜单不会变形，不过需要用户手动安装 posframe 包。
 ;; (setq pyim-page-tooltip 'popup)
 (setq pyim-page-tooltip 'posframe)
@@ -51,7 +57,7 @@
                 pyim-probe-punctuation-after-punctuation))
 
 ;; 开启拼音搜索功能
-;; (pyim-isearch-mode 1)
+(pyim-isearch-mode 1)
 
 ;; 标点符号
 ;; (setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。

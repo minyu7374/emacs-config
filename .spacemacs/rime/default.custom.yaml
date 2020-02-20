@@ -1,4 +1,7 @@
 patch:
-    "menu/page_size": 100
-    "speller/auto_select": false
-    "speller/auto_select_unique_candidate": false
+  schema_list:
+    - schema: terra_pinyin
+    - schema: luna_pinyin_simp
+  "menu/page_size": 50
+  "speller/auto_select": false
+  "speller/auto_select_unique_candidate": false

@@ -46,8 +46,19 @@
       ;; incase hooks not running
       (interactive)
       ;; (liberime-start "/usr/share/rime-data" "~/.emacs.d/rime/")
-      (liberime-select-schema "luna_pinyin_simp")))
-      ;; (liberime-select-schema "terra_pinyin")))
+      ;; (liberime-select-schema "luna_pinyin_simp")))
+      (liberime-select-schema "terra_pinyin")
+      (add-to-list
+       'pyim-schemes
+       '(rime-mspy
+         :document "support ;"
+         :class rime
+         :first-chars "abcdefghijklmnopqrstuvwxyz/"
+         :rest-chars "abcdefghijklmnopqrstuvwxyz;=/,\\"
+         :prefer-trigger-chars nil
+         ))
+      (setq pyim-default-scheme 'rime-mspy)
+      ))
 
   ;; work with pyim
   (add-hook 'pyim-load-hook 'setup-liberime)
