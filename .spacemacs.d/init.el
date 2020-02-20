@@ -346,7 +346,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Consolas NF"
                                :slant italic
-                               :size 32
+                               :size 30
                                :weight normal
                                :width normal)
 
