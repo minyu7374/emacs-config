@@ -15,6 +15,10 @@
 (add-hook 'python-mode-hook
           (lambda () (setq zeal-at-point-docset '("python" "django"))))
 
+;; 让 Emacs 启动时自动加载 pyim 词库
+(add-hook 'emacs-startup-hook
+          #'(lambda () (pyim-restart-1 t)))
+
 ;; icons
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 

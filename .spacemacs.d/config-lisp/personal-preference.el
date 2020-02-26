@@ -34,6 +34,9 @@
 (define-key pyim-mode-map "-" 'pyim-self-insert-command)
 (define-key pyim-mode-map "=" 'pyim-self-insert-command)
 
+;; 模糊音
+(setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
+
 ;; 默认双行，使用popup可能会有显示错位，而单行数字和文字连一起展示不方便确认选项
 ;; (setq pyim-page-style 'one-line)
 (setq pyim-page-length 7)
