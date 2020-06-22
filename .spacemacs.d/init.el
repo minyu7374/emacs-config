@@ -170,7 +170,7 @@ This function should only modify configuration layer settings."
               youdao-dictionary
               ;; fcitx
               pyim
-              pangu-spacing
+              ;; pangu-spacing
               :variables
               chinese-default-input-method 'pinyin
               ;; chinese-enable-fcitx t
@@ -347,7 +347,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Consolas NF"
                                :slant italic
-                               :size 30
+                               :size 32
                                :weight normal
                                :width normal)
 
