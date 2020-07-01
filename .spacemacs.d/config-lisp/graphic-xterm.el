@@ -6,6 +6,8 @@
       ;; (spacemacs//set-monospaced-font "Consolas" "FZWeiBei-S03" 38 46)
       ;; (spacemacs//set-monospaced-font "Consolas NF" "FZTieJinLiShu-S17S" 38 46)
       ;; (spacemacs//set-monospaced-font "Consolas NF" "FZTieJinLiShu-S17S" 30 34)
+      ;; work with pyim
+      (add-hook 'pyim-load-hook 'setup-liberime)
       (spacemacs//set-monospaced-font "Consolas NF" "FZTieJinLiShu-S17S" 32 36)
  )
   (progn

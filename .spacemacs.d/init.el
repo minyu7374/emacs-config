@@ -72,9 +72,9 @@ This function should only modify configuration layer settings."
          ;; go-linter 'golangci-lint)
          go-backend 'lsp)
      (python :variables
-             python-backend 'anaconda
-             ;; python-backend 'lsp
-             ;; python-lsp-server 'pyls
+             ;; python-backend 'anaconda
+             python-backend 'lsp
+             python-lsp-server 'pyls
              ;; python-enable-yapf-format-on-save t
              python-formatter 'yapf
              python-format-on-save t
@@ -164,7 +164,7 @@ This function should only modify configuration layer settings."
           org-want-todo-bindings t)
      (shell :variables
             ;; shell-default-shell 'eshell
-            shell-default-position 'bottom
+            shell-default-position 'full
             shell-default-height 30)
      (chinese :packages
               youdao-dictionary

@@ -60,7 +60,5 @@
       (setq pyim-default-scheme 'rime-mspy)
       ))
 
-  ;; work with pyim
-  (add-hook 'pyim-load-hook 'setup-liberime)
   )
 ;;; packages.el ends here
