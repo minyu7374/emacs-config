@@ -2,6 +2,12 @@
 ;; (global-hl-line-mode 0)
 (spacemacs/enable-transparency)
 
+;;; org-mode load-languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ditaa . t)
+   (dot . t)))
+
 ;;;; zeal(offline API documentation browser inspired by Dash)
 (global-set-key "\C-cd" 'zeal-at-point)
 
