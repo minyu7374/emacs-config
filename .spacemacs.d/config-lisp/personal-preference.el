@@ -32,13 +32,6 @@
 
 ;; pyim
 (setq default-input-method "pyim")
-;; (setq pyim-default-scheme 'rime)
-
-;; 兼容地球拼音声调输入
-(define-key pyim-mode-map "]" 'pyim-page-next-page)
-(define-key pyim-mode-map "[" 'pyim-page-previous-page)
-(define-key pyim-mode-map "-" 'pyim-self-insert-command)
-(define-key pyim-mode-map "=" 'pyim-self-insert-command)
 
 ;; 模糊音
 (setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
@@ -46,9 +39,6 @@
 ;; 默认双行，使用popup可能会有显示错位，而单行数字和文字连一起展示不方便确认选项
 ;; (setq pyim-page-style 'one-line)
 (setq pyim-page-length 7)
-;; emacs26, 改用posframe, 速度很快并且菜单不会变形，不过需要用户手动安装 posframe 包。
-;; (setq pyim-page-tooltip 'popup)
-(setq pyim-page-tooltip 'posframe)
 
 ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
 ;; 中英文动态切换规则是：
@@ -74,7 +64,7 @@
 (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
 
 ;; 将光标处的拼音或者五笔字符串转换为中文
-(global-set-key (kbd "M-i") 'pyim-convert-string-at-point)
+(global-set-key (kbd "M-z") 'pyim-convert-string-at-point)
 (global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
 
 ;;;; tab
@@ -101,7 +91,7 @@
 
 ;; treemacs icons
 (with-eval-after-load "treemacs"
-  (treemacs-resize-icons 14)
+  (treemacs-resize-icons 12)
   )
 
 (provide 'personal-preference)

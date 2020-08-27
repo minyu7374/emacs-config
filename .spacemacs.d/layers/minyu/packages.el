@@ -32,8 +32,10 @@
 (defconst minyu-packages
   '(
       (liberime-config :location (recipe
-                        :fetcher gitlab
-                        :repo "liberime/liberime"
+                        ;; :fetcher file
+                        ;; :path "~/Workspace/openSource/liberime"
+                        :fetcher git
+                        :url "https://github.com/merrickluo/liberime.git"
                         :files ("CMakeLists.txt" "Makefile" "src" "liberime-config.el")))
       )
   )
@@ -44,21 +46,30 @@
     :config
     (defun setup-liberime ()
       ;; incase hooks not running
-      (interactive)
       ;; (liberime-start "/usr/share/rime-data" "~/.emacs.d/rime/")
-      ;; (liberime-select-schema "luna_pinyin_simp")))
-      (liberime-select-schema "terra_pinyin")
-      (add-to-list
-       'pyim-schemes
-       '(rime-mspy
-         :document "support ;"
-         :class rime
-         :first-chars "abcdefghijklmnopqrstuvwxyz/"
-         :rest-chars "abcdefghijklmnopqrstuvwxyz;=/,\\"
-         :prefer-trigger-chars nil
-         ))
-      (setq pyim-default-scheme 'rime-mspy)
+      (interactive)
+      (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/.emacs.d/pyim/rime/"))
+      (liberime-select-schema "luna_pinyin_simp")
+      (setq pyim-default-scheme 'rime-quanpin)
+      ;; (liberime-select-schema "terra_pinyin")
+      ;; (add-to-list
+      ;;  'pyim-schemes
+      ;;  '(rime-mspy
+      ;;    :document "support ;"
+      ;;    :class rime
+      ;;    :first-chars "abcdefghijklmnopqrstuvwxyz/"
+      ;;    :rest-chars "abcdefghijklmnopqrstuvwxyz;=/,\\"
+      ;;    :prefer-trigger-chars nil
+      ;;    ))
+      ;; (setq pyim-default-scheme 'rime-mspy)
+      ;; ;; 兼容地球拼音声调输入
+      ;; (define-key pyim-mode-map "]" 'pyim-page-next-page)
+      ;; (define-key pyim-mode-map "[" 'pyim-page-previous-page)
+      ;; (define-key pyim-mode-map "-" 'pyim-self-insert-command)
+      ;; (define-key pyim-mode-map "=" 'pyim-self-insert-command)
       ))
+
+     (add-hook 'pyim-load-hook 'setup-liberime)
 
   )
 ;;; packages.el ends here

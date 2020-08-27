@@ -28,7 +28,7 @@
     (progn
       (push #'tabnine//company-box-icons--tabnine
             company-box-icons-functions)
-      (map-put company-box-backends-colors
+      (map-put! company-box-backends-colors
                'company-tabnine  '(:all
                                    tabnine-company-box-backend-tabnine-face
                                    :selected
