@@ -44,7 +44,7 @@
 ;; 中英文动态切换规则是：
 ;; 1. 光标只有在注释里面时，才可以输入中文。
 ;; 2. 光标前是汉字字符时，才能输入中文。
-;; 3. 使用 M-i 快捷键，强制将光标前的拼音字符串转换为中文。
+;; 3. 使用 C-z 快捷键，强制将光标前的拼音字符串转换为中文。
 (setq-default pyim-english-input-switch-functions
               '(pyim-probe-dynamic-english
                 pyim-probe-isearch-mode
@@ -55,6 +55,9 @@
               '(pyim-probe-punctuation-line-beginning
                 pyim-probe-punctuation-after-punctuation))
 
+;; 将光标处的拼音或者五笔字符串转换为中文
+(global-set-key (kbd "\C-z") 'pyim-convert-string-at-point)
+
 ;; 开启拼音搜索功能
 (pyim-isearch-mode 1)
 
@@ -63,8 +66,6 @@
 ;; (setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
 (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
 
-;; 将光标处的拼音或者五笔字符串转换为中文
-(global-set-key (kbd "M-z") 'pyim-convert-string-at-point)
 (global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
 
 ;;;; tab
