@@ -6,7 +6,7 @@
       (setq pyim-page-tooltip 'posframe)
 )
   (progn
-    (load-theme 'doom-tomorrow-night t)
+    ;; (load-theme 'doom-tomorrow-night t)
     ;; 伪终端模拟器们似乎对posframe 的支持不够好
     (setq pyim-page-tooltip 'popup)
     ;; disable mouse
