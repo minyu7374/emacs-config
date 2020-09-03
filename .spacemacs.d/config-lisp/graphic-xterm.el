@@ -1,7 +1,7 @@
 (if (display-graphic-p)
     (progn
       ;; 设置等宽字体
-      (spacemacs//set-monospaced-font "Consolas NF" "FZTieJinLiShu-S17S" 14 16)
+      (spacemacs//set-monospaced-font "Consolas NF" "YouYuan" 13 14)
       ;; emacs26, 改用posframe, 速度很快并且菜单不会变形，不过需要用户手动安装 posframe 包。
       (setq pyim-page-tooltip 'posframe)
 )
