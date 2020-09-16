@@ -18,6 +18,7 @@
 
 ;; input
 (global-set-key (kbd "C-\\") 'toggle-input-method)
+(spacemacs/set-leader-keys "o\\" 'toggle-input-method)
 
 ;; fcitx
 ;; ;; Make sure the following comes before `(fcitx-aggressive-setup)'
@@ -44,7 +45,7 @@
 ;; 中英文动态切换规则是：
 ;; 1. 光标只有在注释里面时，才可以输入中文。
 ;; 2. 光标前是汉字字符时，才能输入中文。
-;; 3. 使用 C-z 快捷键，强制将光标前的拼音字符串转换为中文。
+;; 3. 使用快捷键，强制将光标前的拼音字符串转换为中文。
 (setq-default pyim-english-input-switch-functions
               '(pyim-probe-dynamic-english
                 pyim-probe-isearch-mode
@@ -56,7 +57,8 @@
                 pyim-probe-punctuation-after-punctuation))
 
 ;; 将光标处的拼音或者五笔字符串转换为中文
-(global-set-key (kbd "\C-z") 'pyim-convert-string-at-point)
+(global-set-key (kbd "\C-x\/") 'pyim-convert-string-at-point)
+(spacemacs/set-leader-keys "o\/" 'pyim-convert-string-at-point)
 
 ;; 开启拼音搜索功能
 (pyim-isearch-mode 1)
