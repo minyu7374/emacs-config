@@ -74,10 +74,12 @@ This function should only modify configuration layer settings."
      (python :variables
              ;; python-backend 'anaconda
              python-backend 'lsp
-             python-lsp-server 'pyls
+             ;; python-lsp-server 'pyls
+             python-lsp-server 'pyright
              ;; python-enable-yapf-format-on-save t
              python-formatter 'yapf
              python-format-on-save t
+             python-test-runner '(pytest nose)
              ;; python-sort-imports-on-save t
              python-fill-column 80)
      asm
