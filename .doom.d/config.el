@@ -33,16 +33,20 @@
 ;;                     (font-spec :family (car (cdr fonts)))))
 ;; ;; Fix chinese font width and rescale
 ;; (setq face-font-rescale-alist '(("Microsoft Yahei" . 1.2) ("WenQuanYi Micro Hei Mono" . 1.2) ("STHeiti". 1.2)))
+(defun set-font()
+  (interactive)
+  (setq doom-big-font (font-spec :family "Consolas" :slant 'italic :size 18)
+        doom-variable-pitch-font (font-spec :family "Consolas" :slant 'italic :size 13)
+        doom-serif-font (font-spec :family "Consolas" :slant 'italic :weight 'light))
+  (set-face-attribute 'default nil :font "Consolas:pixelsize=13" :slant 'italic)
+  (dolist (charset '(kana han symbol cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font) charset
+                      (font-spec :family "Microsoft Yahei")))
+  (setq face-font-rescale-alist '(("Microsoft Yahei" . 1.1)))
+  )
 
-(setq doom-big-font (font-spec :family "Consolas" :slant 'italic :size 18)
-      doom-variable-pitch-font (font-spec :family "Consolas" :slant 'italic :size 13)
-      doom-serif-font (font-spec :family "Consolas" :slant 'italic :weight 'light))
-
-(set-face-attribute 'default nil :font "Consolas:pixelsize=13" :slant 'italic)
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font) charset
-                    (font-spec :family "Microsoft Yahei")))
-(setq face-font-rescale-alist '(("Microsoft Yahei" . 1.1)))
+(if (display-graphic-p)
+    (set-font))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
