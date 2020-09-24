@@ -33,17 +33,24 @@
 ;;                     (font-spec :family (car (cdr fonts)))))
 ;; ;; Fix chinese font width and rescale
 ;; (setq face-font-rescale-alist '(("Microsoft Yahei" . 1.2) ("WenQuanYi Micro Hei Mono" . 1.2) ("STHeiti". 1.2)))
+
 (defun set-font()
   (interactive)
-  (setq doom-big-font (font-spec :family "Consolas" :slant 'italic :size 18)
-        doom-variable-pitch-font (font-spec :family "Consolas" :slant 'italic :size 13)
-        doom-serif-font (font-spec :family "Consolas" :slant 'italic :weight 'light))
-  (set-face-attribute 'default nil :font "Consolas:pixelsize=13" :slant 'italic)
-  (dolist (charset '(kana han symbol cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font) charset
-                      (font-spec :family "Microsoft Yahei")))
-  (setq face-font-rescale-alist '(("Microsoft Yahei" . 1.1)))
+  (let ((default-font "Consolas")
+        (chinese-font "Microsoft Yahei")
+        (default-font-size 13)
+        (big-font-size 18)
+        (chinese-font-rescale 1.1))
+    (setq doom-big-font (font-spec :family default-font :slant 'italic :size big-font-size)
+          doom-variable-pitch-font (font-spec :family default-font :slant 'italic :size default-font-size)
+          doom-serif-font (font-spec :family default-font :slant 'italic :weight 'light))
+    (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" default-font default-font-size) :slant 'italic)
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil 'font) charset
+                        (font-spec :family chinese-font)))
+    (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
   )
+)
 
 (if (display-graphic-p)
     (set-font))
