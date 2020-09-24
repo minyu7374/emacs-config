@@ -80,12 +80,16 @@
 ;; they are implemented.
 (after! pyim
    (setq default-input-method "pyim")
+   (setq pyim-default-scheme "quanpin")
    (global-set-key (kbd "C-\\") 'toggle-input-method)
 
    ;; 模糊音
    (setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
 
    (setq pyim-page-tooltip 'posframe)
+   ;; (if (display-graphic-p)
+   ;;     (setq pyim-page-tooltip 'posframe)
+   ;;   (setq pyim-page-tooltip 'popup))
    (setq pyim-page-length 7)
 
     ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-
@@ -116,6 +120,12 @@
 
     (global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
     )
+
+;; ;; icons
+;; (after! dired
+;;   ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+;;   (add-hook! 'dired-mode 'all-the-icons-dired-mode)
+;;   )
 
 ;;;; insert current datetime
 (defun insert-current-datetime ()

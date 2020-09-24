@@ -18,6 +18,11 @@ doom-emacs 配置目录
 
 ### TODO 主要配置记录
 
+#### TODO
+
+imenu-list-minor-mode
+lsp-ui-imenu
+
 ## .pyim_dict
 
 pyim 词库(以后抽时间整理和完善)
