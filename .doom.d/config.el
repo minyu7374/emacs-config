@@ -93,10 +93,9 @@
    ;; 模糊音
    (setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
 
-   (setq pyim-page-tooltip 'posframe)
-   ;; (if (display-graphic-p)
-   ;;     (setq pyim-page-tooltip 'posframe)
-   ;;   (setq pyim-page-tooltip 'popup))
+   (if (display-graphic-p)
+       (setq pyim-page-tooltip 'posframe)
+     (setq pyim-page-tooltip 'popup))
    (setq pyim-page-length 7)
 
     ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-
