@@ -2,7 +2,6 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "minyu"
@@ -103,11 +102,12 @@
     ;; 1. 光标只有在注释里面时，才可以输入中文。
     ;; 2. 光标前是汉字字符时，才能输入中文。
     ;; 3. 使用快捷键，强制将光标前的拼音字符串转换为中文。
-   (setq-default pyim-english-input-switch-functions
-                 '(pyim-probe-dynamic-english
-                   pyim-probe-isearch-mode
-                   pyim-probe-program-mode
-                   pyim-probe-org-structure-template))
+   (if (display-graphic-p)
+       (setq-default pyim-english-input-switch-functions
+                     '(pyim-probe-dynamic-english
+                       pyim-probe-isearch-mode
+                       pyim-probe-program-mode
+                       pyim-probe-org-structure-template)))
 
    (setq-default pyim-punctuation-half-width-functions
                  '(pyim-probe-punctuation-line-beginning
