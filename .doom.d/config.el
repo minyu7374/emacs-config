@@ -36,10 +36,12 @@
 (defun set-font()
   (interactive)
   (let ((default-font "Consolas")
-        (chinese-font "Microsoft Yahei")
-        (default-font-size 13)
-        (big-font-size 18)
-        (chinese-font-rescale 1.1))
+        (chinese-font "FZTieJinLiShu-S17S")
+        (default-font-size 14)
+        (big-font-size 20)
+        (chinese-font-rescale 1.2))
+
+
     (setq doom-big-font (font-spec :family default-font :slant 'italic :size big-font-size)
           doom-variable-pitch-font (font-spec :family default-font :slant 'italic :size default-font-size)
           doom-serif-font (font-spec :family default-font :slant 'italic :weight 'light))
@@ -48,8 +50,8 @@
       (set-fontset-font (frame-parameter nil 'font) charset
                         (font-spec :family chinese-font)))
     (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
+    )
   )
-)
 
 (if (display-graphic-p)
     (set-font))
@@ -67,6 +69,18 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;;;; insert current datetime
+(defun insert-current-datetime ()
+  "Insert date at point."
+  (interactive)
+  ;; (insert (format-time-string "%Y-%m-%d %H:%M:%S")))
+  (insert (format-time-string "%Y-%m-%d %r")))
+(global-set-key (kbd "\C-cot") 'insert-current-datetime)
+
+(+global-word-wrap-mode +1)
+
+(setq-default fill-column 120
+              delete-trailing-lines t)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -84,64 +98,91 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+;; 输入法
+(setq default-input-method "rime")
+(global-set-key (kbd "C-\\") 'toggle-input-method)
+
+(use-package! pyim
+  :after-call after-find-file pre-command-hook
+  :init
+  (setq pyim-dcache-directory (concat doom-cache-dir "pyim/"))
+  )
+
 (after! pyim
-   (setq default-input-method "pyim")
-   (setq pyim-default-scheme "quanpin")
-   (global-set-key (kbd "C-\\") 'toggle-input-method)
+  (setq pyim-default-scheme "quanpin")
 
-   ;; 模糊音
-   (setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
+  ;; pyim-greatdict 词库
+  ;; (pyim-greatdict-enable)
 
-   (if (display-graphic-p)
-       (setq pyim-page-tooltip 'posframe)
-     (setq pyim-page-tooltip 'popup))
-   (setq pyim-page-length 7)
+  ;; 模糊音
+  (setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
 
-    ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-
-    ;; 中英文动态切换规则是：
-    ;; 1. 光标只有在注释里面时，才可以输入中文。
-    ;; 2. 光标前是汉字字符时，才能输入中文。
-    ;; 3. 使用快捷键，强制将光标前的拼音字符串转换为中文。
-   (if (display-graphic-p)
-       (setq-default pyim-english-input-switch-functions
-                     '(pyim-probe-dynamic-english
-                       pyim-probe-isearch-mode
-                       pyim-probe-program-mode
-                       pyim-probe-org-structure-template)))
+  (if (display-graphic-p)
+      (setq pyim-page-tooltip 'posframe)
+    (setq pyim-page-tooltip 'popup))
+  (setq pyim-page-length 7)
 
-   (setq-default pyim-punctuation-half-width-functions
-                 '(pyim-probe-punctuation-line-beginning
-                   pyim-probe-punctuation-after-punctuation))
+  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-
+  ;; 中英文动态切换规则是：
+  ;; 1. 光标只有在注释里面时，才可以输入中文。
+  ;; 2. 光标前是汉字字符时，才能输入中文。
+  ;; 3. 使用快捷键，强制将光标前的拼音字符串转换为中文。
+  (if (display-graphic-p)
+      (setq-default pyim-english-input-switch-functions
+                    '(pyim-probe-dynamic-english
+                      pyim-probe-isearch-mode
+                      pyim-probe-program-mode
+                      pyim-probe-org-structure-template)))
 
-    ;; 将光标处的拼音或者五笔字符串转换为中文
-    (global-set-key (kbd "C-\|") 'pyim-convert-string-at-point)
+  (setq-default pyim-punctuation-half-width-functions
+                '(pyim-probe-punctuation-line-beginning
+                  pyim-probe-punctuation-after-punctuation))
 
-    ;; 开启拼音搜索功能
-    (pyim-isearch-mode 1)
+  ;; 将光标处的拼音或者五笔字符串转换为中文
+  (global-set-key (kbd "C-\|") 'pyim-convert-string-at-point)
 
-    ;; 标点符号
-    ;; (setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
-    ;; (setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
-    (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
+  ;; 开启拼音搜索功能
+  (pyim-isearch-mode 1)
 
-    (global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
-    )
+  ;; 标点符号
+  ;; (setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
+  ;; (setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
+  (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
 
-;; ;; icons
-;; (after! dired
-;;   ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-;;   (add-hook! 'dired-mode 'all-the-icons-dired-mode)
-;;   )
+  (global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
+  )
 
-;;;; insert current datetime
-(defun insert-current-datetime ()
-  "Insert date at point."
-    (interactive)
-    ;; (insert (format-time-string "%Y-%m-%d %H:%M:%S")))
-    (insert (format-time-string "%Y-%m-%d %r")))
-(global-set-key (kbd "\C-cot") 'insert-current-datetime)
+(use-package! rime
+  :after-call after-find-file pre-command-hook
+  :custom
+  (rime-librime-root "~/.emacs.d/librime/dist")
+  (rime-user-data-dir (concat doom-cache-dir "rime/"))
+  )
 
-(+global-word-wrap-mode +1)
+(after! rime
+  (if (display-graphic-p)
+      (setq rime-show-candidate 'posframe)
+    (setq rime-show-candidate 'popup))
 
-(setq-default fill-column 120
-              delete-trailing-lines t)
+  ;; 在 evil-normal-state 中、在英文字母后面以及代码中自动使用英文
+  (setq rime-disable-predicates
+        '(rime-predicate-evil-mode-p
+          rime-predicate-after-alphabet-char-p
+          rime-predicate-prog-in-code-p))
+
+  ;; support shift-l, shift-r, control-l, control-r
+  (setq rime-inline-ascii-trigger 'shift-l)
+
+  ;; Any single character that not trigger auto commit
+  (setq rime-inline-ascii-holder ?x)
+
+  (define-key rime-mode-map (kbd "C-\"") 'rime-force-enable) ;; 强制中文
+  (define-key rime-mode-map (kbd "C-'") 'rime-select-schema)
+  )
+
+;; icons
+(after! dired
+  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  (add-hook! 'dired-mode 'all-the-icons-dired-mode)
+  )
