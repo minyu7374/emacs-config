@@ -146,7 +146,7 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +gnuplot +pretty +present +roam +brain +gnuplot +hugo +journal +noter +pandoc)                ; organize your plain life in plain text
+       (org +gnuplot +pretty +present +brain +gnuplot +hugo +journal +noter +pandoc)                ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
@@ -179,6 +179,7 @@
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
+       everywhere
 
        :config
        ;;literate
