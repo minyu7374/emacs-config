@@ -7,7 +7,6 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
                                         ;(package! some-package)
-(package! org-re-reveal)
 (package! imenu-list)
 (package! awesome-pair :recipe (:host github :repo "manateelazycat/awesome-pair"))
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
@@ -15,7 +14,6 @@
 (package! rime)
 (package! pyim)
 ;; (package! pangu-spacing)
-
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
