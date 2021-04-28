@@ -82,8 +82,6 @@
 (setq-default fill-column 120
               delete-trailing-lines t)
 
-(setq markdown-split-window-direction 'right)
-
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
@@ -250,4 +248,17 @@
   (define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
   (define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
   (define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
+  )
+
+(after! markdown-mode
+  (setq markdown-split-window-direction 'right)
+
+  (defun marp-preview()
+    (interactive)
+    (shell-command (format "marp -p %s" buffer-file-name))
+    )
+
+  (global-set-key (kbd "\C-cop") 'marp-preview)
+  (map! :map markdown-mode-map
+        :localleader "P" #'marp-preview)
   )
