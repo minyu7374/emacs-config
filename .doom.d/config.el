@@ -41,7 +41,6 @@
         (big-font-size 20)
         (chinese-font-rescale 1.2))
 
-
     (setq doom-big-font (font-spec :family default-font :slant 'italic :size big-font-size)
           doom-variable-pitch-font (font-spec :family default-font :slant 'italic :size default-font-size)
           doom-serif-font (font-spec :family default-font :slant 'italic :weight 'light))
@@ -255,10 +254,30 @@
 
   (defun marp-preview()
     (interactive)
-    (shell-command (format "marp -p %s" buffer-file-name))
+    ;; (async-shell-command (format "marp -p '%s'" buffer-file-name))
+    (start-process-shell-command "marp-preview" nil (format "marp -p '%s'" buffer-file-name))
     )
 
-  (global-set-key (kbd "\C-cop") 'marp-preview)
+  (defun reveal-preview()
+    (interactive)
+    (let ((reveal-root (concat doom-local-dir "reveal.js"))
+          (custom-css (concat doom-cache-dir "reveal.js/custom.css"))
+          (os-open (cond (IS-MAC "open") (IS-LINUX "xdg-open")))
+          ;; 如果markdown文件里有相对路径资源的引用，随机html文件将不合适，因此改为与原文件同路径同名的html文件
+          ;; (out-html (concat (shell-command-to-string "mktemp") ".html")))
+          (out-html (concat (file-name-sans-extension buffer-file-name) ".html")))
+      (start-process-shell-command
+       "md2reveal" nil
+       "pandoc" "-t revealjs -s --mathjax --toc -V theme=sky"
+       (format "-V revealjs-url='file://%s' --include-in-header='%s' -o '%s' '%s' && %s '%s'"
+               reveal-root custom-css out-html buffer-file-name os-open out-html))
+      )
+    )
+
+  ;; (global-set-key (kbd "\C-cop") 'marp-preview)
+  ;; (global-set-key (kbd "\C-cor") 'reveal-preview)
   (map! :map markdown-mode-map
-        :localleader "P" #'marp-preview)
+        :localleader
+        "P" #'marp-preview
+        "R" #'reveal-preview)
   )
