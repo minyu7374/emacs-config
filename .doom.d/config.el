@@ -102,55 +102,55 @@
 (setq default-input-method "rime")
 (global-set-key (kbd "C-\\") 'toggle-input-method)
 
-(use-package! pyim
-  :after-call after-find-file pre-command-hook
-  :init
-  (setq pyim-dcache-directory (concat doom-cache-dir "pyim/"))
-  )
+;; (use-package! pyim
+;;   :after-call after-find-file pre-command-hook
+;;   :init
+;;   (setq pyim-dcache-directory (concat doom-cache-dir "pyim/"))
+;;   )
 
-(after! pyim
-  (setq pyim-default-scheme "quanpin")
+;; (after! pyim
+;;   (setq pyim-default-scheme "quanpin")
 
-  ;; pyim-greatdict 词库
-  ;; (pyim-greatdict-enable)
+;;   ;; pyim-greatdict 词库
+;;   ;; (pyim-greatdict-enable)
 
-  ;; 模糊音
-  (setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
+;;   ;; 模糊音
+;;   (setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
 
-  (if (display-graphic-p)
-      (setq pyim-page-tooltip 'posframe)
-    (setq pyim-page-tooltip 'popup))
-  (setq pyim-page-length 7)
+;;   (if (display-graphic-p)
+;;       (setq pyim-page-tooltip 'posframe)
+;;     (setq pyim-page-tooltip 'popup))
+;;   (setq pyim-page-length 7)
 
-  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-
-  ;; 中英文动态切换规则是：
-  ;; 1. 光标只有在注释里面时，才可以输入中文。
-  ;; 2. 光标前是汉字字符时，才能输入中文。
-  ;; 3. 使用快捷键，强制将光标前的拼音字符串转换为中文。
-  (if (display-graphic-p)
-      (setq-default pyim-english-input-switch-functions
-                    '(pyim-probe-dynamic-english
-                      pyim-probe-isearch-mode
-                      pyim-probe-program-mode
-                      pyim-probe-org-structure-template)))
+;;   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-
+;;   ;; 中英文动态切换规则是：
+;;   ;; 1. 光标只有在注释里面时，才可以输入中文。
+;;   ;; 2. 光标前是汉字字符时，才能输入中文。
+;;   ;; 3. 使用快捷键，强制将光标前的拼音字符串转换为中文。
+;;   (if (display-graphic-p)
+;;       (setq-default pyim-english-input-switch-functions
+;;                     '(pyim-probe-dynamic-english
+;;                       pyim-probe-isearch-mode
+;;                       pyim-probe-program-mode
+;;                       pyim-probe-org-structure-template)))
 
-  (setq-default pyim-punctuation-half-width-functions
-                '(pyim-probe-punctuation-line-beginning
-                  pyim-probe-punctuation-after-punctuation))
+;;   (setq-default pyim-punctuation-half-width-functions
+;;                 '(pyim-probe-punctuation-line-beginning
+;;                   pyim-probe-punctuation-after-punctuation))
 
-  ;; 将光标处的拼音或者五笔字符串转换为中文
-  (global-set-key (kbd "C-\|") 'pyim-convert-string-at-point)
+;;   ;; 将光标处的拼音或者五笔字符串转换为中文
+;;   (global-set-key (kbd "C-\|") 'pyim-convert-string-at-point)
 
-  ;; 开启拼音搜索功能
-  (pyim-isearch-mode 1)
+;;   ;; 开启拼音搜索功能
+;;   (pyim-isearch-mode 1)
 
-  ;; 标点符号
-  ;; (setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
-  ;; (setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
-  (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
+;;   ;; 标点符号
+;;   ;; (setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
+;;   ;; (setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
+;;   (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
 
-  (global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
-  )
+;;   (global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
+;;   )
 
 (use-package! rime
   :after-call after-find-file pre-command-hook
@@ -258,6 +258,18 @@
     (start-process-shell-command "marp-preview" nil (format "marp -p '%s'" buffer-file-name))
     )
 
+  (defun marp-export-open()
+    (interactive)
+    (let ((os-open (cond (IS-MAC "open") (IS-LINUX "xdg-open")))
+          ;; 如果markdown文件里有相对路径资源的引用，随机html文件将不合适，因此改为与原文件同路径同名的html文件
+          (out-ppt (concat (shell-command-to-string "mktemp") ".pptx")))
+      (start-process-shell-command
+       "marp_export_open" nil
+       "marp" "--pptx --allow-local-files"
+       (format "'%s' -o '%s' && %s '%s'" buffer-file-name out-ppt os-open out-ppt))
+      )
+    )
+
   (defun reveal-preview()
     (interactive)
     (let ((reveal-root (concat doom-local-dir "reveal.js"))
@@ -267,7 +279,7 @@
           ;; (out-html (concat (shell-command-to-string "mktemp") ".html")))
           (out-html (concat (file-name-sans-extension buffer-file-name) ".html")))
       (start-process-shell-command
-       "md2reveal" nil
+       "md2reveal_preview" nil
        "pandoc" "-t revealjs -s --mathjax --toc -V theme=sky"
        (format "-V revealjs-url='file://%s' --include-in-header='%s' -o '%s' '%s' && %s '%s'"
                reveal-root custom-css out-html buffer-file-name os-open out-html))
@@ -276,8 +288,10 @@
 
   ;; (global-set-key (kbd "\C-cop") 'marp-preview)
   ;; (global-set-key (kbd "\C-cor") 'reveal-preview)
+  ;; (global-set-key (kbd "\C-coe") 'marp-export-open)
   (map! :map markdown-mode-map
         :localleader
         "P" #'marp-preview
-        "R" #'reveal-preview)
+        "R" #'reveal-preview
+        "E" #'marp-export-open)
   )

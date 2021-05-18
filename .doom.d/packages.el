@@ -12,7 +12,7 @@
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
 
 (package! rime)
-(package! pyim)
+;; (package! pyim)
 ;; (package! pangu-spacing)
 
 ;; To install a package directly from a remote git repo, you must specify a
