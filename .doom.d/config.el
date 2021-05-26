@@ -155,8 +155,8 @@
 (use-package! rime
   :after-call after-find-file pre-command-hook
   :custom
-  (rime-librime-root "~/.emacs.d/librime/dist")
-  (rime-user-data-dir (concat doom-cache-dir "rime/"))
+  (rime-librime-root "~/.local/lib/librime/dist")
+  (rime-user-data-dir (concat doom-local-dir "rime/"))
   )
 
 (after! rime
@@ -273,7 +273,7 @@
   (defun reveal-preview()
     (interactive)
     (let ((reveal-root (concat doom-local-dir "reveal.js"))
-          (custom-css (concat doom-cache-dir "reveal.js/custom.css"))
+          (custom-css (concat doom-local-dir "etc/reveal.js/custom.css"))
           (os-open (cond (IS-MAC "open") (IS-LINUX "xdg-open")))
           ;; 如果markdown文件里有相对路径资源的引用，随机html文件将不合适，因此改为与原文件同路径同名的html文件
           ;; (out-html (concat (shell-command-to-string "mktemp") ".html")))
