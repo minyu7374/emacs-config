@@ -155,7 +155,8 @@
 (use-package! rime
   :after-call after-find-file pre-command-hook
   :custom
-  (rime-librime-root "~/.local/lib/librime/dist")
+  ;; max下单独下载librime链接库文件
+  (if IS-MAC (rime-librime-root "~/.local/lib/librime/dist"))
   (rime-user-data-dir (concat doom-local-dir "rime/"))
   )
 
@@ -178,6 +179,12 @@
 
   (define-key rime-mode-map (kbd "C-\"") 'rime-force-enable) ;; 强制中文
   (define-key rime-mode-map (kbd "C-'") 'rime-select-schema)
+  )
+
+;; max下shell脚本自动补全比较慢
+(after! sh-script
+  (if IS-MAC
+      (set-company-backend! 'sh-mode nil))
   )
 
 ;; icons
