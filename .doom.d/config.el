@@ -174,6 +174,9 @@
   ;; support shift-l, shift-r, control-l, control-r
   (setq rime-inline-ascii-trigger 'shift-l)
 
+  ;; 在有编码的状态下使用 rime-inline-ascii 命令可以切换状态
+  (define-key rime-active-mode-map (kbd "M-j") 'rime-inline-ascii)
+
   ;; Any single character that not trigger auto commit
   (setq rime-inline-ascii-holder ?x)
 
