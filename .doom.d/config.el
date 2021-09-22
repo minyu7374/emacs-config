@@ -237,13 +237,14 @@
   )
 
 ;; Mac GUI 只有基础的环境变量集，需加载shell环境变量
-;; (when (memq window-system '(mac ns x))
+;;(when (memq window-system '(mac ns x))
 (if (and IS-MAC (display-graphic-p))
     (use-package! exec-path-from-shell
       :config
-      (exec-path-from-shell-copy-env "PATH")
-      (exec-path-from-shell-copy-env "GOPATH")
-      ;;(exec-path-from-shell-initialize)
+      ;;(setq exec-path-from-shell-arguments nil)
+      (setq exec-path-from-shell-arguments '("-l"))
+      (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH"))
+      (exec-path-from-shell-initialize)
       )
   )
 
