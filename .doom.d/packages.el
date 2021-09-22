@@ -15,6 +15,11 @@
 ;; (package! pyim)
 ;; (package! pangu-spacing)
 
+(package! tmux-pane)
+
+;; Mac GUI需要单独加载shell变量
+(package! exec-path-from-shell :ignore (not IS-MAC))
+
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
 ;; https://github.com/raxod502/straight.el#the-recipe-format

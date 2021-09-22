@@ -68,13 +68,28 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;;;; comment
+(global-set-key (kbd "\C-cc") 'comment-line)
+(map! :leader
+      (:prefix "m"
+       :desc "comment or uncomment current line" :nv "c" #'comment-line))
+
+;;;; set mark ctrl+space 和常用输入法切换快捷键冲突
+(global-unset-key (kbd "C-SPC"))
+;; alt+space 在Linux kde上是kruner，command+space是Albert(Linux)/Spotlight(Mac)
+(global-set-key (kbd "C-S-SPC") 'set-mark-command)
+
 ;;;; insert current datetime
 (defun insert-current-datetime ()
   "Insert date at point."
   (interactive)
   ;; (insert (format-time-string "%Y-%m-%d %H:%M:%S")))
   (insert (format-time-string "%Y-%m-%d %r")))
-(global-set-key (kbd "\C-cot") 'insert-current-datetime)
+
+(global-set-key (kbd "\C-cit") 'insert-current-datetime)
+(map! :leader
+      (:prefix "i"
+       :desc "insert current datetime" :nv "t" #'insert-current-datetime))
 
 (+global-word-wrap-mode +1)
 
@@ -100,7 +115,12 @@
 
 ;; 输入法
 (setq default-input-method "rime")
-(global-set-key (kbd "C-\\") 'toggle-input-method)
+
+(global-set-key (kbd "S-SPC") 'toggle-input-method)
+(global-set-key (kbd "\C-c SPC") 'toggle-input-method)
+(map! :leader
+      (:prefix "t"
+       :desc "toggle input method" :nv "i" #'toggle-input-method))
 
 ;; (use-package! pyim
 ;;   :after-call after-find-file pre-command-hook
@@ -155,7 +175,7 @@
 (use-package! rime
   :after-call after-find-file pre-command-hook
   :custom
-  ;; max下单独下载librime链接库文件
+  ;; max下需要单独下载librime链接库文件
   (if IS-MAC (rime-librime-root "~/.local/lib/librime/dist"))
   (rime-user-data-dir (concat doom-local-dir "rime/"))
   )
@@ -182,12 +202,49 @@
 
   (define-key rime-mode-map (kbd "C-\"") 'rime-force-enable) ;; 强制中文
   (define-key rime-mode-map (kbd "C-'") 'rime-select-schema)
+
+  (global-set-key (kbd "\C-czf") 'rime-force-enable)
+  (global-set-key (kbd "\C-czs") 'rime-select-schema)
+  (map! :leader
+        (:prefix ("z" . "chinaese")
+         :desc "force rime" :nv "f" #'rime-force-enable
+         :desc "rime select scheme" :nv "s" #'rime-select-schema))
   )
 
-;; max下shell脚本自动补全比较慢
+;;;; 和tmux无缝跳转
+(use-package! tmux-pane
+  :config
+  (tmux-pane-mode)
+  (map! :leader
+        (:prefix ("v" . "tmux pane")
+         :desc "Open vpane" :nv "o" #'tmux-pane-open-vertical
+         :desc "Open hpane" :nv "h" #'tmux-pane-open-horizontal
+         :desc "Open hpane" :nv "s" #'tmux-pane-open-horizontal
+         :desc "Open vpane" :nv "v" #'tmux-pane-open-vertical
+         :desc "Close pane" :nv "c" #'tmux-pane-close
+         :desc "Rerun last command" :nv "r" #'tmux-pane-rerun))
+  (map! :leader
+        (:prefix "t"
+         :desc "vpane" :nv "v" #'tmux-pane-toggle-vertical
+         :desc "hpane" :nv "h" #'tmux-pane-toggle-horizontal))
+  )
+
+;;;; mac 确实很烦
+;;max下shell脚本自动补全比较慢
 (after! sh-script
   (if IS-MAC
       (set-company-backend! 'sh-mode nil))
+  )
+
+;; Mac GUI 只有基础的环境变量集，需加载shell环境变量
+;; (when (memq window-system '(mac ns x))
+(if (and IS-MAC (display-graphic-p))
+    (use-package! exec-path-from-shell
+      :config
+      (exec-path-from-shell-copy-env "PATH")
+      (exec-path-from-shell-copy-env "GOPATH")
+      ;;(exec-path-from-shell-initialize)
+      )
   )
 
 ;; icons
@@ -296,9 +353,6 @@
       )
     )
 
-  ;; (global-set-key (kbd "\C-cop") 'marp-preview)
-  ;; (global-set-key (kbd "\C-cor") 'reveal-preview)
-  ;; (global-set-key (kbd "\C-coe") 'marp-export-open)
   (map! :map markdown-mode-map
         :localleader
         "P" #'marp-preview
