@@ -59,7 +59,8 @@
 (add-hook 'after-make-frame-functions
           (lambda (new-frame)
             (select-frame new-frame)
-            (if (display-graphic-p) (set-font))))
+            (if (display-graphic-p) (set-font))
+            (doom/reload-font)))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
