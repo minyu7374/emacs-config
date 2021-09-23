@@ -113,7 +113,7 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; 输入法
+;;;; 输入法
 (setq default-input-method "rime")
 
 (global-set-key (kbd "S-SPC") 'toggle-input-method)
@@ -122,65 +122,13 @@
       (:prefix "t"
        :desc "toggle input method" :nv "i" #'toggle-input-method))
 
-;; (use-package! pyim
-;;   :after-call after-find-file pre-command-hook
-;;   :init
-;;   (setq pyim-dcache-directory (concat doom-cache-dir "pyim/"))
-;;   )
-
-;; (after! pyim
-;;   (setq pyim-default-scheme "quanpin")
-
-;;   ;; pyim-greatdict 词库
-;;   ;; (pyim-greatdict-enable)
-
-;;   ;; 模糊音
-;;   (setf pyim-fuzzy-pinyin-alist '(("z" "zh") ("c" "ch") ("s" "sh")))
-
-;;   (if (display-graphic-p)
-;;       (setq pyim-page-tooltip 'posframe)
-;;     (setq pyim-page-tooltip 'popup))
-;;   (setq pyim-page-length 7)
-
-;;   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-
-;;   ;; 中英文动态切换规则是：
-;;   ;; 1. 光标只有在注释里面时，才可以输入中文。
-;;   ;; 2. 光标前是汉字字符时，才能输入中文。
-;;   ;; 3. 使用快捷键，强制将光标前的拼音字符串转换为中文。
-;;   (if (display-graphic-p)
-;;       (setq-default pyim-english-input-switch-functions
-;;                     '(pyim-probe-dynamic-english
-;;                       pyim-probe-isearch-mode
-;;                       pyim-probe-program-mode
-;;                       pyim-probe-org-structure-template)))
-
-;;   (setq-default pyim-punctuation-half-width-functions
-;;                 '(pyim-probe-punctuation-line-beginning
-;;                   pyim-probe-punctuation-after-punctuation))
-
-;;   ;; 将光标处的拼音或者五笔字符串转换为中文
-;;   (global-set-key (kbd "C-\|") 'pyim-convert-string-at-point)
-
-;;   ;; 开启拼音搜索功能
-;;   (pyim-isearch-mode 1)
-
-;;   ;; 标点符号
-;;   ;; (setq pyim-punctuation-translate-p '(yes no auto))   ;使用全角标点。
-;;   ;; (setq pyim-punctuation-translate-p '(no yes auto))   ;使用半角标点。
-;;   (setq pyim-punctuation-translate-p '(auto yes no))   ;中文使用全角标点，英文使用半角标点。
-
-;;   (global-set-key (kbd "C-;") 'pyim-delete-word-from-personal-buffer)
-;;   )
-
 (use-package! rime
   :after-call after-find-file pre-command-hook
   :custom
   ;; max下需要单独下载librime链接库文件
   (if IS-MAC (rime-librime-root "~/.local/lib/librime/dist"))
   (rime-user-data-dir (concat doom-local-dir "rime/"))
-  )
-
-(after! rime
+  :config
   (if (display-graphic-p)
       (setq rime-show-candidate 'posframe)
     (setq rime-show-candidate 'popup))
@@ -229,40 +177,9 @@
          :desc "hpane" :nv "h" #'tmux-pane-toggle-horizontal))
   )
 
-;;;; mac 确实很烦
-;;max下shell脚本自动补全比较慢
-(after! sh-script
-  (if IS-MAC
-      (set-company-backend! 'sh-mode nil))
-  )
-
-;; Mac GUI 只有基础的环境变量集，需加载shell环境变量
-;;(when (memq window-system '(mac ns x))
-(if (and IS-MAC (display-graphic-p))
-    (use-package! exec-path-from-shell
-      :config
-      ;;(setq exec-path-from-shell-arguments nil)
-      (setq exec-path-from-shell-arguments '("-l"))
-      (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH"))
-      (exec-path-from-shell-initialize)
-      )
-  )
-
-;; icons
-(after! dired
-  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-  (add-hook! 'dired-mode 'all-the-icons-dired-mode)
-  )
-
-(use-package! imenu-list
-  :custom
-  (imenu-list-position 'right)
-  (imenu-list-size 0.2)
-  )
-
-(use-package! awesome-pair)
-
-(after! awesome-pair
+;;;; pair
+(use-package! awesome-pair
+  :config
   (dolist (hook (list
                  'c-mode-common-hook
                  'c-mode-hook
@@ -315,6 +232,31 @@
   (define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
   (define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
   (define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
+  )
+
+;;;; mac 下环境变量
+;; Mac GUI 只有基础的环境变量集，需加载shell环境变量
+;;(when (memq window-system '(mac ns x))
+(if (and IS-MAC (display-graphic-p))
+    (use-package! exec-path-from-shell
+      :config
+      ;;(setq exec-path-from-shell-arguments nil)
+      (setq exec-path-from-shell-arguments '("-l"))
+      (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH"))
+      (exec-path-from-shell-initialize)
+      )
+  )
+
+;;max下shell脚本自动补全比较慢
+(after! sh-script
+  (if IS-MAC
+      (set-company-backend! 'sh-mode nil))
+  )
+
+;; icons
+(after! dired
+  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  (add-hook! 'dired-mode 'all-the-icons-dired-mode)
   )
 
 (after! markdown-mode

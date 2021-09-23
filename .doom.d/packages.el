@@ -7,7 +7,6 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
                                         ;(package! some-package)
-(package! imenu-list)
 (package! awesome-pair :recipe (:host github :repo "manateelazycat/awesome-pair"))
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
 
