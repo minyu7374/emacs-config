@@ -78,8 +78,8 @@
 ;;;; comment
 (global-set-key (kbd "\C-cc") 'comment-line)
 (map! :leader
-      (:prefix "m"
-       :desc "comment or uncomment current line" :nv "c" #'comment-line))
+      (:prefix "c"
+       :desc "comment or uncomment current line" :nv "m" #'comment-line))
 
 ;;;; set mark ctrl+space 和常用输入法切换快捷键冲突
 (global-unset-key (kbd "C-SPC"))
@@ -308,4 +308,9 @@
         "P" #'marp-preview
         "R" #'reveal-preview
         "E" #'marp-export-open)
+  )
+
+(after! lsp-ui
+  (map! :map lsp-command-map
+        "m" #'lsp-ui-imenu)
   )
