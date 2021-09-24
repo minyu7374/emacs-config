@@ -55,13 +55,6 @@
 (if (display-graphic-p)
     (set-font))
 
-;; Fix Font not loaded when using emacs daemon
-(add-hook 'after-make-frame-functions
-          (lambda (new-frame)
-            (select-frame new-frame)
-            (if (display-graphic-p) (set-font))
-            (doom/reload-font)))
-
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
@@ -74,6 +67,24 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
+
+(set-frame-parameter nil 'fullscreen 'fullboth)
+
+;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(+global-word-wrap-mode +1)
+
+(setq-default fill-column 120
+              delete-trailing-lines t)
+
+;;;; when using emacs daemon
+(add-hook 'after-make-frame-functions
+          (lambda (new-frame)
+            (select-frame new-frame)
+            (set-frame-parameter nil 'fullscreen 'fullboth)
+            (if (display-graphic-p) (set-font))
+            (doom/reload-font)))
 
 ;;;; comment
 (global-set-key (kbd "\C-cc") 'comment-line)
@@ -97,11 +108,6 @@
 (map! :leader
       (:prefix "i"
        :desc "insert current datetime" :nv "t" #'insert-current-datetime))
-
-(+global-word-wrap-mode +1)
-
-(setq-default fill-column 120
-              delete-trailing-lines t)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
