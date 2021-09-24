@@ -83,7 +83,9 @@
           (lambda (new-frame)
             (select-frame new-frame)
             (set-frame-parameter nil 'fullscreen 'fullboth)
-            (if (display-graphic-p) (set-font))
+            (if (display-graphic-p)
+                (set-font)
+              (menu-bar-mode -1))
             (doom/reload-font)))
 
 ;;;; comment
