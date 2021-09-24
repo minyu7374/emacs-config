@@ -55,6 +55,15 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; 禁用鼠标
+(xterm-mouse-mode -1)
+(dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]
+             [mouse-2] [down-mouse-2] [drag-mouse-2] [double-mouse-2] [triple-mouse-2]
+             [mouse-3] [down-mouse-3] [drag-mouse-3] [double-mouse-3] [triple-mouse-3]
+             [mouse-4] [down-mouse-4] [drag-mouse-4] [double-mouse-4] [triple-mouse-4]
+             [mouse-5] [down-mouse-5] [drag-mouse-5] [double-mouse-5] [triple-mouse-5]))
+  (global-unset-key k))
+
 (set-frame-parameter nil 'fullscreen 'fullboth)
 
 ;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
@@ -118,8 +127,8 @@
 ;;;; 输入法
 (setq default-input-method "rime")
 
+(global-set-key (kbd "C-\\") 'toggle-input-method)
 (global-set-key (kbd "S-SPC") 'toggle-input-method)
-(global-set-key (kbd "\C-c SPC") 'toggle-input-method)
 (map! :leader
       (:prefix "t"
        :desc "toggle input method" :nv "i" #'toggle-input-method))
@@ -177,63 +186,9 @@
         (:prefix "t"
          :desc "vpane" :nv "v" #'tmux-pane-toggle-vertical
          :desc "hpane" :nv "h" #'tmux-pane-toggle-horizontal))
-  )
-
-;;;; pair
-(use-package! awesome-pair
-  :config
-  (dolist (hook (list
-                 'c-mode-common-hook
-                 'c-mode-hook
-                 'c++-mode-hook
-                 'haskell-mode-hook
-                 'emacs-lisp-mode-hook
-                 'lisp-interaction-mode-hook
-                 'lisp-mode-hook
-                 'sh-mode-hook
-                 'makefile-gmake-mode-hook
-                 'php-mode-hook
-                 'python-mode-hook
-                 'js-mode-hook
-                 'go-mode-hook
-                 'css-mode-hook
-                 'ruby-mode-hook
-                 'coffee-mode-hook
-                 'rust-mode-hook
-                 'qmake-mode-hook
-                 'lua-mode-hook
-                 'json-mode-hook
-                 'markdown-mode-hook
-                 'minibuffer-inactive-mode-hook
-                 ))
-    (add-hook hook '(lambda () (awesome-pair-mode 1))))
-
-  (define-key awesome-pair-mode-map (kbd "(") 'awesome-pair-open-round)
-  (define-key awesome-pair-mode-map (kbd "[") 'awesome-pair-open-bracket)
-  (define-key awesome-pair-mode-map (kbd "{") 'awesome-pair-open-curly)
-  (define-key awesome-pair-mode-map (kbd ")") 'awesome-pair-close-round)
-  (define-key awesome-pair-mode-map (kbd "]") 'awesome-pair-close-bracket)
-  (define-key awesome-pair-mode-map (kbd "}") 'awesome-pair-close-curly)
-  (define-key awesome-pair-mode-map (kbd "=") 'awesome-pair-equal)
-
-  (define-key awesome-pair-mode-map (kbd "%") 'awesome-pair-match-paren)
-  (define-key awesome-pair-mode-map (kbd "\"") 'awesome-pair-double-quote)
-
-  (define-key awesome-pair-mode-map (kbd "SPC") 'awesome-pair-space)
-
-  (define-key awesome-pair-mode-map (kbd "M-o") 'awesome-pair-backward-delete)
-  (define-key awesome-pair-mode-map (kbd "C-d") 'awesome-pair-forward-delete)
-  (define-key awesome-pair-mode-map (kbd "C-k") 'awesome-pair-kill)
-
-  (define-key awesome-pair-mode-map (kbd "M-\"") 'awesome-pair-wrap-double-quote)
-  (define-key awesome-pair-mode-map (kbd "M-[") 'awesome-pair-wrap-bracket)
-  (define-key awesome-pair-mode-map (kbd "M-{") 'awesome-pair-wrap-curly)
-  (define-key awesome-pair-mode-map (kbd "M-(") 'awesome-pair-wrap-round)
-  (define-key awesome-pair-mode-map (kbd "M-)") 'awesome-pair-unwrap)
-
-  (define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
-  (define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
-  (define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
+  ;; tmux-pane 会把 C-\ 设置为 omni-window-last，这里恢复为输入法开关
+  (map! :map tmux-pane--override-keymap
+        "C-\\" #'toggle-input-method)
   )
 
 ;;;; mac 下环境变量

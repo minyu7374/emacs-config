@@ -7,11 +7,10 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
                                         ;(package! some-package)
-(package! awesome-pair :recipe (:host github :repo "manateelazycat/awesome-pair"))
-;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
 
 (package! rime)
 ;; (package! pyim)
+;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
 ;; (package! pangu-spacing)
 
 (package! tmux-pane)
