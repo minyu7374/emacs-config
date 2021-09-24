@@ -19,20 +19,7 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-;; 中英文对齐
-;;https://emacs-china.org/t/org-mode/440/9
-;; (setq fonts
-;;       (cond ((eq system-type 'darwin)     '("Monaco"    "STHeiti"))
-;;             ((eq system-type 'gnu/linux)  '("Menlo"     "WenQuanYi Zen Hei"))
-;;             ((eq system-type 'windows-nt) '("Consolas"  "Microsoft Yahei"))))
-;; (set-face-attribute 'default nil :font
-;;                     (format "%s:pixelsize=%d" (car fonts) 14))
-;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
-;;   (set-fontset-font (frame-parameter nil 'font) charset
-;;                     (font-spec :family (car (cdr fonts)))))
-;; ;; Fix chinese font width and rescale
-;; (setq face-font-rescale-alist '(("Microsoft Yahei" . 1.2) ("WenQuanYi Micro Hei Mono" . 1.2) ("STHeiti". 1.2)))
-
+;; 中英文对齐 参考 https://emacs-china.org/t/org-mode/440/9
 (defun set-font()
   (interactive)
   (let ((default-font "Consolas")
