@@ -27,6 +27,7 @@
 ;; modify by minyu
 
 (use-package! autoinsert
+  :hook (prog-mode . auto-insert-mode)
   :config
   (defun insert-string(&optional prefix)
     (replace-regexp-in-string
@@ -43,7 +44,8 @@
       "Description: \n"
       (make-string 80 ?*))))
 
-  (setq auto-insert-alist
+  (setq auto-insert-query 'ask
+        auto-insert-alist
         '(((ruby-mode . "Ruby program") nil
            "#!/usr/bin/env ruby\n"
            "# -*- encoding: utf-8 -*-\n"
