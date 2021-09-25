@@ -264,3 +264,7 @@
   (map! :map lsp-command-map
         "m" #'lsp-ui-imenu)
   )
+
+
+(add-to-list 'load-path "~/.doom.d/config-lisp")
+(require 'auto-insert-header)
