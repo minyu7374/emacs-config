@@ -39,13 +39,15 @@
     )
   )
 
-(if (display-graphic-p)
-    (set-font))
-
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-one)
+(if (display-graphic-p)
+    (progn
+      (set-font)
+      (setq doom-theme 'doom-one))
+  (setq doom-theme 'doom-tomorrow-night))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -80,9 +82,14 @@
             (select-frame new-frame)
             (set-frame-parameter nil 'fullscreen 'fullboth)
             (if (display-graphic-p)
-                (set-font)
-              (menu-bar-mode -1))
-            (doom/reload-font)))
+                (progn
+                  (load-theme 'doom-one 'no-confirm)
+                  (set-font)
+                  (doom/reload-font))
+              (progn
+                (load-theme 'doom-tomorrow-night 'no-confirm)
+                (menu-bar-mode -1)))
+            ))
 
 ;;;; comment
 (global-set-key (kbd "\C-cc") 'comment-line)
