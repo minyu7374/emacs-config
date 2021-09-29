@@ -76,6 +76,9 @@
 (setq-default fill-column 120
               delete-trailing-lines t)
 
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "en_US")
+
 ;;;; when using emacs daemon
 (add-hook 'after-make-frame-functions
           (lambda (new-frame)
@@ -271,7 +274,6 @@
   (map! :map lsp-command-map
         "m" #'lsp-ui-imenu)
   )
-
 
 (add-to-list 'load-path "~/.doom.d/config-lisp")
 (require 'auto-insert-header)
