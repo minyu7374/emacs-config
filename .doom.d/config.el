@@ -147,7 +147,10 @@
   :after-call after-find-file pre-command-hook
   :custom
   ;; max下需要单独下载librime链接库文件
-  (if IS-MAC (rime-librime-root "~/.local/lib/librime/dist"))
+  (if IS-MAC
+   (progn
+    (setq rime-librime-root "~/.local/lib/librime/dist")
+    (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include")))
   (rime-user-data-dir (concat doom-local-dir "rime/"))
   :config
   (if (display-graphic-p)
@@ -238,7 +241,6 @@
   (defun marp-export-open()
     (interactive)
     (let ((os-open (cond (IS-MAC "open") (IS-LINUX "xdg-open")))
-          ;; 如果markdown文件里有相对路径资源的引用，随机html文件将不合适，因此改为与原文件同路径同名的html文件
           (out-ppt (concat (shell-command-to-string "mktemp") ".pptx")))
       (start-process-shell-command
        "marp_export_open" nil
