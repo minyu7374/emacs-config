@@ -42,11 +42,11 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-dracula)
 (if (display-graphic-p)
     (progn
       (set-font)
-      (setq doom-theme 'doom-one))
+      (setq doom-theme 'doom-dracula))
   (setq doom-theme 'doom-tomorrow-night))
 
 ;; If you use `org' and don't want your org files in the default location below,
@@ -86,7 +86,7 @@
             (set-frame-parameter nil 'fullscreen 'fullboth)
             (if (display-graphic-p)
                 (progn
-                  (load-theme 'doom-one 'no-confirm)
+                  (load-theme 'doom-dracula 'no-confirm)
                   (set-font)
                   (doom/reload-font))
               (progn
@@ -148,9 +148,10 @@
   :custom
   ;; max下需要单独下载librime链接库文件
   (if IS-MAC
-   (progn
-    (setq rime-librime-root "~/.local/lib/librime/dist")
-    (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include")))
+      (progn
+        (setq rime-librime-root "~/.local/lib/librime/dist")
+        (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
+    )
   (rime-user-data-dir (concat doom-local-dir "rime/"))
   :config
   (if (display-graphic-p)
