@@ -44,7 +44,8 @@
       "Description: \n"
       (make-string 80 ?*))))
 
-  (setq auto-insert-query 'ask
+  ;; (setq auto-insert-query 'ask
+  (setq auto-insert-query nil
         auto-insert-alist
         '(((ruby-mode . "Ruby program") nil
            "#!/usr/bin/env ruby\n"

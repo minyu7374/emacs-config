@@ -146,13 +146,10 @@
 (use-package! rime
   :after-call after-find-file pre-command-hook
   :custom
-  ;; max下需要单独下载librime链接库文件
-  (if IS-MAC
-      (progn
-        (setq rime-librime-root "~/.local/lib/librime/dist")
-        (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
-    )
   (rime-user-data-dir (concat doom-local-dir "rime/"))
+  ;; max下需要单独下载librime链接库文件
+  (rime-emacs-module-header-root (if IS-MAC "/Applications/Emacs.app/Contents/Resources/include" nil))
+  (rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
   :config
   (if (display-graphic-p)
       (setq rime-show-candidate 'posframe)
@@ -208,14 +205,15 @@
 ;;;; mac 下环境变量
 ;; Mac GUI 只有基础的环境变量集，需加载shell环境变量
 ;;(when (memq window-system '(mac ns x))
-(if (and IS-MAC (display-graphic-p))
-    (use-package! exec-path-from-shell
-      :config
-      ;;(setq exec-path-from-shell-arguments nil)
-      (setq exec-path-from-shell-arguments '("-l"))
-      (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH"))
-      (exec-path-from-shell-initialize)
-      )
+(use-package! exec-path-from-shell
+  :if (and IS-MAC (display-graphic-p))
+  :ensure t
+  :custom
+  (exec-path-from-shell-arguments '("-l"))
+  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
+  :config
+  ;;(setq exec-path-from-shell-arguments nil)
+  (exec-path-from-shell-initialize)
   )
 
 ;;max下shell脚本自动补全比较慢
