@@ -207,7 +207,6 @@
 ;;(when (memq window-system '(mac ns x))
 (use-package! exec-path-from-shell
   :if (and IS-MAC (display-graphic-p))
-  :ensure t
   :custom
   (exec-path-from-shell-arguments '("-l"))
   (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
