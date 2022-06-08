@@ -109,8 +109,8 @@
 (defun insert-current-datetime ()
   "Insert date at point."
   (interactive)
-  ;; (insert (format-time-string "%Y-%m-%d %H:%M:%S")))
-  (insert (format-time-string "%Y-%m-%d %r")))
+  (insert (format-time-string "%Y-%m-%d %H:%M")))
+  ;; (insert (format-time-string "%Y-%m-%d %r")))
 
 (global-set-key (kbd "\C-cit") 'insert-current-datetime)
 (map! :leader
