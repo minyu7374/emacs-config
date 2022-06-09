@@ -275,5 +275,7 @@
         "m" #'lsp-ui-imenu)
   )
 
+(add-to-list 'auto-mode-alist '("\\.mod\\'" . gmpl-mode))
+
 (add-to-list 'load-path "~/.doom.d/config-lisp")
 (require 'auto-insert-header)

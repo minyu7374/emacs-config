@@ -13,6 +13,7 @@
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
 ;; (package! pangu-spacing)
 
+(package! gmpl-mode)
 (package! tmux-pane)
 
 ;; Mac GUI需要单独加载shell变量
