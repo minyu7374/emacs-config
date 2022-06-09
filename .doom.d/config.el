@@ -275,7 +275,8 @@
         "m" #'lsp-ui-imenu)
   )
 
-(add-to-list 'auto-mode-alist '("\\.mod\\'" . gmpl-mode))
+;; MathProg支持 排除go.mod: /^(?!.*go).*\.mod$/ /([^o]|[^g]o)+\.mod$/
+(add-to-list 'auto-mode-alist '("\\([^o]\\|[^g]o\\)+\\.mod\\'" . gmpl-mode))
 
 (add-to-list 'load-path "~/.doom.d/config-lisp")
 (require 'auto-insert-header)
