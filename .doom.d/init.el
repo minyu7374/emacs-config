@@ -44,7 +44,7 @@
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
-       (treemacs +lsp)         ; a project drawer, like neotree but cooler
+       treemacs         ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
@@ -80,7 +80,7 @@
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       ;;(syntax +childframe) ; tasing you for every semicolon you forget
+       (syntax +childframe) ; tasing you for every semicolon you forget
        ;;(spell +aspell)   ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
@@ -96,7 +96,7 @@
        gist              ; interacting with github gists
        (lookup +dictionary +offline)              ; navigate your code and its documentation
        ;; (lsp +peek)
-       (lsp +peek +eglot)               ; M-x vscode
+       (lsp +eglot)               ; M-x vscode
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
