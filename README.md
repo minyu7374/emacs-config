@@ -34,6 +34,8 @@ rime 配置，目标路径：
 - spacemacs: ~/.spacemacs/rime
 - doom: ~/.doom/.local/rime
 
+librime 安装，可参考：[Emacs Rime 安装与使用方法](https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org)
+
 ## dot_conf
 
 其他的一些配置
