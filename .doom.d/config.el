@@ -280,4 +280,4 @@
 
 (add-to-list 'load-path "~/.doom.d/config-lisp")
 (require 'auto-insert-header)
-(require 'eaf-config)
+;; (require 'eaf-config)
