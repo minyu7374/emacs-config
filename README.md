@@ -2,27 +2,45 @@
 
 个人 emacs 配置文件及相关资源
 
-- emacs 版本: GNU Emacs 27.1
+- emacs 版本: GNU Emacs 28.2
 - spacemacs 分支: develop
-- doom 分支: develop
+- doom 分支: master
 
-## .spacemacs.d
+## chemacs
 
-spacemacs 配置目录
+eamcs配置切换
 
-### TODO 主要配置记录
+```bash
+git clone https://github.com/plexus/chemacs.git
+cd chemacs
+./install.sh
+```
 
-## .doom.d
+- `emacs-profiles.el` => `~/.emacs-profile.el`: emacs配置列表
+- `emacs-profile` => `~/.emacs-profile`: 选择使用哪一个配置
 
-doom-emacs 配置目录
+## spacemacs.d
 
-### TODO 主要配置记录
+spacemacs 配置，目标路径: `~/.spacemacs.d`
 
-#### TODO
+## doom.d
 
-imenu-list-minor-mode
-lsp-ui-imenu
+doom-emacs 配置，目标路径: `~/.doom.d`
 
-## .pyim_dict
+## rime
 
-pyim 词库(以后抽时间整理和完善)
+rime 配置，目标路径：
+
+- spacemacs: ~/.spacemacs/rime
+- doom: ~/.doom/.local/rime
+
+## dot_conf
+
+其他的一些配置
+
+- `globalrc` => `~/.globalrc`: global 命令的配置
+- `profile`: shell 配置
+
+## colorscheme
+
+配色方案
