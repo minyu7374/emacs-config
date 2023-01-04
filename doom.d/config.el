@@ -242,8 +242,7 @@
           (out-ppt (concat (shell-command-to-string "mktemp") ".pptx")))
       (start-process-shell-command
        "marp_export_open" nil
-       "marp" "--pptx --allow-local-files"
-       (format "'%s' -o '%s' && %s '%s'" buffer-file-name out-ppt os-open out-ppt))
+       (format "marp --pptx --allow-local-files '%s' -o '%s' && %s '%s'" buffer-file-name out-ppt os-open out-ppt))
       )
     )
 
@@ -257,8 +256,7 @@
           (out-html (concat (file-name-sans-extension buffer-file-name) ".html")))
       (start-process-shell-command
        "md2reveal_preview" nil
-       "pandoc" "-t revealjs -s --mathjax --toc -V theme=sky"
-       (format "-V revealjs-url='file://%s' --include-in-header='%s' -o '%s' '%s' && %s '%s'"
+       (format "pandoc -t revealjs -s --mathjax --toc -V theme=sky -V revealjs-url='file://%s' --include-in-header='%s' -o '%s' '%s' && %s '%s'"
                reveal-root custom-css out-html buffer-file-name os-open out-html))
       )
     )
