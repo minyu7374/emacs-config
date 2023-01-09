@@ -43,4 +43,4 @@
 (setq eaf-pdf-dark-mode nil)
 (setq eaf-image-dark-mode nil)
 
-(provide 'eaf-config)
+(provide 'eaf-conf)

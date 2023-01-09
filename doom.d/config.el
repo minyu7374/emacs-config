@@ -14,7 +14,10 @@
 ;; lisp
 (add-to-list 'load-path "~/.doom.d/lisp")
 (require 'display)
-;; (require 'eaf-config)
+(require 'input-method)
+(require 'markdown)
+(require 'tmux)
+;; (require 'eaf-conf)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -77,74 +80,6 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;;;; 输入法
-(setq default-input-method "rime")
-
-(global-set-key (kbd "C-\\") 'toggle-input-method)
-(global-set-key (kbd "S-SPC") 'toggle-input-method)
-(map! :leader
-      (:prefix "t"
-       :desc "toggle input method" :nv "i" #'toggle-input-method))
-
-(use-package! rime
-  :after-call after-find-file pre-command-hook
-  :custom
-  (rime-user-data-dir (concat doom-local-dir "rime/"))
-  ;; max下需要单独下载librime链接库文件
-  (rime-emacs-module-header-root (if IS-MAC "/Applications/Emacs.app/Contents/Resources/include" nil))
-  (rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
-  :config
-  (if (display-graphic-p)
-      (setq rime-show-candidate 'posframe)
-    (setq rime-show-candidate 'popup))
-
-  ;; 在 evil-normal-state 中、在英文字母后面以及代码中自动使用英文
-  (setq rime-disable-predicates
-        '(rime-predicate-evil-mode-p
-          rime-predicate-after-alphabet-char-p
-          rime-predicate-prog-in-code-p))
-
-  ;; support shift-l, shift-r, control-l, control-r
-  (setq rime-inline-ascii-trigger 'shift-l)
-
-  ;; 在有编码的状态下使用 rime-inline-ascii 命令可以切换状态
-  (define-key rime-active-mode-map (kbd "M-j") 'rime-inline-ascii)
-
-  ;; Any single character that not trigger auto commit
-  (setq rime-inline-ascii-holder ?x)
-
-  (define-key rime-mode-map (kbd "C-\"") 'rime-force-enable) ;; 强制中文
-  (define-key rime-mode-map (kbd "C-'") 'rime-select-schema)
-
-  (global-set-key (kbd "\C-czf") 'rime-force-enable)
-  (global-set-key (kbd "\C-czs") 'rime-select-schema)
-  (map! :leader
-        (:prefix ("z" . "chinaese")
-         :desc "force rime" :nv "f" #'rime-force-enable
-         :desc "rime select scheme" :nv "s" #'rime-select-schema))
-  )
-
-;;;; 和tmux无缝跳转
-(use-package! tmux-pane
-  :config
-  (tmux-pane-mode)
-  (map! :leader
-        (:prefix ("v" . "tmux pane")
-         :desc "Open vpane" :nv "o" #'tmux-pane-open-vertical
-         :desc "Open hpane" :nv "h" #'tmux-pane-open-horizontal
-         :desc "Open hpane" :nv "s" #'tmux-pane-open-horizontal
-         :desc "Open vpane" :nv "v" #'tmux-pane-open-vertical
-         :desc "Close pane" :nv "c" #'tmux-pane-close
-         :desc "Rerun last command" :nv "r" #'tmux-pane-rerun))
-  (map! :leader
-        (:prefix "t"
-         :desc "vpane" :nv "v" #'tmux-pane-toggle-vertical
-         :desc "hpane" :nv "h" #'tmux-pane-toggle-horizontal))
-  ;; tmux-pane 会把 C-\ 设置为 omni-window-last，这里恢复为输入法开关
-  (map! :map tmux-pane--override-keymap
-        "C-\\" #'toggle-input-method)
-  )
-
 ;;;; mac 下环境变量
 ;; Mac(GUI) 只有基础的环境变量集，需加载shell环境变量
 ;;(when (memq window-system '(mac ns x))
@@ -170,47 +105,7 @@
   (add-hook! 'dired-mode 'all-the-icons-dired-mode)
   )
 
-(after! markdown-mode
-  (setq markdown-split-window-direction 'right)
-
-  (defun marp-preview()
-    (interactive)
-    ;; (async-shell-command (format "marp -p '%s'" buffer-file-name))
-    (start-process-shell-command "marp-preview" nil (format "marp -p '%s'" buffer-file-name))
-    )
-
-  (defun marp-export-open()
-    (interactive)
-    (let ((os-open (cond (IS-MAC "open") (IS-LINUX "xdg-open")))
-          (out-ppt (concat (shell-command-to-string "mktemp") ".pptx")))
-      (start-process-shell-command
-       "marp_export_open" nil
-       (format "marp --pptx --allow-local-files '%s' -o '%s' && %s '%s'" buffer-file-name out-ppt os-open out-ppt))
-      )
-    )
-
-  (defun reveal-preview()
-    (interactive)
-    (let ((reveal-root (concat doom-local-dir "reveal.js"))
-          (custom-css (concat doom-local-dir "etc/reveal.js/custom.css"))
-          (os-open (cond (IS-MAC "open") (IS-LINUX "xdg-open")))
-          ;; 如果markdown文件里有相对路径资源的引用，随机html文件将不合适，因此改为与原文件同路径同名的html文件
-          ;; (out-html (concat (shell-command-to-string "mktemp") ".html")))
-          (out-html (concat (file-name-sans-extension buffer-file-name) ".html")))
-      (start-process-shell-command
-       "md2reveal_preview" nil
-       (format "pandoc -t revealjs -s --mathjax --toc -V theme=sky -V revealjs-url='file://%s' --include-in-header='%s' -o '%s' '%s' && %s '%s'"
-               reveal-root custom-css out-html buffer-file-name os-open out-html))
-      )
-    )
-
-  (map! :map markdown-mode-map
-        :localleader
-        "P" #'marp-preview
-        "R" #'reveal-preview
-        "E" #'marp-export-open)
-  )
-
+;; imenu
 (after! lsp-ui
   (map! :map lsp-command-map
         "m" #'lsp-ui-imenu)
