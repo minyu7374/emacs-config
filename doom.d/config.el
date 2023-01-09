@@ -7,51 +7,14 @@
 (setq user-full-name "minyu"
       user-mail-address "minyu7374@gmail.com")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-;; 中英文对齐 参考 https://emacs-china.org/t/org-mode/440/9
-(defun set-font()
-  (interactive)
-  (let ((default-font "Consolas")
-        (chinese-font "FZTieJinLiShu-S17S")
-        (default-font-size 14)
-        (big-font-size 20)
-        (chinese-font-rescale 1.2))
-
-    (setq doom-big-font (font-spec :family default-font :slant 'italic :size big-font-size)
-          doom-variable-pitch-font (font-spec :family default-font :slant 'italic :size default-font-size)
-          doom-serif-font (font-spec :family default-font :slant 'italic :weight 'light))
-    (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" default-font default-font-size) :slant 'italic)
-    (dolist (charset '(kana han symbol cjk-misc bopomofo))
-      (set-fontset-font (frame-parameter nil 'font) charset
-                        (font-spec :family chinese-font)))
-    (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
-    )
-  )
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-dracula)
-(if (display-graphic-p)
-    (progn
-      (set-font)
-      (setq doom-theme 'doom-dracula))
-  (setq doom-theme 'doom-tomorrow-night))
-
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
+
+;; lisp
+(add-to-list 'load-path "~/.doom.d/lisp")
+(require 'display)
+;; (require 'eaf-config)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -66,11 +29,6 @@
              [mouse-5] [down-mouse-5] [drag-mouse-5] [double-mouse-5] [triple-mouse-5]))
   (global-unset-key k))
 
-(set-frame-parameter nil 'fullscreen 'fullboth)
-
-;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
 (+global-word-wrap-mode +1)
 
 (setq-default fill-column 120
@@ -78,21 +36,6 @@
 
 ;;(setq ispell-program-name "aspell")
 ;;(setq ispell-dictionary "en_US")
-
-;;;; when using emacs daemon
-(add-hook 'after-make-frame-functions
-          (lambda (new-frame)
-            (select-frame new-frame)
-            (set-frame-parameter nil 'fullscreen 'fullboth)
-            (if (display-graphic-p)
-                (progn
-                  (load-theme 'doom-dracula 'no-confirm)
-                  (set-font)
-                  (doom/reload-font))
-              (progn
-                (load-theme 'doom-tomorrow-night 'no-confirm)
-                (menu-bar-mode -1)))
-            ))
 
 ;;;; comment
 (global-set-key (kbd "\C-cc") 'comment-line)
@@ -275,7 +218,3 @@
 
 ;; MathProg支持 排除go.mod: /^(?!.*go).*\.mod$/ /([^o]|[^g]o)+\.mod$/
 (add-to-list 'auto-mode-alist '("\\([^o]\\|[^g]o\\)+\\.mod\\'" . gmpl-mode))
-
-;; (add-to-list 'load-path "~/.doom.d/config-lisp")
-;; (require 'auto-insert-header)
-;; (require 'eaf-config)
