@@ -1,4 +1,3 @@
-;;;; 输入法
 (setq default-input-method "rime")
 
 (global-set-key (kbd "C-\\") 'toggle-input-method)

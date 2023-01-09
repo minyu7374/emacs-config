@@ -46,7 +46,7 @@
 ;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;;;; when using emacs daemon
+;; when using emacs daemon
 (add-hook 'after-make-frame-functions
           (lambda (new-frame)
             (select-frame new-frame)

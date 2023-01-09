@@ -1,4 +1,3 @@
-;;;; 和tmux无缝跳转
 (use-package! tmux-pane
   :config
   (tmux-pane-mode)

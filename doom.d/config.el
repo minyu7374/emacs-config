@@ -37,21 +37,22 @@
 (setq-default fill-column 120
               delete-trailing-lines t)
 
+;; 拼写检查
 ;;(setq ispell-program-name "aspell")
 ;;(setq ispell-dictionary "en_US")
 
-;;;; comment
+;; comment
 (global-set-key (kbd "\C-cc") 'comment-line)
 (map! :leader
       (:prefix "c"
        :desc "comment or uncomment current line" :nv "m" #'comment-line))
 
-;;;; set mark ctrl+space 和常用输入法切换快捷键冲突
+;; set mark ctrl+space 和常用输入法切换快捷键冲突
 (global-unset-key (kbd "C-SPC"))
 ;; alt+space 在Linux kde上是kruner，command+space是Albert(Linux)/Spotlight(Mac)
 (global-set-key (kbd "C-S-SPC") 'set-mark-command)
 
-;;;; insert current datetime
+;; insert current datetime
 (defun insert-current-datetime ()
   "Insert date at point."
   (interactive)
@@ -80,9 +81,8 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;;;; mac 下环境变量
 ;; Mac(GUI) 只有基础的环境变量集，需加载shell环境变量
-;;(when (memq window-system '(mac ns x))
+;; (when (memq window-system '(mac ns x))
 (use-package! exec-path-from-shell
   :if IS-MAC
   :custom
@@ -93,7 +93,7 @@
   (exec-path-from-shell-initialize)
   )
 
-;;max下shell脚本自动补全比较慢
+;; max下shell脚本自动补全比较慢
 (after! sh-script
   (if IS-MAC
       (set-company-backend! 'sh-mode nil))
