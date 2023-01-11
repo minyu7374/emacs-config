@@ -23,9 +23,32 @@ cd chemacs
 
 spacemacs 配置，目标路径: =~/.spacemacs.d=
 
++ =init.el=: 主配置文件, 主要是各种 =layer= 的加载以及引入 =cofig-lisp= 目录里的配置
++ =layers=: 自定义的layer
+  + =minyu=: 个人配置layer，主要是 =liberime= (pyim使用rime)相关的配置
+  + =tabnine=: 基于AI的自动补全
++ =config-lisp=: 自定义的一些配置
+  + =personal-preference.el=: 一些基础的个人配置(包括快捷键绑定、输入法等)
+  + =graphic-xterm.el=: 图形界面和文本界面的一些针对性配置
+  + =bash-completion.el=: bash脚本的自动补全
+  + =auto-insert-header.el=: 新建一些编程语言的文件自动些文件头
+  + =exec-path-from-shell.el=: 加载环境变量，针对mac需要特殊处理下
+  + =hook.el=: 一些 =mode= 下的钩子
+
 ** doom.d
 
 doom-emacs 配置，目标路径: =~/.doom.d=
+
++ =init.el=: 主配置文件，主要是各种 =module= 的加载
++ =config.el=: 个人配置，会引入 =lisp= 目录里的配置
++ =package.el=: 一些个人额外安装的 =package=
++ =custom.el=: 个人定制的变量参数，一般是doom自动写入的
++ =lisp=: 主要存放一些单独整理出的配置块
+  + =display.el=: 针对图形和文本界面显示相关的配置，根据系统dpi软链到 =display.el.normal= 或 =display.el.hidpi=
+  + =input-method.el=: 输入法配置，这次直接使用了 =emacs-rime= ，感觉比 =pyim+liberime= 的方案好用
+  + =markdown.el=: markdown相关的配置，这里做了一些使用外部软件预览和导出为ppt的功能
+  + =tmux.el=: emacs和tmux面板无缝切换的配置
+  + =eaf-conf.el=: =emacs-application-framework= 相关的配置，这个比较重，默认在 =init.el= 里不进行require
 
 ** rime
 
