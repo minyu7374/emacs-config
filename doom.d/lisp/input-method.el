@@ -11,8 +11,11 @@
   :custom
   (rime-user-data-dir (concat doom-local-dir "rime/"))
   ;; max下需要单独下载librime链接库文件
-  (rime-emacs-module-header-root (if IS-MAC "/Applications/Emacs.app/Contents/Resources/include" nil))
-  (rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
+  ;; (rime-emacs-module-header-root (if IS-MAC "/Applications/Emacs.app/Contents/Resources/include" nil))
+  ;;(rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
+  ;; MacPorts: port install emacs-app librime-devel
+  (rime-emacs-module-header-root (if IS-MAC "/Applications/MacPorts/Emacs.app/Contents/Resources/include" nil))
+  (rime-librime-root (if IS-MAC "/opt/local" nil))
   :config
   (if (display-graphic-p)
       (setq rime-show-candidate 'posframe)
