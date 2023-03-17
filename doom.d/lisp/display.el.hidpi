@@ -14,7 +14,7 @@
 (defun set-font()
   (interactive)
   (let ((default-font "Consolas")
-        (chinese-font "Microsoft Yahei")
+        (chinese-font "Microsoft YaHei")
         (default-font-size 32)
         (big-font-size 40)
         (chinese-font-rescale 1.1))
