@@ -165,8 +165,10 @@
       (cons '("\\.dat$" . ampl-mode) auto-mode-alist))
 (setq auto-mode-alist
       (cons '("\\.ampl$" . ampl-mode) auto-mode-alist))
-(setq interpreter-mode-alist
-      (cons '("\\.run$" . ampl-mode)
-            interpreter-mode-alist))
+(setq auto-mode-alist
+      (cons '("\\.run$" . ampl-mode) auto-mode-alist))
+;; (setq interpreter-mode-alist
+;;       (cons '("\\.run$" . ampl-mode)
+;;             interpreter-mode-alist))
 
 (autoload 'ampl-mode "ampl-mode" "Ampl editing mode." t)
