@@ -40,6 +40,7 @@
 (require 'input-method)
 (require 'markdown)
 (require 'tmux)
+(require 'ampl-mode)
 ;; (require 'eaf-conf)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -130,7 +131,7 @@
   :if IS-MAC
   :custom
   (exec-path-from-shell-arguments '("-l"))
-  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
+  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH" "OPENAI_API_KEY"))
   :config
   ;;(setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize)
@@ -154,5 +155,23 @@
         "m" #'lsp-ui-imenu)
   )
 
-;; MathProg支持 排除go.mod: /^(?!.*go).*\.mod$/ /([^o]|[^g]o)+\.mod$/
-(add-to-list 'auto-mode-alist '("\\([^o]\\|[^g]o\\)+\\.mod\\'" . gmpl-mode))
+;; chatgpt
+(setq gptel-api-key (getenv "OPENAI_API_KEY"))
+
+;; ;; MathProg支持 排除go.mod: /^(?!.*go).*\.mod$/ /([^o]|[^g]o)+\.mod$/
+;; (add-to-list 'auto-mode-alist '("\\([^o]\\|[^g]o\\)+\\.mod\\'" . gmpl-mode))
+
+;; 改为Ampl mode
+(setq auto-mode-alist
+      (cons '("\\([^o]\\|[^g]o\\)+\\.mod\\'" . ampl-mode) auto-mode-alist))
+(setq auto-mode-alist
+      (cons '("\\.dat$" . ampl-mode) auto-mode-alist))
+(setq auto-mode-alist
+      (cons '("\\.ampl$" . ampl-mode) auto-mode-alist))
+(setq auto-mode-alist
+      (cons '("\\.run$" . ampl-mode) auto-mode-alist))
+;; (setq interpreter-mode-alist
+;;       (cons '("\\.run$" . ampl-mode)
+;;             interpreter-mode-alist))
+
+(autoload 'ampl-mode "ampl-mode" "Ampl editing mode." t)

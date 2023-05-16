@@ -13,11 +13,13 @@
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
 ;; (package! pangu-spacing)
 
-(package! gmpl-mode)
+;; (package! gmpl-mode)
 (package! tmux-pane)
 
 ;; Mac GUI需要单独加载shell变量
 (package! exec-path-from-shell :ignore (not IS-MAC))
+
+(package! gptel)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
