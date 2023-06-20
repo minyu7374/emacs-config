@@ -36,7 +36,7 @@
   ;; Any single character that not trigger auto commit
   (setq rime-inline-ascii-holder ?x)
 
-  (define-key rime-mode-map (kbd "C-\"") 'rime-force-enable) ;; 强制中文
+  (define-key rime-mode-map (kbd "C-,") 'rime-force-enable) ;; 强制中文
   (define-key rime-mode-map (kbd "C-'") 'rime-select-schema)
 
   (global-set-key (kbd "\C-czf") 'rime-force-enable)
