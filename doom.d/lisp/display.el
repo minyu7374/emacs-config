@@ -1,1 +1,0 @@
-display.el.normal
