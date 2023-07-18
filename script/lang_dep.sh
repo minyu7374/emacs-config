@@ -73,19 +73,19 @@ function for_haskell() {
 
 function for_markdown() {
     ##Markdown-specific
-    npm install markdownlint
-    gem install mdl
+    sudo npm install -g markdownlint
+    sudo gem install mdl
 
     ## General (natural language)
     pip install proselint
-    npm install textlint
+    sudo npm install -g textlint
     
     ## MarkedJS
-    npm install -g marked
+    sudo npm install -g marked
     
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
-        sudo emerge --update pandoc discount
+        sudo emerge --update pandoc-bin discount
     fi
 
     if [ "$OS" == "Mac" ]; then
@@ -113,7 +113,7 @@ function for_shell() {
     cabal install ShellCheck
     # stack install ShellCheck
 
-    npm i -g bash-language-server
+    sudo npm i -g bash-language-server
 }
 
 if [ -z "$1" ]; then
