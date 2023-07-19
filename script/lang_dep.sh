@@ -73,15 +73,15 @@ function for_haskell() {
 
 function for_markdown() {
     ##Markdown-specific
-    sudo npm install -g markdownlint
+    sudo npm install -g markdownlint --force
     sudo gem install mdl
 
     ## General (natural language)
     pip install proselint
-    sudo npm install -g textlint
+    sudo npm install -g textlint --force
     
     ## MarkedJS
-    sudo npm install -g marked
+    sudo npm install -g marked --force
     
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
@@ -110,10 +110,10 @@ function for_rust() {
 }
 
 function for_shell() {
-    cabal install ShellCheck
+    cabal install ShellCheck --overwrite-policy=always
     # stack install ShellCheck
 
-    sudo npm i -g bash-language-server
+    sudo npm i -g bash-language-server --force
 }
 
 if [ -z "$1" ]; then
