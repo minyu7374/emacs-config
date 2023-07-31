@@ -98,7 +98,8 @@ function for_python() {
     #pip install nose
     
     pip install black pyflakes isort
-    pip install python-language-server pyright
+    pip install python-language-server
+    sudo npm i -g pyright --force
 }
 
 function for_rust() {
