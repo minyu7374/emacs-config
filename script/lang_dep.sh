@@ -59,7 +59,7 @@ function for_go() {
         sudo port install golangci-lint
     else
         # binary will be $(go env GOPATH)/bin/golangci-lint
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.53.2
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.1
         golangci-lint --version
     fi
 }
@@ -74,7 +74,7 @@ function for_haskell() {
 function for_markdown() {
     ##Markdown-specific
     sudo npm install -g markdownlint --force
-    sudo gem install mdl
+    # sudo gem install mdl
 
     ## General (natural language)
     pip install proselint
@@ -105,9 +105,9 @@ function for_python() {
 function for_rust() {
     # for +lsp, need rust-analyzer
 
-    rustup component add rustfmt-preview
+    # rustup component add rustfmt-preview
+    # rustup component add clippy-preview
     cargo install cargo-check
-    rustup component add clippy-preview
 }
 
 function for_shell() {
