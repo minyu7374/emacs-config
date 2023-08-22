@@ -1,6 +1,7 @@
 (setq default-input-method "rime")
 
 (global-set-key (kbd "C-\\") 'toggle-input-method)
+; (global-set-key (kbd "C-;") 'toggle-input-method)
 (global-set-key (kbd "S-SPC") 'toggle-input-method)
 (map! :leader
       (:prefix "t"
@@ -36,15 +37,15 @@
   ;; Any single character that not trigger auto commit
   (setq rime-inline-ascii-holder ?x)
 
-  (define-key rime-mode-map (kbd "C-,") 'rime-force-enable) ;; 强制中文
   (define-key rime-mode-map (kbd "C-'") 'rime-select-schema)
+  (define-key rime-mode-map (kbd "C-,") 'rime-force-enable) ;; 强制中文
 
-  (global-set-key (kbd "\C-czf") 'rime-force-enable)
   (global-set-key (kbd "\C-czs") 'rime-select-schema)
+  (global-set-key (kbd "\C-czf") 'rime-force-enable)
   (map! :leader
         (:prefix ("z" . "chinaese")
-         :desc "force rime" :nv "f" #'rime-force-enable
          :desc "rime select scheme" :nv "s" #'rime-select-schema))
+         :desc "force rime" :nv "f" #'rime-force-enable
   )
 
 (provide 'input-method)
