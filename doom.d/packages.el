@@ -14,7 +14,7 @@
 ;; (package! pangu-spacing)
 
 ;; (package! gmpl-mode)
-(package! tmux-pane)
+;; (package! tmux-pane)
 
 ;; Mac GUI需要单独加载shell变量
 (package! exec-path-from-shell :ignore (not IS-MAC))
