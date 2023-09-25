@@ -44,8 +44,8 @@
   (global-set-key (kbd "\C-czf") 'rime-force-enable)
   (map! :leader
         (:prefix ("z" . "chinaese")
-         :desc "rime select scheme" :nv "s" #'rime-select-schema))
-         :desc "force rime" :nv "f" #'rime-force-enable
+         :desc "rime select scheme" :nv "s" #'rime-select-schema
+         :desc "force rime" :nv "f" #'rime-force-enable))
   )
 
 (provide 'input-method)
