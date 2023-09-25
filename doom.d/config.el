@@ -39,7 +39,7 @@
 (require 'display)
 (require 'input-method)
 (require 'markdown)
-(require 'tmux)
+;; (require 'tmux)
 (require 'ampl-mode)
 ;; (require 'eaf-conf)
 
