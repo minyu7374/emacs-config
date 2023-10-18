@@ -13,8 +13,10 @@
 ;; 中英文对齐 参考 https://emacs-china.org/t/org-mode/440/9
 (defun set-font()
   (interactive)
-  (let ((default-font "Consolas")
-        ;; (chinese-font "FZTieJinLiShu-S17S")
+  ;; "JetBrainsMono/Consolas[ NF]"
+  (let ((default-font "Consolas NF")
+        ;; (chinese-font "FZLiBian-S02")
+        ;; (chinese-font "FZTieJinLiShu-S17")
         (chinese-font "Microsoft YaHei")
         (default-font-size 32)
         (big-font-size 40)
@@ -40,7 +42,7 @@
     (progn
       (set-font)
       (setq doom-theme 'doom-dracula))
-  (setq doom-theme 'doom-tomorrow-night))
+    (setq doom-theme 'doom-tomorrow-night))
 
 ;; fullscreen
 (set-frame-parameter nil 'fullscreen 'fullboth)
@@ -58,9 +60,9 @@
                   (load-theme 'doom-dracula 'no-confirm)
                   (set-font)
                   (doom/reload-font))
-              (progn
-                (load-theme 'doom-tomorrow-night 'no-confirm)
-                (menu-bar-mode -1)))
+                (progn
+                  (load-theme 'doom-tomorrow-night 'no-confirm)
+                  (menu-bar-mode -1)))
             ))
 
 (provide 'display)

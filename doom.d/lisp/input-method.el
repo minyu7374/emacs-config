@@ -1,7 +1,6 @@
 (setq default-input-method "rime")
 
-(global-set-key (kbd "C-\\") 'toggle-input-method)
-; (global-set-key (kbd "C-;") 'toggle-input-method)
+;; (global-set-key (kbd "C-/") 'toggle-input-method)
 (global-set-key (kbd "S-SPC") 'toggle-input-method)
 (map! :leader
       (:prefix "t"

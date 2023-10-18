@@ -13,10 +13,6 @@
         (:prefix "t"
          :desc "vpane" :nv "v" #'tmux-pane-toggle-vertical
          :desc "hpane" :nv "h" #'tmux-pane-toggle-horizontal))
-
-  ;; tmux-pane 会把 C-\ 设置为 omni-window-last，这里恢复为输入法开关
-  (map! :map tmux-pane--override-keymap
-        "C-\\" #'toggle-input-method)
   )
 
 (provide 'tmux)

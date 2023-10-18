@@ -13,8 +13,10 @@
 ;; 中英文对齐 参考 https://emacs-china.org/t/org-mode/440/9
 (defun set-font()
   (interactive)
-  (let ((default-font "Consolas")
-        ;; (chinese-font "FZTieJinLiShu-S17S")
+  ;; "JetBrainsMono/Consolas[ NF]"
+  (let ((default-font "Consolas NF")
+        ;; (chinese-font "FZLiBian-S02")
+        ;; (chinese-font "FZTieJinLiShu-S17")
         (chinese-font "Microsoft YaHei")
         (default-font-size 17)
         (big-font-size 22)
