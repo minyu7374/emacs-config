@@ -65,10 +65,17 @@ function for_go() {
 }
 
 function for_haskell() {
-    ghcup install ghc
-    # for +lsp
-    ghcup install hls
-    # ghcup install haskell-mode haskell-language-server
+    if [ "$DISTRO" == "Gentoo" ]; then
+        sudo emerge --update ghc haskell-language-server haskell-mode hoogle hlint
+    else
+        ghcup install ghc
+        # for +lsp
+        ghcup install hls
+        ghcup install haskell-mode
+
+        ghcup install hlint
+        ghcup install hoogle
+    fi
 }
 
 function for_markdown() {
@@ -85,7 +92,7 @@ function for_markdown() {
     
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
-        sudo emerge --update pandoc-bin discount
+        sudo emerge --update pandoc discount
     fi
 
     if [ "$OS" == "Mac" ]; then
@@ -111,8 +118,12 @@ function for_rust() {
 }
 
 function for_shell() {
-    cabal install ShellCheck --overwrite-policy=always
-    # stack install ShellCheck
+    if [ "$DISTRO" == "Gentoo" ]; then
+        sudo emerge --update shellcheck
+    else
+        cabal install ShellCheck --overwrite-policy=always
+        # stack install ShellCheck
+    fi
 
     sudo npm i -g bash-language-server --force
 }
