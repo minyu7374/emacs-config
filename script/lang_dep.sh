@@ -66,12 +66,12 @@ function for_go() {
 
 function for_haskell() {
     if [ "$DISTRO" == "Gentoo" ]; then
-        sudo emerge --update ghc haskell-language-server haskell-mode hoogle hlint
+        sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
     else
         ghcup install ghc
         # for +lsp
         ghcup install hls
-        ghcup install haskell-mode
+        #ghcup install haskell-mode
 
         ghcup install hlint
         ghcup install hoogle
@@ -92,7 +92,7 @@ function for_markdown() {
     
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
-        sudo emerge --update pandoc discount
+        sudo emerge --update discount app-text/pandoc
     fi
 
     if [ "$OS" == "Mac" ]; then
