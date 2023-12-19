@@ -111,6 +111,9 @@ function for_python() {
 
 function for_rust() {
     # for +lsp, need rust-analyzer
+    if [ "$DISTRO" == "Gentoo" ]; then
+        echo -e "USE config for rust:\n\t dev-lang/rust clippy rust-analyzer rustfmt rust-src"
+    fi
 
     # rustup component add rustfmt-preview
     # rustup component add clippy-preview
