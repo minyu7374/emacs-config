@@ -92,7 +92,7 @@ function for_markdown() {
     
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
-        sudo emerge --update discount app-text/pandoc
+        sudo emerge --update discount app-text/pandoc-bin
     fi
 
     if [ "$OS" == "Mac" ]; then
