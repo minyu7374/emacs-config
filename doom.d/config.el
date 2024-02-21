@@ -34,12 +34,17 @@
 ;; `load-theme' function. This is the default:
 ; (setq doom-theme 'doom-one)
 
+;; DIY 命令前缀
+(map! :leader
+      (:prefix ("y" . "DIY")))
+
 ;; lisp
 (add-to-list 'load-path "~/.doom.d/lisp")
 (require 'display)
 (require 'input-method)
 (require 'markdown)
 ;; (require 'tmux)
+(require 'proxy)
 (require 'window-move)
 (require 'ampl-mode)
 ;; (require 'eaf-conf)

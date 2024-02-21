@@ -21,16 +21,16 @@
 
 (require 'eaf-evil)
 (define-key key-translation-map (kbd "SPC")
-    (lambda (prompt)
-      (if (derived-mode-p 'eaf-mode)
-          (pcase eaf--buffer-app-name
-            ("browser" (if  (eaf-call-sync "execute_function" eaf--buffer-id "is_focus")
-                           (kbd "SPC")
-                         (kbd eaf-evil-leader-key)))
-            ("pdf-viewer" (kbd eaf-evil-leader-key))
-            ("image-viewer" (kbd eaf-evil-leader-key))
-            (_  (kbd "SPC")))
-        (kbd "SPC"))))
+  (lambda (prompt)
+    (if (derived-mode-p 'eaf-mode)
+        (pcase eaf--buffer-app-name
+          ("browser" (if  (eaf-call-sync "execute_function" eaf--buffer-id "is_focus")
+                         (kbd "SPC")
+                       (kbd eaf-evil-leader-key)))
+          ("pdf-viewer" (kbd eaf-evil-leader-key))
+          ("image-viewer" (kbd eaf-evil-leader-key))
+          (_  (kbd "SPC")))
+      (kbd "SPC"))))
 
 (setq browse-url-browser-function 'eaf-open-browser)
 (defalias 'browse-web #'eaf-open-browser)
@@ -41,7 +41,7 @@
 
 (setq eaf-proxy-type "http")
 (setq eaf-proxy-host "127.0.0.1")
-(setq eaf-proxy-port "7890")
+(setq eaf-proxy-port "17890")
 
 (setq eaf-browser-dark-mode nil)
 (setq eaf-pdf-dark-mode nil)

@@ -42,7 +42,7 @@
   (global-set-key (kbd "\C-czs") 'rime-select-schema)
   (global-set-key (kbd "\C-czf") 'rime-force-enable)
   (map! :leader
-        (:prefix ("z" . "chinaese")
+        (:prefix ("z" . "zh_cn")
          :desc "rime select scheme" :nv "s" #'rime-select-schema
          :desc "force rime" :nv "f" #'rime-force-enable))
   )
