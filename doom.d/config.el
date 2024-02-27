@@ -44,6 +44,7 @@
 (require 'input-method)
 (require 'markdown)
 ;; (require 'tmux)
+(require 'java)
 (require 'proxy)
 (require 'window-move)
 (require 'ampl-mode)
