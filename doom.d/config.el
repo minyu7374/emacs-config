@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-; (setq doom-theme 'doom-one)
+                                        ; (setq doom-theme 'doom-one)
 
 ;; DIY 命令前缀
 (map! :leader
@@ -48,6 +48,7 @@
 (require 'proxy)
 (require 'window-move)
 (require 'ampl-mode)
+(require 'diy-env)
 ;; (require 'eaf-conf)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line

@@ -11,6 +11,9 @@
                                           (:name "JavaSE-17" :path "/usr/lib/jvm/java-17-openjdk-amd64")
                                           (:name "JavaSE-21" :path "/opt/oraclejdk-bin-21")])
 
+  ;; 即在java项目所在同一层目录下设置maven目录，提供settings.xml文件
+  (setq lsp-java-configuration-maven-user-settings "../maven/settings.xml")
+
   (setq lombok-library-path (concat doom-data-dir "lombok.jar"))
 
   (unless (file-exists-p lombok-library-path)
@@ -19,8 +22,8 @@
   (setq lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms100m"))
 
   (push (concat "-javaagent:"
-                  (expand-file-name lombok-library-path))
-          lsp-java-vmargs)
+                (expand-file-name lombok-library-path))
+        lsp-java-vmargs)
   )
 
 
