@@ -71,10 +71,10 @@ function for_haskell() {
         ghcup install ghc
         # for +lsp
         ghcup install hls
-        #ghcup install haskell-mode
+        #cabal install haskell-mode
 
-        ghcup install hlint
-        ghcup install hoogle
+        cabal install hlint
+        cabal install hoogle
     fi
 }
 
