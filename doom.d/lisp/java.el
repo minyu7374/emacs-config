@@ -6,9 +6,8 @@
   ;; https://github.com/emacs-lsp/lsp-java/issues/249
   (setq lsp-java-jdt-download-url "https://download.eclipse.org/jdtls/milestones/0.57.0/jdt-language-server-0.57.0-202006172108.tar.gz")
 
-  (setq lsp-java-configuration-runtimes '[(:name "JavaSE-8" :path "/opt/oraclejdk-bin-8" :default t)
-                                          (:name "JavaSE-17" :path "/opt/openjdk-bin-17")
-                                          (:name "JavaSE-17" :path "/usr/lib/jvm/java-17-openjdk-amd64")
+  (setq lsp-java-configuration-runtimes '[(:name "JavaSE-1.8" :path "/opt/oraclejdk-bin-8")
+                                          (:name "JavaSE-17" :path "/opt/openjdk-bin-17" :default t)
                                           (:name "JavaSE-21" :path "/opt/oraclejdk-bin-21")])
 
   ;; 即在java项目所在同一层目录下设置maven目录，提供settings.xml文件
@@ -25,6 +24,5 @@
                 (expand-file-name lombok-library-path))
         lsp-java-vmargs)
   )
-
 
 (provide 'java)
