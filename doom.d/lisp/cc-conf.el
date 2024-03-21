@@ -1,7 +1,7 @@
-;; lsp-mode
+;;; lsp-mode
 ;; (after! lsp-clangd
 ;;   (setq lsp-clients-clangd-args
-;;         '("-j=3"
+;;         '("-j=8"
 ;;           "--background-index"
 ;;           "--clang-tidy"
 ;;           "--completion-style=detailed"
@@ -13,7 +13,7 @@
   (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
   (set-lsp-priority! 'ccls 2)) ; optional as ccls is the default in Doom
 
-;; eglot
+;;; eglot
 ;; (set-eglot-client! 'cc-mode '("clangd" "-j=8" "--clang-tidy"))
 ;; (set-eglot-client! 'cc-mode '("ccls" "--init={\"index\": {\"threads\": 8}}"))
 
