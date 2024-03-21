@@ -15,4 +15,4 @@
          :desc "hpane" :nv "h" #'tmux-pane-toggle-horizontal))
   )
 
-(provide 'tmux)
+(provide 'tmux-conf)

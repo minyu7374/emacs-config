@@ -42,13 +42,17 @@
 (add-to-list 'load-path "~/.doom.d/lisp")
 (require 'display)
 (require 'input-method)
-(require 'markdown)
-;; (require 'tmux)
-(require 'java)
 (require 'proxy)
-(require 'window-move)
+
+(require 'markdown-conf)
+(require 'java-conf)
+(require 'cc-conf)
 (require 'ampl-mode)
+(require 'ampl-conf)
+
 (require 'diy-env)
+(require 'window-move)
+;; (require 'tmux-conf)
 ;; (require 'eaf-conf)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -139,7 +143,7 @@
   :if IS-MAC
   :custom
   (exec-path-from-shell-arguments '("-l"))
-  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
+  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH" "LSP_USE_PLISTS"))
   :config
   ;;(setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize)
@@ -162,21 +166,3 @@
   (map! :map lsp-command-map
         "m" #'lsp-ui-imenu)
   )
-
-;; ;; MathProg支持 排除go.mod: /^(?!.*go).*\.mod$/ /([^o]|[^g]o)+\.mod$/
-;; (add-to-list 'auto-mode-alist '("\\([^o]\\|[^g]o\\)+\\.mod\\'" . gmpl-mode))
-
-;; 改为Ampl mode
-(setq auto-mode-alist
-      (cons '("\\([^o]\\|[^g]o\\)+\\.mod\\'" . ampl-mode) auto-mode-alist))
-(setq auto-mode-alist
-      (cons '("\\.dat$" . ampl-mode) auto-mode-alist))
-(setq auto-mode-alist
-      (cons '("\\.ampl$" . ampl-mode) auto-mode-alist))
-(setq auto-mode-alist
-      (cons '("\\.run$" . ampl-mode) auto-mode-alist))
-;; (setq interpreter-mode-alist
-;;       (cons '("\\.run$" . ampl-mode)
-;;             interpreter-mode-alist))
-
-(autoload 'ampl-mode "ampl-mode" "Ampl editing mode." t)

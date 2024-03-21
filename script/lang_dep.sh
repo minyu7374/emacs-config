@@ -41,7 +41,7 @@ function for_c() {
                 ;;
         esac
     fi
-    # pip install cmake-language-server
+    pip install cmake-language-server
 }
 
 function for_go() {
@@ -105,7 +105,8 @@ function for_python() {
     #pip install nose
     
     pip install black pyflakes isort
-    pip install python-language-server
+    pip install "python-language-server[all]"
+    pip install "python-lsp-server[all]"
     sudo npm i -g pyright --force
 }
 
@@ -131,6 +132,15 @@ function for_shell() {
     sudo npm i -g bash-language-server --force
 }
 
+function for_json() {
+    # sudo npm i -g vscode-langservers-extracted --force
+    sudo npm install -g vscode-json-languageserver --force
+}
+
+function for_docker() {
+    sudo npm install -g dockerfile-language-server-nodejs
+}
+
 if [ -z "$1" ]; then
     for_c
     for_go
@@ -139,6 +149,8 @@ if [ -z "$1" ]; then
     for_markdown
     for_rust
     for_shell
+    for_json
+    for_docker
 else
     eval "for_$1"
 fi

@@ -46,7 +46,7 @@
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
-       treemacs          ; a project drawer, like neotree but cooler
+       ;;treemacs            ; a project drawer, like neotree but cooler
        (treemacs +lsp)        ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        (vc-gutter +pretty) ; vcs diff in the fringe
@@ -56,7 +56,6 @@
        ;;zen               ; distraction-free coding or writing
 
        :editor
-       ;; evil              come to the dark side, we have cookies
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
@@ -102,9 +101,7 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        ;; (lookup +dictionary +offline)              ; navigate your code and its documentation
-       ;; lsp               ; M-x vscode
-       (lsp +peek)
-       ;; (lsp +eglot)               ; M-x vscode
+       (lsp +peek)       ; M-x vscode
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -124,7 +121,7 @@
        :lang
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
-       (cc +lsp)         ; C > C++ == 1
+       (cc +lsp +tree-sitter)         ; C > C++ == 1
        ;;clojure           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs

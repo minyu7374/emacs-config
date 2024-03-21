@@ -39,4 +39,4 @@
         "E" #'marp-export-open)
   )
 
-(provide 'markdown)
+(provide 'markdown-conf)

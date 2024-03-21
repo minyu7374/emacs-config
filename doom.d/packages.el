@@ -16,7 +16,7 @@
 ;; (package! gmpl-mode)
 ;; (package! tmux-pane)
 
-(package! treemacs-evil)
+;; (package! treemacs-evil)
 
 ;; Mac GUI需要单独加载shell变量
 (package! exec-path-from-shell :ignore (not IS-MAC))

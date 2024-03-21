@@ -25,4 +25,4 @@
         lsp-java-vmargs)
   )
 
-(provide 'java)
+(provide 'java-conf)
