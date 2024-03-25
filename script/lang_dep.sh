@@ -1,7 +1,8 @@
 #!/bin/bash
-#set -x
+# set -x
 
-os_name="$(uname -a)"
+os_name="$(grep '^NAME=' /etc/os-release | cut -d= -f2 | xargs)"
+[ -z "$os_name" ] && { os_name="$(uname -a)"; }
 
 OS=Linux
 [[ "$os_name" =~ "Darwin" ]] && {
@@ -12,10 +13,13 @@ DISTRO=""
 [[ "$os_name" =~ "Gentoo" ]] && {
     DISTRO=Gentoo
 }
-[[ "$os_name" =~ "Ubuntu" || "$os_name" =~ "Debian" || "$os_name" =~ "WSL" ]] && {
+[[ "$os_name" =~ "Arch" ]] && {
+    DISTRO=Arch
+}
+[[ "$os_name" =~ "Ubuntu" || "$os_name" =~ "Debian" ]] && {
     DISTRO=Debian
 }
-[[ "$os_name" =~ "Centos" || "$os_name" =~ "Fedora" || "$os_name" =~ "RHEL" ]] && {
+[[ "$os_name" =~ "Centos" || "$os_name" =~ "Fedora" || "$os_name" =~ "RHEL" || "$os_name" =~ "Oracle" ]] && {
     DISTRO=RHEL
 }
 
@@ -30,6 +34,10 @@ function for_c() {
                 # USE extra  : Build extra tools (clangd, clang-tidy and a few more)
                 sudo emerge --update clang
                 sudo emerge --update ccls
+                ;;
+            Arch)
+                sudo pacman -Sy --noconfirm clang
+                sudo pacman -Sy --noconfirm ccls
                 ;;
             Debian)     
                 sudo apt-get install clangd-11
@@ -67,15 +75,17 @@ function for_go() {
 function for_haskell() {
     if [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
-    else
-        ghcup install ghc
-        # for +lsp
-        ghcup install hls
-        #cabal install haskell-mode
-
-        cabal install hlint
-        cabal install hoogle
+    elif [ "$DISTRO" == "Arch" ]; then
+        sudo pacman -Sy --noconfirm ghc haskell-language-server hoogle hlint
     fi
+
+    ghcup install ghc
+    # for +lsp
+    ghcup install hls
+    #cabal install haskell-mode
+
+    cabal install hlint
+    cabal install hoogle
 }
 
 function for_markdown() {
@@ -93,10 +103,12 @@ function for_markdown() {
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update discount app-text/pandoc-bin
-    fi
-
-    if [ "$OS" == "Mac" ]; then
+    elif [ "$DISTRO" == "Arch" ]; then
+        sudo pacman -Sy --noconfirm discount pandoc-cli
+    elif [ "$OS" == "Mac" ]; then
         sudo port install pandoc discount multimarkdown
+    else
+        echo "software to install: discount pandoc"
     fi
 }
 
@@ -114,6 +126,8 @@ function for_rust() {
     # for +lsp, need rust-analyzer
     if [ "$DISTRO" == "Gentoo" ]; then
         echo -e "USE config for rust:\n\t dev-lang/rust clippy rust-analyzer rustfmt rust-src"
+    elif [ "$DISTRO" == "Arch" ]; then
+        sudo pacman -Sy --noconfirm rust rust-src rust-analyzer
     fi
 
     # rustup component add rustfmt-preview
@@ -124,6 +138,8 @@ function for_rust() {
 function for_shell() {
     if [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update shellcheck
+    elif [ "$DISTRO" == "Arch" ]; then
+        sudo pacman -Sy --noconfirm shellcheck
     else
         cabal install ShellCheck --overwrite-policy=always
         # stack install ShellCheck
@@ -154,4 +170,3 @@ if [ -z "$1" ]; then
 else
     eval "for_$1"
 fi
-
