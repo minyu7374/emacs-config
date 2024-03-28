@@ -42,7 +42,7 @@
     (progn
       (set-font)
       (setq doom-theme 'doom-dracula))
-    (setq doom-theme 'doom-tomorrow-night))
+    (setq doom-theme 'doom-one))
 
 ;; fullscreen
 (set-frame-parameter nil 'fullscreen 'fullboth)
@@ -61,7 +61,7 @@
                   (set-font)
                   (doom/reload-font))
                 (progn
-                  (load-theme 'doom-tomorrow-night 'no-confirm)
+                  (load-theme 'doom-one 'no-confirm)
                   (menu-bar-mode -1)))
             ))
 
