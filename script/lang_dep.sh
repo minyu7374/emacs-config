@@ -22,6 +22,22 @@ DISTRO=""
 [[ "$os_name" =~ "Centos" || "$os_name" =~ "Fedora" || "$os_name" =~ "RHEL" || "$os_name" =~ "Oracle" ]] && {
     DISTRO=RHEL
 }
+[[ "$os_name" =~ "openSUSE" ]] && {
+    DISTRO=SUSE
+}
+
+function for_base() {
+    if [ "$DISTRO" == "Gentoo" ]; then
+        sudo emerge --update dev-util/tree-sitter-cli
+    elif [ "$DISTRO" == "Arch" ]; then
+        sudo pacman -Sy --noconfirm tree-sitter
+    elif [ "$DISTRO" == "SUSE" ]; then
+        sudo zypper in -y tree-sitter
+    else
+        cabal install tree-sitter
+    fi
+
+}
 
 function for_c() {
     # +lsp need one of clangd v9+ or ccls.
@@ -38,6 +54,10 @@ function for_c() {
             Arch)
                 sudo pacman -Sy --noconfirm clang
                 sudo pacman -Sy --noconfirm ccls
+                ;;
+            SUSE)
+                sudo zypper in -y clang
+                sudo zypper in -y ccls
                 ;;
             Debian)     
                 sudo apt-get install clangd-11
@@ -77,6 +97,8 @@ function for_haskell() {
         sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
     elif [ "$DISTRO" == "Arch" ]; then
         sudo pacman -Sy --noconfirm ghc haskell-language-server hoogle hlint
+    elif [ "$DISTRO" == "SUSE" ]; then
+        sudo zypper in -y ghc ghc-hlint cabal-install
     fi
 
     ghcup install ghc
@@ -105,6 +127,9 @@ function for_markdown() {
         sudo emerge --update discount app-text/pandoc-bin
     elif [ "$DISTRO" == "Arch" ]; then
         sudo pacman -Sy --noconfirm discount pandoc-cli
+    elif [ "$DISTRO" == "SUSE" ]; then
+        sudo zypper in -y discount pandoc
+        # sudo zypper in -y MultiMarkdown-6
     elif [ "$OS" == "Mac" ]; then
         sudo port install pandoc discount multimarkdown
     else
@@ -128,6 +153,8 @@ function for_rust() {
         echo -e "USE config for rust:\n\t dev-lang/rust clippy rust-analyzer rustfmt rust-src"
     elif [ "$DISTRO" == "Arch" ]; then
         sudo pacman -Sy --noconfirm rust rust-src rust-analyzer
+    elif [ "$DISTRO" == "SUSE" ]; then
+        sudo zypper in -y rust cargo
     fi
 
     # rustup component add rustfmt-preview
@@ -140,6 +167,8 @@ function for_shell() {
         sudo emerge --update shellcheck
     elif [ "$DISTRO" == "Arch" ]; then
         sudo pacman -Sy --noconfirm shellcheck
+    elif [ "$DISTRO" == "SUSE" ]; then
+        sudo zypper in -y ShellCheck
     else
         cabal install ShellCheck --overwrite-policy=always
         # stack install ShellCheck
@@ -158,6 +187,7 @@ function for_docker() {
 }
 
 if [ -z "$1" ]; then
+    for_base
     for_c
     for_go
     for_python
