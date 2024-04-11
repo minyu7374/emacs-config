@@ -96,7 +96,7 @@ function for_haskell() {
     if [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
     elif [ "$DISTRO" == "Arch" ]; then
-        sudo pacman -Sy --noconfirm ghc haskell-language-server hoogle hlint
+        sudo pacman -Sy --noconfirm ghc haskell-language-server hoogle hlint cabal-install
     elif [ "$DISTRO" == "SUSE" ]; then
         sudo zypper in -y ghc ghc-hlint cabal-install
     fi
