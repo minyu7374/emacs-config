@@ -1,3 +1,12 @@
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+
+;; 对于特定的模式，如 C/C++，可以单独设置
+(after! c-mode
+  (setq-default c-basic-offset 4))
+(after! c++-mode
+  (setq-default c-basic-offset 4))
+
 (setq +format-on-save-disabled-modes
       '(emacs-lisp-mode  ; elisp's mechanisms are good enough
         sql-mode         ; sqlformat is currently broken
@@ -5,4 +14,4 @@
         xml-mode nxml-mode
         latex-mode))
 
-(provide 'autoformat-conf)
+(provide 'format-conf)

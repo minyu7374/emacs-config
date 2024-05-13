@@ -47,7 +47,7 @@
 (require 'markdown-conf)
 (require 'java-conf)
 (require 'cc-conf)
-(require 'autoformat-conf)
+(require 'format-conf)
 (require 'ampl-mode)
 (require 'ampl-conf)
 
