@@ -177,6 +177,15 @@ function for_shell() {
     sudo npm i -g bash-language-server --force
 }
 
+function for_web() {
+    if [ "$DISTRO" == "Gentoo" ]; then
+        sudo emerge --update app-text/htmltidy
+    elif [ "$DISTRO" == "Arch" ]; then
+        sudo pacman -Sy --noconfirm tidy
+    fi
+
+}
+
 function for_json() {
     # sudo npm i -g vscode-langservers-extracted --force
     sudo npm install -g vscode-json-languageserver --force
@@ -195,6 +204,7 @@ if [ -z "$1" ]; then
     for_markdown
     for_rust
     for_shell
+    for_web
     for_json
     for_docker
 else
