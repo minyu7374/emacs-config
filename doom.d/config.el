@@ -15,7 +15,7 @@
 ;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
 ;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
-;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-symbol-font' -- for symbols
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
@@ -32,29 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-                                        ; (setq doom-theme 'doom-one)
-
-;; DIY 命令前缀
-(map! :leader
-      (:prefix ("y" . "DIY")))
-
-;; lisp
-(add-to-list 'load-path "~/.doom.d/lisp")
-(require 'display)
-(require 'input-method)
-(require 'proxy)
-
-(require 'markdown-conf)
-(require 'java-conf)
-(require 'cc-conf)
-(require 'format-conf)
-(require 'ampl-mode)
-(require 'ampl-conf)
-
-(require 'diy-env)
-(require 'window-move)
-;; (require 'tmux-conf)
-;; (require 'eaf-conf)
+; (setq doom-theme 'doom-one)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -64,46 +42,10 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
-;; 禁用鼠标
-(xterm-mouse-mode -1)
-(dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]
-             [mouse-2] [down-mouse-2] [drag-mouse-2] [double-mouse-2] [triple-mouse-2]
-             [mouse-3] [down-mouse-3] [drag-mouse-3] [double-mouse-3] [triple-mouse-3]
-             [mouse-4] [down-mouse-4] [drag-mouse-4] [double-mouse-4] [triple-mouse-4]
-             [mouse-5] [down-mouse-5] [drag-mouse-5] [double-mouse-5] [triple-mouse-5]))
-  (global-unset-key k))
-
 (+global-word-wrap-mode +1)
 
 (setq-default fill-column 120
               delete-trailing-lines t)
-
-;; 拼写检查
-;;(setq ispell-program-name "aspell")
-;;(setq ispell-dictionary "en_US")
-
-;; comment
-(global-set-key (kbd "\C-cc") 'comment-line)
-(map! :leader
-      (:prefix "c"
-       :desc "comment or uncomment current line" :nv "m" #'comment-line))
-
-;; set mark ctrl+space 和常用输入法切换快捷键冲突
-(global-unset-key (kbd "C-SPC"))
-;; alt+space 在Linux kde上是kruner，command+space是Albert(Linux)/Spotlight(Mac)
-(global-set-key (kbd "C-S-SPC") 'set-mark-command)
-
-;; insert current datetime
-(defun insert-current-datetime ()
-  "Insert date at point."
-  (interactive)
-  (insert (format-time-string "%Y-%m-%d %H:%M")))
-;; (insert (format-time-string "%Y-%m-%d %r")))
-
-(global-set-key (kbd "\C-cit") 'insert-current-datetime)
-(map! :leader
-      (:prefix "i"
-       :desc "insert current datetime" :nv "t" #'insert-current-datetime))
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -138,32 +80,23 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; Mac(GUI) 只有基础的环境变量集，需加载shell环境变量
-;; (when (memq window-system '(mac ns x))
-(use-package! exec-path-from-shell
-  :if IS-MAC
-  :custom
-  (exec-path-from-shell-arguments '("-l"))
-  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH" "LSP_USE_PLISTS"))
-  :config
-  ;;(setq exec-path-from-shell-arguments nil)
-  (exec-path-from-shell-initialize)
-  )
+;; lisp
+(add-to-list 'load-path "~/.doom.d/lisp")
+(require 'display)
+(require 'proxy)
+(require 'hotkey)
+(require 'input)
 
-;; max下shell脚本自动补全比较慢
-(after! sh-script
-  (if IS-MAC
-      (set-company-backend! 'sh-mode nil))
-  )
+(require 'shell-conf)
+(require 'markdown-conf)
+(require 'java-conf)
+(require 'cc-conf)
+(require 'format-conf)
+(require 'ampl-mode)
+(require 'ampl-conf)
 
-;; icons
-(after! dired
-  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-  (add-hook! 'dired-mode 'all-the-icons-dired-mode)
-  )
-
-;; imenu
-(after! lsp-ui
-  (map! :map lsp-command-map
-        "m" #'lsp-ui-imenu)
-  )
+(require 'diy-env)
+(require 'window-move)
+(require 'hook)
+;; (require 'tmux-conf)
+;; (require 'eaf-conf)

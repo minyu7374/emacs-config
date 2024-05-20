@@ -47,4 +47,8 @@
          :desc "force rime" :nv "f" #'rime-force-enable))
   )
 
-(provide 'input-method)
+;; 拼写检查
+;;(setq ispell-program-name "aspell")
+;;(setq ispell-dictionary "en_US")
+
+(provide 'input)

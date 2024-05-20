@@ -23,6 +23,7 @@
        :completion
        ;; company           ; the ultimate code completion backend
        (company +childframe) ; the ultimate code completion backend
+       ;;(corfu +orderless)  ; complete with cap(f), cape and a flying feather!
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
@@ -46,7 +47,7 @@
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
-       ;;treemacs            ; a project drawer, like neotree but cooler
+       ;;treemacs          ; a project drawer, like neotree but cooler
        (treemacs +lsp)        ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        (vc-gutter +pretty) ; vcs diff in the fringe
@@ -84,7 +85,7 @@
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       ;;syntax              ; tasing you for every semicolon you forget
+       ;; syntax              ; tasing you for every semicolon you forget
        (syntax +childframe) ; tasing you for every semicolon you forget
        ;;(spell +flyspell) ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
@@ -92,15 +93,16 @@
        :tools
        ;;ansible
        ;;biblio            ; Writes a PhD for you (citation needed)
+       ;;collab            ; buffers with friends
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
        docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
-       ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        ;; (lookup +dictionary +offline)              ; navigate your code and its documentation
+       ;;lsp               ; M-x vscode
        (lsp +peek)       ; M-x vscode
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
@@ -115,12 +117,13 @@
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
-       (:if IS-MAC macos)  ; improve compatibility with macOS
+       (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
        tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
+       ;;(cc +lsp)         ; C > C++ == 1
        (cc +lsp +tree-sitter)         ; C > C++ == 1
        ;;clojure           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
@@ -160,7 +163,7 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       ;;org               ; organize your plain life in plain text
+       ;; org               ; organize your plain life in plain text
        (org +gnuplot +pretty +present +brain +gnuplot +hugo +journal +noter +pandoc)                ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
@@ -174,8 +177,9 @@
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
-       scala             ; java, but good
+       ;;scala             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps
+       ;; sh                ; she sells {ba,z,fi}sh shells on the C xor
        (sh +lsp)        ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
