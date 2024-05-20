@@ -11,16 +11,26 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 ;; 中英文对齐 参考 https://emacs-china.org/t/org-mode/440/9
+
+(defvar default-font-size 13 "default font size for doom theme")
+(defvar big-font-size 18 "big font size for doom theme")
+(defvar chinese-font-rescale 1.1 "chinese font scale ratio for doom theme")
+
+;; (require 'font-conf)
+(condition-case nil (require 'font-conf) (error nil))
+
 (defun set-font()
   (interactive)
+  (unless (display-graphic-p)
+    (return-from set-font nil))
+
   ;; "JetBrainsMono/Consolas[ NF]"
-  (let ((default-font "Consolas NF")
-        ;; (chinese-font "FZLiBian-S02")
+  ;; (let ((default-font "Consolas NF")
+  (let ((default-font "JetBrainsMono NF ExtraLight")
+        (chinese-font "FZLiBian-S02")
         ;; (chinese-font "FZTieJinLiShu-S17")
-        (chinese-font "Microsoft YaHei")
-        (default-font-size 20)
-        (big-font-size 26)
-        (chinese-font-rescale 1.1))
+        ;; (chinese-font "Microsoft YaHei")
+        )
 
     (setq doom-font (font-spec :family default-font :slant 'italic :size default-font-size)
           doom-big-font (font-spec :family default-font :slant 'italic :size big-font-size)
@@ -34,16 +44,14 @@
     )
   )
 
+(add-hook 'doom-load-theme-hook 'set-font)
+
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-dracula)
-(if (display-graphic-p)
-    (progn
-      (set-font)
-      (setq doom-theme 'doom-dracula))
-      ;; doom-one/doom-tomorrow-night
-    (setq doom-theme 'doom-one))
+;; doom-dracula/doom-one/doom-tomorrow-night
+(setq doom-theme (if (display-graphic-p) 'doom-dracula 'doom-one))
 
 ;; fullscreen
 (set-frame-parameter nil 'fullscreen 'fullboth)
@@ -57,13 +65,16 @@
             (select-frame new-frame)
             (set-frame-parameter nil 'fullscreen 'fullboth)
             (if (display-graphic-p)
-                (progn
-                  (load-theme 'doom-dracula 'no-confirm)
-                  (set-font)
-                  (doom/reload-font))
+                (load-theme 'doom-dracula 'no-confirm)
               (progn
                 (load-theme 'doom-one 'no-confirm)
                 (menu-bar-mode -1)))
             ))
+
+;; icons
+(after! dired
+  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  (add-hook! 'dired-mode 'all-the-icons-dired-mode)
+  )
 
 (provide 'display)

@@ -24,10 +24,10 @@ else
     echo "display type: $dis_type"
 fi
 
-if ! [ -f "display.el.$dis_type" ]; then
-    echo "file display.el.$dis_type not find"
+if ! [ -f "font-conf.el.$dis_type" ]; then
+    echo "file font-conf.el.$dis_type not find"
     exit 1
 fi
 
-echo "link display.el to display.el.$dis_type"
-ln -sf display.el{."$dis_type",}
+echo "link font-conf.el to font-conf.el.$dis_type"
+ln -sf font-conf.el{."$dis_type",}

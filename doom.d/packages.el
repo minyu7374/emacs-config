@@ -53,8 +53,6 @@
 ;; Mac GUI需要单独加载shell变量
 (package! exec-path-from-shell :ignore (not IS-MAC))
 
-;; (package! valign)
-
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...

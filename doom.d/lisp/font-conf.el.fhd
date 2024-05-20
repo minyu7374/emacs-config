@@ -1,0 +1,5 @@
+(setq default-font-size 16
+    big-font-size 20
+    chinese-font-rescale 1.1)
+
+(provide 'font-conf)
