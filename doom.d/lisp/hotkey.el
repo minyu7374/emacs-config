@@ -17,10 +17,10 @@
 ;;   (global-unset-key k))
 
 ;; comment
+(global-set-key (kbd "\C-c\C-c") 'comment-line)
 (global-set-key (kbd "\C-cc") 'comment-line)
-(map! :leader
-      (:prefix "c"
-       :desc "comment or uncomment current line" :nv "m" #'comment-line))
+(map! :leader (:prefix "c"
+               :desc "comment or uncomment current line" :nv "m" #'comment-line))
 
 ;; set mark ctrl+space 和常用输入法切换快捷键冲突
 (global-unset-key (kbd "C-SPC"))
@@ -34,41 +34,48 @@
   (insert (format-time-string "%Y-%m-%d %H:%M")))
 ;; (insert (format-time-string "%Y-%m-%d %r")))
 
+(global-set-key (kbd "\C-c\C-t") 'insert-current-datetime)
 (global-set-key (kbd "\C-cit") 'insert-current-datetime)
-(map! :leader
-      (:prefix "i"
-       :desc "insert current datetime" :nv "t" #'insert-current-datetime))
+(map! :leader (:prefix "i"
+               :desc "insert current datetime" :nv "t" #'insert-current-datetime))
 
-;; imenu
+;; imenu (lsp-sommand-map: <leader>cl)
+(global-set-key (kbd "\C-c\C-u") 'lsp-ui-mode)
+(map! :map lsp-command-map
+      "u" #'lsp-ui-mode)
+
 (after! lsp-ui
+  (global-set-key (kbd "\C-c\C-m") 'lsp-ui-imenu)
   (map! :map lsp-command-map
         "m" #'lsp-ui-imenu)
   )
 
 ;; window move
-(if (featurep 'tmux-pane)
-  (use-package! tmux-pane
-  :config
-  (tmux-pane-mode)
-  (map! :leader
-        (:prefix ("v" . "tmux pane")
-         :desc "Open vpane" :nv "o" #'tmux-pane-open-vertical
-         :desc "Open hpane" :nv "h" #'tmux-pane-open-horizontal
-         :desc "Open hpane" :nv "s" #'tmux-pane-open-horizontal
-         :desc "Open vpane" :nv "v" #'tmux-pane-open-vertical
-         :desc "Close pane" :nv "c" #'tmux-pane-close
-         :desc "Rerun last command" :nv "r" #'tmux-pane-rerun))
-  (map! :leader
-        (:prefix "t"
-         :desc "vpane" :nv "v" #'tmux-pane-toggle-vertical
-         :desc "hpane" :nv "h" #'tmux-pane-toggle-horizontal))
-  )
-  (progn
-    (global-set-key (kbd "C-\\") 'evil-window-prev)
-    (global-set-key (kbd "C-k") 'evil-window-up)
-    (global-set-key (kbd "C-j") 'evil-window-down)
-    (global-set-key (kbd "C-h") 'evil-window-left)
-    (global-set-key (kbd "C-l") 'evil-window-right)))
+;; 和emacs本身的快捷键产生冲突，不使用了
+;; (if (featurep 'tmux-pane)
+;;     (use-package! tmux-pane
+;;       :config
+;;       (tmux-pane-mode)
+;;       (map! :leader
+;;             (:prefix ("v" . "tmux pane")
+;;              :desc "Open vpane" :nv "o" #'tmux-pane-open-vertical
+;;              :desc "Open hpane" :nv "h" #'tmux-pane-open-horizontal
+;;              :desc "Open hpane" :nv "s" #'tmux-pane-open-horizontal
+;;              :desc "Open vpane" :nv "v" #'tmux-pane-open-vertical
+;;              :desc "Close pane" :nv "c" #'tmux-pane-close
+;;              :desc "Rerun last command" :nv "r" #'tmux-pane-rerun))
+;;       (map! :leader
+;;             (:prefix "t"
+;;              :desc "vpane" :nv "v" #'tmux-pane-toggle-vertical
+;;              :desc "hpane" :nv "h" #'tmux-pane-toggle-horizontal))
+;;       )
+;;       (progn
+;;         (global-set-key (kbd "C-\\") 'evil-window-prev)
+;;         (global-set-key (kbd "C-k") 'evil-window-up)
+;;         (global-set-key (kbd "C-j") 'evil-window-down)
+;;         (global-set-key (kbd "C-h") 'evil-window-left)
+;;         (global-set-key (kbd "C-l") 'evil-window-right))
+;;       )
 
 (provide 'hotkey)
 
