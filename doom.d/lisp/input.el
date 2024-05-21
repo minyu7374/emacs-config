@@ -1,3 +1,9 @@
+;;; input.el -- input config
+;;; Commentary:
+;;;      输入行为相关配置
+
+;;; Code:
+
 (setq default-input-method "rime")
 
 ;; (global-set-key (kbd "C-/") 'toggle-input-method)
@@ -52,3 +58,5 @@
 ;;(setq ispell-dictionary "en_US")
 
 (provide 'input)
+
+;;; input.el ends here.

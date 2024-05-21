@@ -1,3 +1,9 @@
+;;; shell-conf.el --- Shell Config
+;;; Commentary:
+;;      shell相关处理
+
+;;; code:
+
 ;; Mac(GUI) 只有基础的环境变量集，需加载shell环境变量
 ;; (when (memq window-system '(mac ns x))
 (use-package! exec-path-from-shell
@@ -17,3 +23,5 @@
   )
 
 (provide 'shell-conf)
+
+;;; shell-conf.el ends here.

@@ -1,3 +1,9 @@
+;;; format-conf.el -- Format Config
+;;; Commentary:
+;;      代码格式化相关配置
+
+;;; Code:
+
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
 
@@ -15,3 +21,5 @@
         latex-mode))
 
 (provide 'format-conf)
+
+;;; format-conf.el ends here.

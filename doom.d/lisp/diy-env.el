@@ -1,4 +1,10 @@
+;;; diy-env.el -- DIY Environment Variables Config
+;;; Commentary:
+;;      自定义的一些环境变量配置
+
+;;; Code:
 (defun default-java()
+  "Default Java environment variables."
   (interactive)
 
   (setenv "JAVA_HOME" "/opt/openjdk-bin-17")
@@ -8,6 +14,7 @@
   )
 
 (defun kanjia-java()
+  "Kanjia Java environment variables."
   (interactive)
 
   (setenv "JAVA_HOME" "/opt/oraclejdk-bin-8")
@@ -19,7 +26,8 @@
 (map! :leader
       (:prefix ("yj" . "java env")
        :desc "default java env config" :nv "d" #'default-java
-       :desc "kanjia java env config" :nv "k" #'kanjia-java)
-      )
+       :desc "kanjia java env config" :nv "k" #'kanjia-java))
 
 (provide 'diy-env)
+
+;;; diy-env.el ends here.

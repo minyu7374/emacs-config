@@ -1,3 +1,9 @@
+;;; java-conf.el -- Java Language Support
+;;; Commentary:
+;;;      java语言支持相关配置
+
+;;; Code:
+
 (use-package! lsp-java
   :hook (java-mode . lsp-deferred)
   :init
@@ -26,3 +32,5 @@
   )
 
 (provide 'java-conf)
+
+;;; java-conf.el ends here.

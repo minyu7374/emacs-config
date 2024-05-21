@@ -93,9 +93,7 @@
 (require 'cc-conf)
 (require 'format-conf)
 (require 'ampl-mode)
-(require 'ampl-conf)
+(require 'mpl-conf)
 
 (require 'diy-env)
-(require 'window-move)
-;; (require 'tmux-conf)
 ;; (require 'eaf-conf)

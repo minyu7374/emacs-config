@@ -1,3 +1,9 @@
+;;; eaf-conf.el -- EAF Config
+;;; Commentary:
+;;      EAF 架构配置
+
+;;; Code:
+
 (add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
 (require 'eaf)
 (require 'eaf-browser)
@@ -48,3 +54,5 @@
 (setq eaf-image-dark-mode nil)
 
 (provide 'eaf-conf)
+
+;;; eaf-conf.el ends here.

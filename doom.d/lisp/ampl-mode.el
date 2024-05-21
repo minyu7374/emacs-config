@@ -1,13 +1,13 @@
-
-;;; ampl-mode.el --- Ampl mode for the Emacs editor
-
-;; Filename: ampl-mode.el
+;;; ampl-mode.el --- Ampl mode
+;; Homepage: https://github.com/dpo/ampl-mode/blob/master/emacs/ampl-mode.el
 ;; Author: Dominique Orban <dominique.orban@gmail.com>
 ;; Copyright (C) 2003, 2008, Dominique Orban, all rights reserved.
-;; Keywords: Ampl
+;; Keywords: languages
 ;; Version: 0.1
 ;; Time stamp: "Wed 25 Sep 2013 10:55:10 EDT"
 
+;;; Commentary:
+;;
 ;; Purpose: Provides syntax highlighting and basic indentation for
 ;;  models written in Ampl. Ampl is a modeling language for
 ;;  optimization programs.  See www.ampl.com for more information.
@@ -240,7 +240,7 @@
 
 ;; Definition of Ampl major mode
 (defun ampl-mode ()
-  "Major mode for editing Ampl models.\nSpecial commands:\n\\{ampl-mode-map}"
+  "Major mode for editing Ampl models.\nSpecial commands:\n\\{ampl-mode-map}."
   (interactive)
   (kill-all-local-variables)
 
@@ -271,8 +271,7 @@
 	  (progn
 	    (setq point-c (match-beginning 0))
 	    (replace-match ""))
-	(goto-char point-b))
-      ))
+	(goto-char point-b))))
 
   (defun ampl-insert-parens (arg)
     "Insert parenthesis pair. See ampl-auto-close-parenthesis."
@@ -324,8 +323,7 @@
   (setq major-mode 'ampl-mode)
   (setq mode-name "Ampl")
   (use-local-map ampl-mode-map)   ; Load Ampl keymap
-  (run-mode-hooks 'ampl-mode-hook)
-)
+  (run-mode-hooks 'ampl-mode-hook))
 
 (provide 'ampl-mode)  ; So others can (require 'ampl-mode)
 

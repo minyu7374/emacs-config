@@ -1,4 +1,10 @@
-(setq proxy-status nil)
+;;; proxy.el --- Proxy -*- lexical-binding: t; -*-
+;;; Commentary:
+;;      Proxy 控制
+
+;;; code:
+
+(defvar proxy-status nil "Proxy Status (t/nil).")
 
 (defun proxy-on()
   (interactive)
@@ -33,3 +39,5 @@
        :desc "proxy off" :nv "f" #'proxy-off))
 
 (provide 'proxy)
+
+;;; proxy.el ends here.

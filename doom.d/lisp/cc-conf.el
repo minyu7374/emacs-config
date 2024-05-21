@@ -1,4 +1,10 @@
-;;; lsp-mode
+;;; cc-conf.el -- C/C++ Config
+;;; Commentary:
+;;      C/C++ 语言服务协议配置使用lsp/ccls
+
+;;; Code:
+
+;; lsp-mode
 ;; (after! lsp-clangd
 ;;   (setq lsp-clients-clangd-args
 ;;         '("-j=8"
@@ -18,3 +24,5 @@
 ;; (set-eglot-client! 'cc-mode '("ccls" "--init={\"index\": {\"threads\": 8}}"))
 
 (provide 'cc-conf)
+
+;;; cc-conf.el ends here.
