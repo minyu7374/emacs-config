@@ -29,6 +29,12 @@
   (push (concat "-javaagent:"
                 (expand-file-name lombok-library-path))
         lsp-java-vmargs)
+
+  ;; Spring boot support (Experimental)
+  ;; (require 'lsp-java-boot)
+
+  (add-hook 'lsp-mode-hook #'lsp-lens-mode)
+  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
   )
 
 (provide 'java-conf)
