@@ -42,7 +42,8 @@
 ;; imenu (lsp-sommand-map: <leader>cl)
 (global-set-key (kbd "\C-c\C-u") 'lsp-ui-mode)
 (map! :map lsp-command-map
-      "u" #'lsp-ui-mode)
+      "u" #'lsp-ui-mode
+      "c" #'+lsp/switch-client)
 
 (after! lsp-ui
   (global-set-key (kbd "\C-c\C-m") 'lsp-ui-imenu)
