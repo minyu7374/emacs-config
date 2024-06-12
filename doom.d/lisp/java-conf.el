@@ -4,6 +4,8 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 (use-package! lsp-java
   :hook (java-mode . lsp-deferred)
   :init
@@ -36,6 +38,77 @@
   (add-hook 'lsp-mode-hook #'lsp-lens-mode)
   (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
   )
+
+(defun java-env-opnjdk17()
+  "OpenJDK17 Java environment variables."
+  (interactive)
+
+  (_remove-java-home-from-path)
+  (setenv "JAVA_HOME" "/opt/openjdk-bin-17")
+  (setenv "JDK_HOME" "/opt/openjdk-bin-17")
+  (setenv "PATH" (concat "/opt/openjdk-bin-17:" (getenv "PATH")))
+  (setq lsp-java-configuration-maven-user-settings "~/.m2/maven/settings.xml")
+  )
+
+(defun java-env-oraclejdk8()
+  "kanjia Java environment variables."
+  (interactive)
+
+  (_remove-java-home-from-path)
+  (setenv "JAVA_HOME" "/opt/oraclejdk-bin-8")
+  (setenv "JDK_HOME" "/opt/oraclejdk-bin-8")
+  (setenv "PATH" (concat "/opt/oraclejdk-bin-8:" (getenv "PATH")))
+  (setq lsp-java-configuration-maven-user-settings "~/.m2/maven/settings.xml")
+  )
+
+(defun java-env-oraclejdk21()
+  "OracleJDK21 Java environment variables."
+  (interactive)
+
+  (_remove-java-home-from-path)
+  (setenv "JAVA_HOME" "/opt/oraclejdk-bin-21")
+  (setenv "JDK_HOME" "/opt/oraclejdk-bin-21")
+  (setenv "PATH" (concat "/opt/oraclejdk-bin-21:" (getenv "PATH")))
+  (setq lsp-java-configuration-maven-user-settings "~/.m2/maven/settings.xml")
+  )
+
+(defun java-env-kanjia()
+  "kanjia Java environment variables."
+  (interactive)
+
+  (_remove-java-home-from-path)
+  (setenv "JAVA_HOME" "/opt/oraclejdk-bin-8")
+  (setenv "JDK_HOME" "/opt/oraclejdk-bin-8")
+  (setenv "PATH" (concat "/opt/oraclejdk-bin-8:" (getenv "PATH")))
+  (setq lsp-java-configuration-maven-user-settings "~/Workspace/unicom/projects/kanjia/maven/settings.xml")
+  )
+
+(defun java-env-switch()
+  "Switch between different Java environments."
+  (interactive)
+  (let ((choice (completing-read
+                 "Select Java version: "
+                 '("OpenJDK 17" "OracleJDK 8" "OracleJDK 21" "kanjia"))))
+    (cond
+     ((string-equal choice "OpenJDK 17") (java-env-opnjdk17))
+     ((string-equal choice "OracleJDK 8") (java-env-oraclejdk8))
+     ((string-equal choice "OracleJDK 21") (java-env-oraclejdk21))
+     ((string-equal choice "kanjia") (java-env-kanjia))
+     (t (message "Invalid choice")))))
+
+(defun _remove-java-home-from-path ()
+  "Remove all OracleJDK or OpenJDK paths from PATH."
+  (let ((path-list (split-string (getenv "PATH") ":")))
+    (setenv "PATH"
+            (mapconcat 'identity
+                       (cl-remove-if (lambda (path)
+                                       (or (string-match-p "oraclejdk" path)
+                                           (string-match-p "openjdk" path)))
+                                     path-list) ":"))))
+
+(map! :leader
+      (:prefix "y"
+       :desc "java environment switch" :nv "j" #'java-env-switch))
 
 (provide 'java-conf)
 

@@ -95,5 +95,4 @@
 (require 'ampl-mode)
 (require 'mpl-conf)
 
-(require 'diy-env)
 ;; (require 'eaf-conf)
