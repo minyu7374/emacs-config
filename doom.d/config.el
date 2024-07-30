@@ -82,9 +82,9 @@
 
 ;; lisp
 (add-to-list 'load-path "~/.doom.d/lisp")
+(require 'hotkey)
 (require 'display)
 (require 'proxy)
-(require 'hotkey)
 (require 'input)
 
 (require 'shell-conf)
