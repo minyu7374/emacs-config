@@ -89,7 +89,7 @@
 
 (require 'shell-conf)
 (require 'markdown-conf)
-(require 'java-conf)
+; (require 'java-conf)
 (require 'cc-conf)
 (require 'format-conf)
 (require 'ampl-mode)

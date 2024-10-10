@@ -1,30 +1,35 @@
 #!/bin/bash
 # set -x
 
-os_name="$(grep '^NAME=' /etc/os-release | cut -d= -f2 | xargs)"
-[ -z "$os_name" ] && { os_name="$(uname -a)"; }
+case "$(uname -s)" in
+    Linux)
+        OS=Linux
+        os_name="$(grep '^NAME=' /etc/os-release | cut -d= -f2 | xargs)"
+        [ -z "$os_name" ] && { os_name="$(uname -a)"; }
+        ;;
+    Darwin)
+        OS=Mac
+        ;;
+esac
 
-OS=Linux
-[[ "$os_name" =~ "Darwin" ]] && {
-    OS=Mac
-}
-
-DISTRO=""
-[[ "$os_name" =~ "Gentoo" ]] && {
-    DISTRO=Gentoo
-}
-[[ "$os_name" =~ "Arch" ]] && {
-    DISTRO=Arch
-}
-[[ "$os_name" =~ "Ubuntu" || "$os_name" =~ "Debian" ]] && {
-    DISTRO=Debian
-}
-[[ "$os_name" =~ "Centos" || "$os_name" =~ "Fedora" || "$os_name" =~ "RHEL" || "$os_name" =~ "Oracle" ]] && {
-    DISTRO=RHEL
-}
-[[ "$os_name" =~ "openSUSE" ]] && {
-    DISTRO=SUSE
-}
+if [ "$OS" == Linux ]; then
+    DISTRO=""
+    [[ "$os_name" =~ "Gentoo" ]] && {
+        DISTRO=Gentoo
+    }
+    [[ "$os_name" =~ "Arch" ]] && {
+        DISTRO=Arch
+    }
+    [[ "$os_name" =~ "Ubuntu" || "$os_name" =~ "Debian" ]] && {
+        DISTRO=Debian
+    }
+    [[ "$os_name" =~ "Centos" || "$os_name" =~ "Fedora" || "$os_name" =~ "RHEL" || "$os_name" =~ "Oracle" ]] && {
+        DISTRO=RHEL
+    }
+    [[ "$os_name" =~ "openSUSE" ]] && {
+        DISTRO=SUSE
+    }
+fi
 
 function for_base() {
     if [ "$DISTRO" == "Gentoo" ]; then
@@ -43,7 +48,8 @@ function for_c() {
     # +lsp need one of clangd v9+ or ccls.
     # clangd 目前最稳定健壮，但是尚无索引系统, ccls 可搜索引用
     if [ "$OS" == "Mac" ]; then
-        sudo port install llvm
+        # sudo port install llvm
+        brew install llvm
     else 
         case "$DISTRO" in
             Gentoo)
@@ -84,10 +90,11 @@ function for_go() {
     go install github.com/fatih/gomodifytags@latest
     
     if [ $OS == "Mac" ]; then
-        sudo port install golangci-lint
+        #sudo port install golangci-lint
+        brew install golangci-lint
     else
         # binary will be $(go env GOPATH)/bin/golangci-lint
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.1
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin #v1.54.1
         golangci-lint --version
     fi
 }
@@ -131,7 +138,8 @@ function for_markdown() {
         sudo zypper in -y discount pandoc
         # sudo zypper in -y MultiMarkdown-6
     elif [ "$OS" == "Mac" ]; then
-        sudo port install pandoc discount multimarkdown
+        # sudo port install pandoc discount multimarkdown
+        brew install pandoc discount
     else
         echo "software to install: discount pandoc"
     fi
@@ -163,7 +171,9 @@ function for_rust() {
 }
 
 function for_shell() {
-    if [ "$DISTRO" == "Gentoo" ]; then
+    if [ "$OS" == "Mac" ]; then
+        brew install shellcheck
+    elif [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update shellcheck
     elif [ "$DISTRO" == "Arch" ]; then
         sudo pacman -Sy --noconfirm shellcheck
@@ -192,7 +202,9 @@ function for_json() {
 }
 
 function for_docker() {
-    sudo npm install -g dockerfile-language-server-nodejs
+    if [ "$OS" == "Linux" ]; then
+        sudo npm install -g dockerfile-language-server-nodejs
+    fi
 }
 
 if [ -z "$1" ]; then
