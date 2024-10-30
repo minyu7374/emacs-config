@@ -95,4 +95,5 @@
 (require 'ampl-mode)
 (require 'mpl-conf)
 
+(require 'auto-insert)
 ;; (require 'eaf-conf)
