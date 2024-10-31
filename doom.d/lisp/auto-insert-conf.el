@@ -1,4 +1,4 @@
-;;; auto-insert.el -- auto insert snippets for file
+;;; auto-insert-conf.el -- auto insert snippets for file
 ;;; Commentary:
 ;;      自动添加代码片段
 
@@ -23,6 +23,6 @@
                 (("\\.sh\\'" . "Shell header") . auto-insert-header))
               auto-insert-alist))
 
-(provide 'auto-insert)
+(provide 'auto-insert-conf)
 
 ;;; auto-insert.el ends here.

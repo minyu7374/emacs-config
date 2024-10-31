@@ -148,7 +148,8 @@ function for_markdown() {
 function for_python() {
     pip install pytest
     #pip install nose
-    
+
+    pip install autopep8 pylint yapf
     pip install black pyflakes isort
     pip install "python-language-server[all]"
     pip install "python-lsp-server[all]"
