@@ -25,4 +25,4 @@
 
 (provide 'auto-insert-conf)
 
-;;; auto-insert.el ends here.
+;;; auto-insert-conf.el ends here.

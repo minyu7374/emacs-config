@@ -151,6 +151,7 @@ function for_python() {
 
     pip install autopep8 pylint yapf
     pip install black pyflakes isort
+    pip install pipenv nose poetry
     pip install "python-language-server[all]"
     pip install "python-lsp-server[all]"
     sudo npm i -g pyright --force
@@ -186,6 +187,7 @@ function for_shell() {
     fi
 
     sudo npm i -g bash-language-server --force
+    go install mvdan.cc/sh/v3/cmd/shfmt@latest
 }
 
 function for_web() {
@@ -206,6 +208,8 @@ function for_docker() {
     if [ "$OS" == "Linux" ]; then
         sudo npm install -g dockerfile-language-server-nodejs
     fi
+
+    go install github.com/jessfraz/dockfmt@latest
 }
 
 if [ -z "$1" ]; then

@@ -40,7 +40,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/Documents/org/")
 
 (+global-word-wrap-mode +1)
 
@@ -81,7 +81,8 @@
 ;; they are implemented.
 
 ;; lisp
-(add-to-list 'load-path "~/.doom.d/lisp")
+;; (add-to-list 'load-path (expand-file-name "lisp" (file-name-directory (or load-file-name buffer-file-name))))
+(add-to-list 'load-path (expand-file-name "lisp" doom-user-dir))
 (require 'hotkey)
 (require 'display)
 (require 'proxy)
