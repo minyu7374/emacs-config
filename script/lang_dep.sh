@@ -31,6 +31,11 @@ if [ "$OS" == Linux ]; then
     }
 fi
 
+function pre_task() {
+    cabal update
+    pip install --upgrade pip
+}
+
 function for_base() {
     if [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update dev-util/tree-sitter-cli
@@ -39,7 +44,8 @@ function for_base() {
     elif [ "$DISTRO" == "SUSE" ]; then
         sudo zypper in -y tree-sitter
     else
-        cabal install tree-sitter
+        # The command "cabal install [TARGETS]" doesn't expose libraries.
+        cabal install --lib tree-sitter
     fi
 
 }
@@ -89,7 +95,7 @@ function for_go() {
     go install github.com/cweill/gotests/gotests@latest
     go install github.com/fatih/gomodifytags@latest
     
-    if [ $OS == "Mac" ]; then
+    if [ "$OS" == "Mac" ]; then
         #sudo port install golangci-lint
         brew install golangci-lint
     else
@@ -106,15 +112,11 @@ function for_haskell() {
         sudo pacman -Sy --noconfirm ghc haskell-language-server hoogle hlint cabal-install
     elif [ "$DISTRO" == "SUSE" ]; then
         sudo zypper in -y ghc ghc-hlint cabal-install
+    else
+        # ghcup install ghc hls
+        cabal install haskell-language-server hlint hoogle
+        #cabal install haskell-mode
     fi
-
-    ghcup install ghc
-    # for +lsp
-    ghcup install hls
-    #cabal install haskell-mode
-
-    cabal install hlint
-    cabal install hoogle
 }
 
 function for_markdown() {
@@ -212,6 +214,7 @@ function for_docker() {
     go install github.com/jessfraz/dockfmt@latest
 }
 
+pre_task
 if [ -z "$1" ]; then
     for_base
     for_c
