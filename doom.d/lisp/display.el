@@ -32,8 +32,8 @@
   "Set custom fonts for doom theme."
   (interactive)
 
-  ;; JetBrainsMono/Consolas[ NF]
-  (let ((default-font "JetBrainsMono NF ExtraLight")
+  ;; JetBrainsMono/Consolas[ NF(M)]  ExtraLight/Thin
+  (let ((default-font "JetBrainsMono NFM Thin")
         ;; FZLiBian-S02/FZTieJinLiShu-S17/Microsoft YaHei
         (chinese-font "FZLiBian-S02"))
 
