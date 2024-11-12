@@ -4,7 +4,7 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
+(add-to-list 'load-path "~/.conf/emacs/site-lisp/emacs-application-framework/")
 (require 'eaf)
 (require 'eaf-browser)
 (require 'eaf-pdf-viewer)

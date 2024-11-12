@@ -20,6 +20,9 @@
         xml-mode nxml-mode
         latex-mode))
 
+;; 默认black太严格了，有些风格也不是很喜欢，可用autopep8/yapf/flake8/pylint等
+(setq-hook! 'python-mode-hook +format-with 'yapf)
+
 (provide 'format-conf)
 
 ;;; format-conf.el ends here.
