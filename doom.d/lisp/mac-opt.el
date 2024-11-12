@@ -30,10 +30,10 @@
 ;; ;; 禁用doom启动屏幕
 ;; (setq +doom-dashboard-functions nil)
 
-;; 禁用 Doom Modeline 的图标和动画
-(after! doom-modeline
-  (setq doom-modeline-icon nil
-        doom-modeline-major-mode-icon nil))
+;; ;; 禁用 Doom Modeline 的图标和动画
+;; (after! doom-modeline
+;;   (setq doom-modeline-icon nil
+;;         doom-modeline-major-mode-icon nil))
 
 (provide 'mac-opt)
 

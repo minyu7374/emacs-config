@@ -2,14 +2,14 @@
 # set -x
 
 case "$(uname -s)" in
-    Linux)
-        OS=Linux
-        os_name="$(grep '^NAME=' /etc/os-release | cut -d= -f2 | xargs)"
-        [ -z "$os_name" ] && { os_name="$(uname -a)"; }
-        ;;
-    Darwin)
-        OS=Mac
-        ;;
+Linux)
+    OS=Linux
+    os_name="$(grep '^NAME=' /etc/os-release | cut -d= -f2 | xargs)"
+    [ -z "$os_name" ] && { os_name="$(uname -a)"; }
+    ;;
+Darwin)
+    OS=Mac
+    ;;
 esac
 
 if [ "$OS" == Linux ]; then
@@ -37,7 +37,10 @@ function pre_task() {
 }
 
 function for_base() {
-    if [ "$DISTRO" == "Gentoo" ]; then
+    if [ "$OS" == "Mac" ]; then
+        # sudo port install tree-sitter-cli
+        brew install tree-sitter-cli
+    elif [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update dev-util/tree-sitter-cli
     elif [ "$DISTRO" == "Arch" ]; then
         sudo pacman -Sy --noconfirm tree-sitter
@@ -54,31 +57,31 @@ function for_c() {
     # +lsp need one of clangd v9+ or ccls.
     # clangd 目前最稳定健壮，但是尚无索引系统, ccls 可搜索引用
     if [ "$OS" == "Mac" ]; then
-        # sudo port install llvm
-        brew install llvm
-    else 
+        # sudo port install llvm ccls
+        brew install llvm ccls
+    else
         case "$DISTRO" in
-            Gentoo)
-                # USE extra  : Build extra tools (clangd, clang-tidy and a few more)
-                sudo emerge --update clang
-                sudo emerge --update ccls
-                ;;
-            Arch)
-                sudo pacman -Sy --noconfirm clang
-                sudo pacman -Sy --noconfirm ccls
-                ;;
-            SUSE)
-                sudo zypper in -y clang
-                sudo zypper in -y ccls
-                ;;
-            Debian)     
-                sudo apt-get install clangd-11
-                sudo apt-get install ccls
-                ;;
-            RHEL)
-                sudo dnf install clang-tools-extra
-                sudo dnf install ccls
-                ;;
+        Gentoo)
+            # USE extra  : Build extra tools (clangd, clang-tidy and a few more)
+            sudo emerge --update clang
+            sudo emerge --update ccls
+            ;;
+        Arch)
+            sudo pacman -Sy --noconfirm clang
+            sudo pacman -Sy --noconfirm ccls
+            ;;
+        SUSE)
+            sudo zypper in -y clang
+            sudo zypper in -y ccls
+            ;;
+        Debian)
+            sudo apt-get install clangd-11
+            sudo apt-get install ccls
+            ;;
+        RHEL)
+            sudo dnf install clang-tools-extra
+            sudo dnf install ccls
+            ;;
         esac
     fi
     pip install cmake-language-server
@@ -94,7 +97,7 @@ function for_go() {
     go install golang.org/x/tools/cmd/guru@latest
     go install github.com/cweill/gotests/gotests@latest
     go install github.com/fatih/gomodifytags@latest
-    
+
     if [ "$OS" == "Mac" ]; then
         #sudo port install golangci-lint
         brew install golangci-lint
@@ -127,10 +130,10 @@ function for_markdown() {
     ## General (natural language)
     pip install proselint
     sudo npm install -g textlint --force
-    
+
     ## MarkedJS
     sudo npm install -g marked --force
-    
+
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update discount app-text/pandoc-bin
@@ -156,7 +159,8 @@ function for_python() {
     pip install pipenv nose poetry
     pip install "python-language-server[all]"
     pip install "python-lsp-server[all]"
-    sudo npm i -g pyright --force
+    pip install pyright
+    # sudo npm i -g pyright --force
 }
 
 function for_rust() {

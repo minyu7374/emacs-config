@@ -6,37 +6,62 @@
 
 (require 'cl-lib)
 
-(use-package! lsp-java
-  :hook (java-mode . lsp-deferred)
-  :init
-
+(after! lsp-java
   ;; jdk8 isn't supported in latest version
-  ;; https://github.com/emacs-lsp/lsp-java/issues/249
-  (setq lsp-java-jdt-download-url "https://download.eclipse.org/jdtls/milestones/0.57.0/jdt-language-server-0.57.0-202006172108.tar.gz")
+  ;; https://github.com
+  ;; (setq lsp-java-jdt-download-url "https://download.eclipse.org/jdtls/milestones/0.57.0/jdt-language-server-0.57.0-202006172108.tar.gz")
 
-  (setq lsp-java-configuration-runtimes '[(:name "JavaSE-1.8" :path "/opt/oraclejdk-bin-8")
-                                          (:name "JavaSE-17" :path "/opt/openjdk-bin-17" :default t)
-                                          (:name "JavaSE-21" :path "/opt/oraclejdk-bin-21")])
-
-  ;; 即在java项目所在同一层目录下设置maven目录，提供settings.xml文件
-  (setq lsp-java-configuration-maven-user-settings "../maven/settings.xml")
+  ;; 通过direnv控制不同项目的环境变量即可
+  ;; (if (string= (getenv "EMACS_WORK_PRIORITY") "1")
+  ;;   (progn
+  ;;     (setq lsp-java-configuration-runtimes '[
+  ;;                                             ;; (:name "JavaSE-1.8" :path "/opt/oraclejdk-bin-8")
+  ;;                                             (:name "JavaSE-11" :path "/opt/openjdk-bin-11" :default t)
+  ;;                                             (:name "JavaSE-17" :path "/opt/openjdk-bin-17")
+  ;;                                             ])
+  ;;     (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-work.xml"))
+  ;;   (progn
+  ;;     (setq lsp-java-configuration-runtimes '[
+  ;;                                             ;; (:name "JavaSE-1.8" :path "/opt/oraclejdk-bin-8")
+  ;;                                             (:name "JavaSE-17" :path "/opt/openjdk-bin-11")
+  ;;                                             (:name "JavaSE-11" :path "/opt/openjdk-bin-17" :default t)
+  ;;                                             ])
+  ;;     (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-default.xml")))
 
   (setq lombok-library-path (concat doom-data-dir "lombok.jar"))
-
   (unless (file-exists-p lombok-library-path)
     (url-copy-file "https://projectlombok.org/downloads/lombok.jar" lombok-library-path))
 
-  (setq lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms100m"))
-
+  (setq lsp-java-vmargs 
+        '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms100m"))
   (push (concat "-javaagent:"
                 (expand-file-name lombok-library-path))
         lsp-java-vmargs)
 
   ;; Spring boot support (Experimental)
   ;; (require 'lsp-java-boot)
+  ;; (add-hook 'lsp-mode-hook #'lsp-lens-mode)
+  ;; (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+  )
 
-  (add-hook 'lsp-mode-hook #'lsp-lens-mode)
-  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+;; (defun java-env-oraclejdk8()
+;;   "OracleJDK8 Java environment variables."
+;;   (interactive)
+
+;;   (_remove-java-home-from-path)
+;;   (setenv "JAVA_HOME" "/opt/oraclejdk-bin-8")
+;;   (setenv "JDK_HOME" "/opt/oraclejdk-bin-8")
+;;   (setenv "PATH" (concat "/opt/oraclejdk-bin-8:" (getenv "PATH")))
+;;   )
+
+(defun java-env-openjdk11()
+  "OpenJDK11 Java environment variables."
+  (interactive)
+
+  (_remove-java-home-from-path)
+  (setenv "JAVA_HOME" "/opt/openjdk-bin-11")
+  (setenv "JDK_HOME" "/opt/openjdk-bin-11")
+  (setenv "PATH" (concat "/opt/openjdk-bin-11:" (getenv "PATH")))
   )
 
 (defun java-env-opnjdk17()
@@ -47,40 +72,20 @@
   (setenv "JAVA_HOME" "/opt/openjdk-bin-17")
   (setenv "JDK_HOME" "/opt/openjdk-bin-17")
   (setenv "PATH" (concat "/opt/openjdk-bin-17:" (getenv "PATH")))
-  (setq lsp-java-configuration-maven-user-settings "~/.m2/maven/settings.xml")
   )
 
-(defun java-env-oraclejdk8()
-  "kanjia Java environment variables."
+(defun maven-set-default()
+  "Set Default Maven config."
   (interactive)
 
-  (_remove-java-home-from-path)
-  (setenv "JAVA_HOME" "/opt/oraclejdk-bin-8")
-  (setenv "JDK_HOME" "/opt/oraclejdk-bin-8")
-  (setenv "PATH" (concat "/opt/oraclejdk-bin-8:" (getenv "PATH")))
-  (setq lsp-java-configuration-maven-user-settings "~/.m2/maven/settings.xml")
+  (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-default.xml")
   )
 
-(defun java-env-oraclejdk21()
-  "OracleJDK21 Java environment variables."
+(defun maven-set-work()
+  "Set Work Maven config."
   (interactive)
 
-  (_remove-java-home-from-path)
-  (setenv "JAVA_HOME" "/opt/oraclejdk-bin-21")
-  (setenv "JDK_HOME" "/opt/oraclejdk-bin-21")
-  (setenv "PATH" (concat "/opt/oraclejdk-bin-21:" (getenv "PATH")))
-  (setq lsp-java-configuration-maven-user-settings "~/.m2/maven/settings.xml")
-  )
-
-(defun java-env-kanjia()
-  "kanjia Java environment variables."
-  (interactive)
-
-  (_remove-java-home-from-path)
-  (setenv "JAVA_HOME" "/opt/oraclejdk-bin-8")
-  (setenv "JDK_HOME" "/opt/oraclejdk-bin-8")
-  (setenv "PATH" (concat "/opt/oraclejdk-bin-8:" (getenv "PATH")))
-  (setq lsp-java-configuration-maven-user-settings "~/Workspace/unicom/projects/kanjia/maven/settings.xml")
+  (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-work.xml")
   )
 
 (defun java-env-switch()
@@ -88,12 +93,23 @@
   (interactive)
   (let ((choice (completing-read
                  "Select Java version: "
-                 '("OpenJDK 17" "OracleJDK 8" "OracleJDK 21" "kanjia"))))
+                 ;; '("OracleJDK 8" "OpenJDK 11" "OpenJDK 17"))))
+                 '("OpenJDK 11" "OpenJDK 17"))))
     (cond
+     ;; ((string-equal choice "OracleJDK 8") (java-env-oraclejdk8))
+     ((string-equal choice "OpenJDK 11") (java-env-openjdk11))
      ((string-equal choice "OpenJDK 17") (java-env-opnjdk17))
-     ((string-equal choice "OracleJDK 8") (java-env-oraclejdk8))
-     ((string-equal choice "OracleJDK 21") (java-env-oraclejdk21))
-     ((string-equal choice "kanjia") (java-env-kanjia))
+     (t (message "Invalid choice")))))
+
+(defun maven-set-switch()
+  "Switch between different Maven settings."
+  (interactive)
+  (let ((choice (completing-read
+                 "Select Maven settings: "
+                 '("Default" "Work"))))
+    (cond
+     ((string-equal choice "Default") (maven-set-default))
+     ((string-equal choice "Work") (maven-set-work))
      (t (message "Invalid choice")))))
 
 (defun _remove-java-home-from-path ()
@@ -108,7 +124,8 @@
 
 (map! :leader
       (:prefix "y"
-       :desc "java environment switch" :nv "j" #'java-env-switch))
+       :desc "java environment switch" :nv "j" #'java-env-switch
+       :desc "maven config switch" :nv "m" #'maven-set-switch))
 
 (provide 'java-conf)
 
