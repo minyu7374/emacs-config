@@ -59,7 +59,7 @@
 (setq doom-theme (if (display-graphic-p) 'doom-dracula 'doom-one))
 
 ;; fullscreen
-(set-frame-parameter nil 'fullscreen 'fullboth)
+(set-frame-parameter nil 'fullscreen (if IS-MAC 'maximized 'fullboth))
 
 ;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -68,7 +68,7 @@
 (add-hook 'after-make-frame-functions
           (lambda (new-frame)
             (select-frame new-frame)
-            (set-frame-parameter nil 'fullscreen 'fullboth)
+            (set-frame-parameter nil 'fullscreen (if IS-MAC 'maximized 'fullboth))
             (if (display-graphic-p)
                 (load-theme 'doom-dracula 'no-confirm)
               (progn
@@ -97,6 +97,9 @@
   ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   (add-hook! 'dired-mode 'all-the-icons-dired-mode)
   )
+
+;; 光标离窗口顶部或底部多少行时，Emacs 将自动滚动窗口，以使光标保持在指定的行数之外，改善阅读体验
+(setq scroll-margin 5)
 
 (provide 'display)
 

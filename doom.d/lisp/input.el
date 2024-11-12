@@ -15,10 +15,9 @@
   :after-call after-find-file pre-command-hook
   :custom
   (rime-user-data-dir (concat doom-local-dir "rime/"))
-  ;; homebrew mac下需要单独下载librime链接库文件(或者使用squirrel提供的)
+  ;; homebrew mac下需要单独下载librime链接库文件(https://github.com/rime/librime/releases)
   (rime-emacs-module-header-root (if IS-MAC "/Applications/Emacs.app/Contents/Resources/include" nil))
-  ;;(rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
-  (rime-librime-root (if IS-MAC "/Library/Input Methods/Squirrel.app/Contents/Frameworks" nil))
+  (rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
   ;; MacPorts: port install emacs-app librime-devel
   ;;(rime-emacs-module-header-root (if IS-MAC "/Applications/MacPorts/Emacs.app/Contents/Resources/include" nil))
   ;;(rime-librime-root (if IS-MAC "/opt/local" nil))

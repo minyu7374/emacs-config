@@ -98,3 +98,7 @@
 
 (require 'auto-insert-conf)
 ;; (require 'eaf-conf)
+
+(if IS-MAC
+      (require 'mac-opt)
+  )
