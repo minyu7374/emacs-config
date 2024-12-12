@@ -4,6 +4,14 @@
 
 ;;; Code:
 
+
+(+global-word-wrap-mode +1)
+
+(setq-default fill-column 120
+              delete-trailing-lines t)
+
+(global-goto-address-mode t)
+
 (after! lsp-ui
    (setq lsp-ui-doc-enable t)
    ;;top/bottom/at-point
