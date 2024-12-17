@@ -33,7 +33,7 @@
   (interactive)
 
   ;; JetBrainsMono/Consolas[ NF(M)]  ExtraLight/Thin
-  (let ((default-font "JetBrainsMono NFM Thin")
+  (let ((default-font "JetBrainsMono NFM Light")
         ;; FZLiBian-S02/FZTieJinLiShu-S17/Microsoft YaHei
         (chinese-font "FZLiBian-S02"))
 
