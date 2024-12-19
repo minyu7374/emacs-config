@@ -81,6 +81,7 @@
 (require 'display)
 (require 'proxy)
 (require 'input)
+(require 'ai)
 
 (require 'shell-conf)
 (require 'markdown-conf)
@@ -96,5 +97,5 @@
 ;; (require 'eaf-conf)
 
 (if IS-MAC
-      (require 'mac-opt)
+    (require 'mac-opt)
   )
