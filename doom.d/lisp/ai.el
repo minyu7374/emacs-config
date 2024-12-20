@@ -1,4 +1,6 @@
 ;;; ai.el --- AI conf                                -*- lexical-binding: t; -*-
+;;; Commentary:
+;;     AI 工具相关配置
 
 ;; Copyright (C) 2024  minyu
 
@@ -6,26 +8,34 @@
 
 ;;; Code:
 
-(defun get-api-token (pass-key env-key)
-  "Retrieve API token from password manager or environment variable.
-PASS-KEY is the command to retrieve the token from the password manager.
-ENV-KEY is the environment variable to fallback if PASS-KEY fails."
-  (let ((token (string-trim (shell-command-to-string (format "pass %s" pass-key)))))
-    (if (or (not token) (string-empty-p token))
-        (getenv env-key) token)))
+(defun get-api-host (env-var default-host)
+  "Retrieve the API host from an environment variable.
+ENV-VAR is the name of the environment variable.
+DEFAULT-HOST is the fallback value if ENV-VAR is not set or empty."
+  (let ((host (getenv env-var)))
+    (if (or (not host) (string-empty-p host)) default-host host)))
+
+(defun get-api-token (pass-var env-var)
+  "Retrieve the API token from a password manager or an environment variable.
+PASS-VAR is the key for the token stored in GNU Pass.
+ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
+  (let ((token (string-trim (shell-command-to-string (format "pass %s" pass-var)))))
+    
+(if (or (not token) (string-empty-p token))
+        (getenv env-var) token)))
 
 (use-package! gptel
   :config
-  (setq gptel-api-key (get-api-token "openapi/token" "OPENAI_API_KEY"))
+  (setq gptel-api-key (get-api-token "openai/token" "OPENAI_API_KEY"))
 
-  (let ((chatanywhere-token (get-api-token "chatanywhere/token" "CHATANYWHERE_IP_KEY")))
+  (let ((chatanywhere-host (get-api-host "CHATANYWHERE_IP_HOST" "api.chatanywhere.tech"))
+        (chatanywhere-token (get-api-token "chatanywhere/token" "CHATANYWHERE_IP_KEY")))
     (defvar gptel--chatanywhere
       (gptel-make-openai "ChatAnyWhere"
-        :host "api.chatanywhere.tech"
+        :host chatanywhere-host
+        :key chatanywhere-token
         :endpoint "/v1/chat/completions"
         :models '("gpt-4" "gpt-4o" "gpt-4o-mini")
-        :key chatanywhere-token
-        ;; :header `(("Authorization" . ,(format "Bearer %s" chatanywhere-token)))
         :stream t)))
 
   (let ((gemini-token (get-api-token "gemini/token" "GEMINI_IP_KEY")))
@@ -42,6 +52,18 @@ ENV-KEY is the environment variable to fallback if PASS-KEY fails."
          :desc "gptel" :nv "a" #'gptel
          :desc "gptel menu" :nv "m" #'gptel-menu))
   )
+
+;; https://github.com/copilot-emacs/copilot.el
+;; accept completion from copilot and fallback to company
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)
+              ("C-n" . 'copilot-next-completion)
+              ("C-p" . 'copilot-previous-completion)))
 
 (provide 'ai)
 

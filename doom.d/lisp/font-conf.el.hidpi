@@ -1,4 +1,4 @@
-(setq default-font-size 32
+(setq default-font-size 34
     big-font-size 40
     chinese-font-rescale 1.1)
 
