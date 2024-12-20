@@ -28,6 +28,9 @@ ENV-KEY is the environment variable to fallback if PASS-KEY fails."
         ;; :header `(("Authorization" . ,(format "Bearer %s" chatanywhere-token)))
         :stream t)))
 
+  (let ((gemini-token (get-api-token "gemini/token" "GEMINI_IP_KEY")))
+    (defvar gptel--gemini (gptel-make-gemini "Gemini" :key gemini-token :stream t)))
+
   ;; TODO 定义其他大模型后端 ...
 
   ;; 默认后端
