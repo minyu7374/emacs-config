@@ -21,9 +21,9 @@
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 ;; 中英文对齐 参考 https://emacs-china.org/t/org-mode/440/9
 
-(defvar default-font-size 13 "Default font size for doom theme.")
+(defvar default-font-size 14 "Default font size for doom theme.")
 (defvar big-font-size 18 "Big font size for doom theme.")
-(defvar chinese-font-rescale 1.1 "Chinese font scale ratio for doom theme.")
+(defvar chinese-font-rescale 1.15 "Chinese font scale ratio for doom theme.")
 
 ;; (require 'font-conf)
 (condition-case nil (require 'font-conf) (error nil))
@@ -33,19 +33,20 @@
   (interactive)
 
   ;; JetBrainsMono/Consolas[ NF(M)]  ExtraLight/Thin
-  (let ((default-font "JetBrainsMono NFM Light")
+  (let ((default-font "JetBrainsMono NFM")
         ;; FZLiBian-S02/FZTieJinLiShu-S17/Microsoft YaHei
         (chinese-font "FZLiBian-S02"))
 
-    (setq doom-font (font-spec :family default-font :slant 'italic :size default-font-size)
-          doom-big-font (font-spec :family default-font :slant 'italic :size big-font-size)
-          doom-variable-pitch-font (font-spec :family default-font :slant 'italic :size default-font-size)
-          doom-serif-font (font-spec :family default-font :slant 'italic))
-    (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" default-font default-font-size) :slant 'italic)
+    (setq doom-font (font-spec :family default-font :weight 'light :slant 'italic :size default-font-size)
+          ;; doom-variable-pitch-font (font-spec :family default-font :weight 'light :slant 'italic :size default-font-size)
+          ;; doom-serif-font (font-spec :family default-font :weight 'light :slant 'italic :size default-font-size)
+          doom-big-font (font-spec :family default-font :weight 'light :slant 'italic :size big-font-size))
+    (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" default-font default-font-size) :weight 'light :slant 'italic)
+    (set-face-attribute 'bold nil :font (format "%s:pixelsize=%d" default-font default-font-size) :weight 'bold :slant 'normal)
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
                         (font-spec :family chinese-font)))
-    (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
+    ;; (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
     ))
 
 ;; (add-hook 'doom-load-theme-hook 'doom/reload-custom-font)
