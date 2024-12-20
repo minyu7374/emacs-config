@@ -23,7 +23,7 @@
 
 (defvar default-font-size 14 "Default font size for doom theme.")
 (defvar big-font-size 18 "Big font size for doom theme.")
-(defvar chinese-font-rescale 1.15 "Chinese font scale ratio for doom theme.")
+(defvar chinese-font-rescale 1.1 "Chinese font scale ratio for doom theme.")
 
 ;; (require 'font-conf)
 (condition-case nil (require 'font-conf) (error nil))
@@ -46,7 +46,7 @@
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
                         (font-spec :family chinese-font)))
-    ;; (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
+    (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
     ))
 
 ;; (add-hook 'doom-load-theme-hook 'doom/reload-custom-font)
