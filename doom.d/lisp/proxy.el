@@ -21,6 +21,16 @@
 (defun _proxy-on(ip port)
   (setq url-gateway-method 'socks)
   (setq socks-server `("Default server" ,ip ,port 5))
+  ;; (let ((proxy-server (format "socks5://%s:%d" ip port)))
+  (let ((proxy-server (format "socks5h://%s:%d" ip port)))
+       (setq url-proxy-services
+             `(("no_proxy" . "^\\(localhost\\|127\\..*\\|10\\..*\\|192\\.168\\..*\\)")  ; elisp正则 \\( \\| \\. 即普通正则的( | \.
+               ("http" . ,proxy-server)
+               ("https" . ,proxy-server)))
+       (setenv "http_proxy" proxy-server)
+       (setenv "https_proxy" proxy-server)
+       (setenv "ALL_PROXY" proxy-server))
+       (setenv "NO_PROXY" "localhost,127.0.0.0/8,10.0.0.0/8,192.168.0.0/16")
   (setq proxy-status t)
   (message "set proxy server: %s:%d" ip port)
   )
@@ -31,6 +41,11 @@
 
   (setq url-gateway-method 'native)
   (setq socks-server nil)
+  (setq url-proxy-services nil)
+  (setenv "http_proxy" nil)
+  (setenv "https_proxy" nil)
+  (setenv "ALL_PROXY" nil)
+  (setenv "NO_PROXY" nil)
   (setq proxy-status nil)
   (message "off proxy server")
   )
