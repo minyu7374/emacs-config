@@ -39,17 +39,21 @@
 (map! :leader (:prefix "i"
                :desc "insert current datetime" :nv "t" #'insert-current-datetime))
 
-;; imenu (lsp-sommand-map: <leader>cl)
+;; lsp (lsp-sommand-map: <leader>cl)
 (global-set-key (kbd "\C-c\C-u") 'lsp-ui-mode)
 (map! :map lsp-command-map
       "u" #'lsp-ui-mode
       "c" #'+lsp/switch-client)
 
+;; lsp-ui-imenu(lsp-ui 开启后，才有imenu命令)
 (after! lsp-ui
   (global-set-key (kbd "\C-c\C-m") 'lsp-ui-imenu)
   (map! :map lsp-command-map
-        "m" #'lsp-ui-imenu)
-  )
+        "m" #'lsp-ui-imenu))
+
+;; treemacs
+(map! :leader (:prefix "t"
+               :desc "Project sidebar(treeemacs)" :nv "t" #'treemacs))
 
 ;; window move
 ;; 和emacs本身的快捷键产生冲突，不使用了

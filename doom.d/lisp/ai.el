@@ -81,10 +81,35 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)
+              ("C-/" . 'copilot-accept-completion)
+              ("S-<tab>" . 'copilot-accept-completion-by-word)
+              ("S-TAB" . 'copilot-accept-completion-by-word)
               ("C-n" . 'copilot-next-completion)
-              ("C-p" . 'copilot-previous-completion)))
+              ("C-p" . 'copilot-previous-completion))
+  :config
+  (add-to-list 'copilot-indentation-alist '(prog-mode 4))
+  (add-to-list 'copilot-indentation-alist '(org-mode 2))
+  (add-to-list 'copilot-indentation-alist '(text-mode 2))
+  (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2)))
+
+(after! (evil copilot)
+  ;; Define a custom function for handling Copilot or fallback actions
+  (defun my/copilot-action-or-default (copilot-action)
+    "Perform COPILOT-ACTION if copilot-mode is active, otherwise do the default action."
+    (if (and (bound-and-true-p copilot-mode)
+             (copilot--overlay-visible)) ; Ensure a completion is visible
+        (funcall copilot-action)
+      (call-interactively #'self-insert-command))) ; Default to inserting the key's character
+
+  ;; Bind keys in Evil insert state globally
+  (evil-define-key 'insert 'global
+    (kbd "<tab>") (lambda () (interactive) (my/copilot-action-or-default #'copilot-accept-completion))
+    (kbd "TAB") (lambda () (interactive) (my/copilot-action-or-default #'copilot-accept-completion))
+    (kbd "C-/") (lambda () (interactive) (my/copilot-action-or-default #'copilot-accept-completion))
+    (kbd "S-<tab>") (lambda () (interactive) (my/copilot-action-or-default #'copilot-accept-completion-by-word))
+    (kbd "S-TAB") (lambda () (interactive) (my/copilot-action-or-default #'copilot-accept-completion-by-word))
+    (kbd "C-n") (lambda () (interactive) (my/copilot-action-or-default #'copilot-next-completion))
+    (kbd "C-p") (lambda () (interactive) (my/copilot-action-or-default #'copilot-previous-completion))))
 
 (provide 'ai)
 
