@@ -39,6 +39,9 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
         :stream t
         :models '("gpt-4" "gpt-4o" "gpt-4o-mini"))))
 
+  (let ((anthropic-token (get-api-token "anthropic/token" "ANTHROPIC_API_KEY")))
+    (defvar gptel--anthropic (gptel-make-anthropic "Claude" :key anthropic-token :stream t)))
+
   (let ((gemini-token (get-api-token "gemini/token" "GEMINI_API_KEY")))
     (defvar gptel--gemini (gptel-make-gemini "Gemini" :key gemini-token :stream t)))
 
