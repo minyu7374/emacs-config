@@ -17,10 +17,11 @@
 ;;   (global-unset-key k))
 
 ;; comment
-(global-set-key (kbd "\C-c\C-c") 'comment-line)
-(global-set-key (kbd "\C-cc") 'comment-line)
+;; (global-set-key (kbd "\C-c\C-c") 'comment-line)
 (map! :leader (:prefix "c"
-               :desc "comment or uncomment current line" :nv "m" #'comment-line))
+               ;;和vim中NERDCommenter快捷键保持一致
+               :desc "Comment line toggle" :nv "SPC" #'comment-line
+               :desc "Comment in box" :nv "b" #'comment-box))
 
 ;; set mark ctrl+space 和常用输入法切换快捷键冲突
 (global-unset-key (kbd "C-SPC"))

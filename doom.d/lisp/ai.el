@@ -26,6 +26,8 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
 (use-package! gptel
   :config
   (setq gptel-max-tokens 4096)
+  (setq gptel-track-media t)
+
   (setq gptel-api-key (get-api-token "openai/token" "OPENAI_API_KEY"))
 
   (let ((chatanywhere-host (get-api-host "CHATANYWHERE_API_HOST" "api.chatanywhere.tech"))
@@ -73,8 +75,12 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
   (global-set-key (kbd "\C-ca") 'gptel)
   (map! :leader
         (:prefix ("ya" . "AI")
-         :desc "gptel" :nv "a" #'gptel
-         :desc "gptel menu" :nv "m" #'gptel-menu))
+         :desc "Create new chat buffer" :nv "a" #'gptel
+         :desc "Menu for chat preferences" :nv "m" #'gptel-menu
+         :desc "Rewrite/refactor selected region" :nv "w" #'gptel-rewrite
+         :desc "Add/remove region/buffer to chat context" :nv "d" #'gptel-add
+         :desc "Add a file to chat context" :nv "f" #'gptel-add-file
+         :desc "Stop active gptel process" :nv "k" #'gptel-abort))
   )
 
 ;; https://github.com/copilot-emacs/copilot.el

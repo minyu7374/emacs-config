@@ -28,6 +28,28 @@
 (add-hook! 'c++-mode-hook 'disable-format-on-save-by-env)
 (add-hook! 'java-mode-hook 'disable-format-on-save-by-env)
 
+;; 按C/C++多行注释风格进行注释
+(defun comment-region-in-clike-multi-line-style (beg end)
+  "Comment the region from BEG to END using C-like multi-line style."
+  (interactive "r")
+  (let ((comment-style 'multi-line)
+        (comment-start "/* ")
+        (comment-end " */")
+        (comment-start-skip "/\\*+[ \t]*")
+        (comment-end-skip "[ \t]*\\*+/")
+        (comment-multi-line t)
+        (comment-padding " "))
+    (comment-region beg end)))
+
+(defun setup-clike-multi-line-style-comment-region-hotkey ()
+  "Set up keybinding for commenting region in C-like multi-line style."
+  (map! :leader (:prefix "c"
+                 :desc "Comment region" :nv "m" #'comment-region-in-clike-multi-line-style)))
+
+(add-hook 'c-mode-hook #'setup-clike-multi-line-style-comment-region-hotkey)
+(add-hook 'c++-mode-hook #'setup-clike-multi-line-style-comment-region-hotkey)
+(add-hook 'go-mode-hook #'setup-clike-multi-line-style-comment-region-hotkey)
+
 (provide 'format-conf)
 
 ;;; format-conf.el ends here.
