@@ -18,6 +18,8 @@
   ;; homebrew mac下需要单独下载librime链接库文件(https://github.com/rime/librime/releases)
   (rime-emacs-module-header-root (if IS-MAC "/Applications/Emacs.app/Contents/Resources/include" nil))
   (rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
+  ;; 2024-12-24 15:14 现在发现homebrew有librime的包了, 但是用起来有问题，还是先用github releases的
+  ;; (rime-librime-root (if IS-MAC "/opt/homebrew/lib" nil))
   ;; MacPorts: port install emacs-app librime-devel
   ;;(rime-emacs-module-header-root (if IS-MAC "/Applications/MacPorts/Emacs.app/Contents/Resources/include" nil))
   ;;(rime-librime-root (if IS-MAC "/opt/local" nil))
