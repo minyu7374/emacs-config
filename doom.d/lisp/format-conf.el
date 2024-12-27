@@ -41,14 +41,15 @@
         (comment-padding " "))
     (comment-region beg end)))
 
-(defun setup-clike-multi-line-style-comment-region-hotkey ()
-  "Set up keybinding for commenting region in C-like multi-line style."
-  (map! :leader (:prefix "c"
-                 :desc "Comment region" :nv "m" #'comment-region-in-clike-multi-line-style)))
+(defun my/comment-region (beg end)
+  "Comment the region from BEG to END using the appropriate style for the current mode."
+  (interactive "r")
+  (if (member major-mode '(c-mode c++-mode go-mode))
+      (comment-region-in-clike-multi-line-style beg end)
+    (comment-region beg end)))
 
-(add-hook 'c-mode-hook #'setup-clike-multi-line-style-comment-region-hotkey)
-(add-hook 'c++-mode-hook #'setup-clike-multi-line-style-comment-region-hotkey)
-(add-hook 'go-mode-hook #'setup-clike-multi-line-style-comment-region-hotkey)
+(map! :leader (:prefix "c"
+                :desc "Comment region" :nv "m" #'my/comment-region))
 
 (provide 'format-conf)
 
