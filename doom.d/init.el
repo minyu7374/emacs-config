@@ -14,6 +14,12 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
+;; 临时禁用nongnu (https://git.savannah.gnu.org/git/emacs/nongnu.git/ 502)
+(defadvice! straight-use-recipes-ignore-nongnu-elpa-a (fn recipe)
+  :around #'straight-use-recipes
+  (unless (eq 'nongnu-elpa (car recipe))
+    (funcall fn recipe)))
+
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
        ;;chinese
