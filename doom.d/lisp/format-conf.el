@@ -20,8 +20,8 @@
 (defun disable-format-on-save-by-env ()
   "Disable format-on-save if FORMAT_ON_SAVE environment variable is set to 'false'."
   (when (string= (getenv "FORMAT_ON_SAVE") "false")
-    (setq +format-with-lsp nil)  ;; 禁用 LSP 的格式化功能
-    (setq +format-inhibit t)))   ;; 禁用 Doom Emacs 的格式化功能
+    (setq +format-with :none)
+    (setq +format-inhibit t)))
 
 (add-hook! 'python-mode-hook 'disable-format-on-save-by-env)
 (add-hook! 'c-mode-hook 'disable-format-on-save-by-env)
@@ -49,7 +49,7 @@
     (comment-region beg end)))
 
 (map! :leader (:prefix "c"
-                :desc "Comment region" :nv "m" #'my/comment-region))
+               :desc "Comment region" :nv "m" #'my/comment-region))
 
 (provide 'format-conf)
 
