@@ -9,7 +9,6 @@
 ;; (setq mac-allow-anti-aliasing nil)              ;; 禁用字体抗锯齿，减少渲染压力
 (setq frame-inhibit-implied-resize t)           ;; 禁止窗口自动调整大小
 (setq inhibit-compacting-font-caches t)         ;; 禁止压缩字体缓存，减少卡顿
-(setq ns-use-native-fullscreen t)               ;; 通过原生全屏模式来避免窗口切换时的重绘问题
 (setq frame-resize-pixelwise t)                 ;; 更平滑的窗口缩放
 (setq line-move-visual nil)                     ;; 设置为物理行移动
 
