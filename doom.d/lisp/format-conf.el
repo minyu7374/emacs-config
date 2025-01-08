@@ -16,17 +16,17 @@
 ;; 默认black太严格了，有些风格也不是很喜欢，可用autopep8/yapf/flake8/pylint等
 (setq-hook! 'python-mode-hook +format-with 'yapf)
 
-;; 检查环境变量以禁用自动格式化，可与direnv结合从而控制不同项目目录下的行为
-(defun disable-format-on-save-by-env ()
-  "Disable format-on-save if FORMAT_ON_SAVE environment variable is set to 'false'."
-  (when (string= (getenv "FORMAT_ON_SAVE") "false")
-    (setq +format-with :none)
-    (setq +format-inhibit t)))
+;; 修改+format-inhibit的值没有作用，可通过.dir-locals.el 配置+format-on-save-disabled-modes(dot_conf/dir-locals.el)
+;; ;; 检查环境变量以禁用自动格式化，可与direnv结合从而控制不同项目目录下的行为
+;; (defun disable-format-on-save-by-env ()
+;;   "Disable format-on-save if FORMAT_ON_SAVE environment variable is set to 'false'."
+;;   (when (string= (getenv "FORMAT_ON_SAVE") "false")
+;;     (setq-local +format-inhibit t)))
 
-(add-hook! 'python-mode-hook 'disable-format-on-save-by-env)
-(add-hook! 'c-mode-hook 'disable-format-on-save-by-env)
-(add-hook! 'c++-mode-hook 'disable-format-on-save-by-env)
-(add-hook! 'java-mode-hook 'disable-format-on-save-by-env)
+;; (add-hook! 'python-mode-hook 'disable-format-on-save-by-env)
+;; (add-hook! 'c-mode-hook 'disable-format-on-save-by-env)
+;; (add-hook! 'c++-mode-hook 'disable-format-on-save-by-env)
+;; (add-hook! 'java-mode-hook 'disable-format-on-save-by-env)
 
 ;; 按C/C++多行注释风格进行注释
 (defun comment-region-in-clike-multi-line-style (beg end)
