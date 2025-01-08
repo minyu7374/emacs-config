@@ -5,7 +5,7 @@
 ;;; Code:
 
 (setq-default tab-width 4)
-(setq-default indent-tabs-mode nil)
+;; (setq-default indent-tabs-mode nil)
 
 ;; 对于特定的模式，如 C/C++，可以单独设置
 (after! c-mode
