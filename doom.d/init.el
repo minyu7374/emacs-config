@@ -15,10 +15,10 @@
 ;;      directory (for easy access to its source code).
 
 ;; 临时禁用nongnu (https://git.savannah.gnu.org/git/emacs/nongnu.git/ 502)
-(defadvice! straight-use-recipes-ignore-nongnu-elpa-a (fn recipe)
-  :around #'straight-use-recipes
-  (unless (eq 'nongnu-elpa (car recipe))
-    (funcall fn recipe)))
+;; (defadvice! straight-use-recipes-ignore-nongnu-elpa-a (fn recipe)
+;;   :around #'straight-use-recipes
+;;   (unless (eq 'nongnu-elpa (car recipe))
+;;     (funcall fn recipe)))
 
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
@@ -28,8 +28,9 @@
 
        :completion
        ;; company           ; the ultimate code completion backend
-       (company +childframe) ; the ultimate code completion backend
+       ;;(company +childframe) ; the ultimate code completion backend
        ;;(corfu +orderless)  ; complete with cap(f), cape and a flying feather!
+       (corfu +orderless +icons +dabbrev)  ; complete with cap(f), cape and a flying feather!
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
@@ -43,7 +44,6 @@
        ;; (emoji +unicode)  ; 🙂
        ;; (emoji +unicode +github +ascii)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       ;;hydra
        indent-guides     ; highlighted indent columns
        ;;ligatures         ; ligatures and symbols to make your code pretty again (连字，直接使用JetBrains字体了)
        ;;minimap           ; show a map of the code on the side
@@ -116,8 +116,6 @@
        ;;pass              ; password manager for nerds
        pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
-       ;; rgb               ; creating color strings
-       ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        tree-sitter       ; syntax and parsing, sitting in a tree...
@@ -211,7 +209,6 @@
        everywhere        ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
-       ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
        ;;literate
