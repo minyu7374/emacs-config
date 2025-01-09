@@ -51,7 +51,7 @@
 ;; (package! treemacs-evil)
 
 ;; Mac GUI需要单独加载shell变量
-(package! exec-path-from-shell :ignore (not IS-MAC))
+(package! exec-path-from-shell :ignore (not (eq system-type 'darwin)))
 
 (package! gptel)
 (package! copilot

@@ -84,7 +84,6 @@
 (require 'input)
 (require 'ai)
 
-(require 'shell-conf)
 (require 'markdown-conf)
 (require 'java-conf)
 (require 'cc-conf)
@@ -97,6 +96,6 @@
 (require 'auto-insert-conf)
 ;; (require 'eaf-conf)
 
-(if IS-MAC
+(if (eq system-type 'darwin)
     (require 'mac-opt)
   )
