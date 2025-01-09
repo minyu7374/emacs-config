@@ -15,14 +15,27 @@
   :after-call after-find-file pre-command-hook
   :custom
   (rime-user-data-dir (concat doom-local-dir "rime/"))
-  ;; homebrew mac下需要单独下载librime链接库文件(https://github.com/rime/librime/releases)
-  (rime-emacs-module-header-root (if IS-MAC "/Applications/Emacs.app/Contents/Resources/include" nil))
-  (rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
-  ;; 2024-12-24 15:14 现在发现homebrew有librime的包了, 但是用起来有问题，还是先用github releases的
-  ;; (rime-librime-root (if IS-MAC "/opt/homebrew/lib" nil))
+  ;; MacOS下自动检测 emacs include 和 librime 路径
   ;; MacPorts: port install emacs-app librime-devel
-  ;;(rime-emacs-module-header-root (if IS-MAC "/Applications/MacPorts/Emacs.app/Contents/Resources/include" nil))
-  ;;(rime-librime-root (if IS-MAC "/opt/local" nil))
+  (rime-emacs-module-header-root
+   (when IS-MAC
+     (let ((dirs '("/Applications/MacPorts/Emacs.app/Contents/Resources/include/"
+                   "/opt/homebrew/opt/emacs-mac/include/"
+                   "/Applications/Emacs.app/Contents/Resources/include/")))
+       (cl-find-if (lambda (d) (and (file-directory-p d) d)) dirs))))
+  (rime-librime-root
+   (when IS-MAC
+     ;; MacPorts安装的librime(/opt/local)可以正常使用，homebrew的librime包用起来有问题，还是优先用github releases的（放在.local/lib/librime/dist）
+     (let ((dirs '("/opt/local/"
+                   "~/.local/lib/librime/dist/"
+                   "/opt/homebrew/"
+                   "/usr/local/")))
+       (cl-find-if (lambda (d)
+                     (let ((lib-dir (expand-file-name "lib" d)))
+                       (and (file-directory-p lib-dir)
+                            (directory-files lib-dir nil "librime.*\\.dylib" t)
+                            d)))
+                   dirs))))
   :config
   (setq rime-show-candidate (if (display-graphic-p) 'posframe 'popup))
 
