@@ -45,6 +45,8 @@
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
 ;; (package! pangu-spacing)
 
+(package! math-preview)
+
 ;; (package! gmpl-mode)
 ;; (package! tmux-pane)
 

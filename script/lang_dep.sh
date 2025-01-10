@@ -134,6 +134,9 @@ function for_markdown() {
     ## MarkedJS
     sudo npm install -g marked --force
 
+    ## latex math preview
+    sudo npm install -g git+https://gitlab.com/matsievskiysv/math-preview
+
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
         sudo emerge --update discount app-text/pandoc-bin

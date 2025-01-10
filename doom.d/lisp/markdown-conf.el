@@ -4,6 +4,15 @@
 
 ;;; Code:
 
+(map! :leader
+      (:prefix ("ym" . "math-preview")
+       :desc "Preview equations in buffer" :nv "a" #'math-preview-all
+       :desc "Preview equations in region" :nv "r" #'math-preview-region
+       :desc "Preview equations at point" :nv "p" #'math-preview-at-point
+       :desc "Clear equations in buffer" :nv "A" #'math-preview-clear-all
+       :desc "Clear equations in region" :nv "R" #'math-preview-clear-region
+       :desc "Clear equations at point" :nv "P" #'math-preview-clear-at-point))
+
 (after! markdown-mode
   (setq markdown-split-window-direction 'right)
 
@@ -40,7 +49,16 @@
         :localleader
         "P" #'marp-preview
         "R" #'reveal-preview
-        "E" #'marp-export-open))
+        "E" #'marp-export-open
+        (:prefix ("m" . "math-preview")
+         :desc "Preview equations in buffer" :nv "a" #'math-preview-all
+         :desc "Preview equations in region" :nv "r" #'math-preview-region
+         :desc "Preview equations at point" :nv "p" #'math-preview-at-point
+         :desc "Clear equations in buffer" :nv "A" #'math-preview-clear-all
+         :desc "Clear equations in region" :nv "R" #'math-preview-clear-region
+         :desc "Clear equations at point" :nv "P" #'math-preview-clear-at-point))
+  )
+
 
 (provide 'markdown-conf)
 

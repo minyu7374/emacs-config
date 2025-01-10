@@ -123,8 +123,8 @@
                                      path-list) ":"))))
 
 (map! :leader
-      (:prefix "y"
-       :desc "java environment switch" :nv "j" #'java-env-switch
+      (:prefix ("yj" . "java")
+       :desc "java environment switch" :nv "e" #'java-env-switch
        :desc "maven config switch" :nv "m" #'maven-set-switch))
 
 (provide 'java-conf)
