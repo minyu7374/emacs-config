@@ -56,6 +56,9 @@
 (map! :leader (:prefix "t"
                :desc "Project sidebar(treeemacs)" :nv "t" #'treemacs))
 
+;; evil
+(map! :nv "：" #'evil-ex)
+
 ;; window move
 ;; 和emacs本身的快捷键产生冲突，不使用了
 ;; (if (featurep 'tmux-pane)
