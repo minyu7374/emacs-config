@@ -17,7 +17,7 @@
 ;;   (global-unset-key k))
 
 ;; comment
-;; (global-set-key (kbd "\C-c\C-c") 'comment-line)
+(global-set-key (kbd "\C-cc") 'comment-line)
 (map! :leader (:prefix "c"
                ;;和vim中NERDCommenter快捷键保持一致
                :desc "Comment line toggle" :nv "SPC" #'comment-line
@@ -25,7 +25,7 @@
 
 ;; set mark ctrl+space 和常用输入法切换快捷键冲突
 (global-unset-key (kbd "C-SPC"))
-;; alt+space 在Linux kde上是kruner，command+space是Albert(Linux)/Spotlight(Mac)
+
 (global-set-key (kbd "C-S-SPC") 'set-mark-command)
 
 ;; insert current datetime
@@ -35,20 +35,19 @@
   (insert (format-time-string "%Y-%m-%d %H:%M")))
 ;; (insert (format-time-string "%Y-%m-%d %r")))
 
-(global-set-key (kbd "\C-c\C-t") 'insert-current-datetime)
 (global-set-key (kbd "\C-cit") 'insert-current-datetime)
 (map! :leader (:prefix "i"
                :desc "insert current datetime" :nv "t" #'insert-current-datetime))
 
 ;; lsp (lsp-sommand-map: <leader>cl)
-(global-set-key (kbd "\C-c\C-u") 'lsp-ui-mode)
+(global-set-key (kbd "\C-clu") 'lsp-ui-mode)
 (map! :map lsp-command-map
       "u" #'lsp-ui-mode
       "c" #'+lsp/switch-client)
 
 ;; lsp-ui-imenu(lsp-ui 开启后，才有imenu命令)
 (after! lsp-ui
-  (global-set-key (kbd "\C-c\C-m") 'lsp-ui-imenu)
+  (global-set-key (kbd "\C-clm") 'lsp-ui-imenu)
   (map! :map lsp-command-map
         "m" #'lsp-ui-imenu))
 

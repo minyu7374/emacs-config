@@ -8,6 +8,7 @@
 
 ;;; Code:
 
+;; gptel
 (defun get-api-host (env-var default-host)
   "Retrieve the API host from an environment variable.
 ENV-VAR is the name of the environment variable.
@@ -83,7 +84,8 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
          :desc "Stop active gptel process" :nv "k" #'gptel-abort))
   )
 
-;; https://github.com/copilot-emacs/copilot.el
+
+;; copilot https://github.com/copilot-emacs/copilot.el
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
