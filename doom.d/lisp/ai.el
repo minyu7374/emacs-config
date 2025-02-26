@@ -29,7 +29,13 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
   (setq gptel-max-tokens 4096)
   (setq gptel-track-media t)
 
-  (setq gptel-api-key (get-api-token "openai/token" "OPENAI_API_KEY"))
+  ;; (setq gptel-api-key (get-api-token "openai/token" "OPENAI_API_KEY"))
+
+  ;; (let ((anthropic-token (get-api-token "anthropic/token" "ANTHROPIC_API_KEY")))
+  ;;   (defvar gptel--anthropic (gptel-make-anthropic "Claude" :key anthropic-token :stream t)))
+
+  (let ((gemini-token (get-api-token "gemini/token" "GEMINI_API_KEY")))
+    (defvar gptel--gemini (gptel-make-gemini "Gemini" :key gemini-token :stream t)))
 
   (let ((chatanywhere-host (get-api-host "CHATANYWHERE_API_HOST" "api.chatanywhere.tech"))
         (chatanywhere-token (get-api-token "chatanywhere/token" "CHATANYWHERE_API_KEY")))
@@ -40,38 +46,42 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
         ;; :header `(("Authorization" . ,(concat "Bearer " chatanywhere-token)))
         ;; :endpoint "/v1/chat/completions"
         :stream t
-        :models '("gpt-4" "gpt-4o" "gpt-4o-mini"))))
+        :models '(gpt-4 gpt-4o gpt-4o-mini))))
 
-  (let ((anthropic-token (get-api-token "anthropic/token" "ANTHROPIC_API_KEY")))
-    (defvar gptel--anthropic (gptel-make-anthropic "Claude" :key anthropic-token :stream t)))
-
-  (let ((gemini-token (get-api-token "gemini/token" "GEMINI_API_KEY")))
-    (defvar gptel--gemini (gptel-make-gemini "Gemini" :key gemini-token :stream t)))
-
-  ;; Gentoo-GMK 本地部署，直接(或ssh端口转发)进行请求。
-  (defvar gptel--gpt4all
-    (gptel-make-gpt4all "GPT4All"
-      :protocol "http"
-      :host "localhost:4891"
-      :stream nil
-      :models '(qwen2.5-coder-7b-instruct-q4_0.gguf
-                Meta-Llama-3-8B-Instruct-Q4_0.gguf
-                Llama-3.2-3B-Instruct-Q4_0.gguf)))
-
-  ;; 通过nginx反向代理转发，nginx中做简单的authorization
+  ;; deepseek web页面逆向api部署本地，nginx反向代理
   (let ((minyuchat-host (get-api-host "MINYUCHAT_API_HOST" "chat.wminyu.top:433"))
-        (minyuchat-token (get-api-token "minyuchat/token" "MINYUCHAT_API_KEY")))
+        (minyuchat-token (get-api-token "deepseek/web-token" "DEEPSEEK_WEB_API_KEY")))
     (defvar gptel--minyuchat
-      (gptel-make-gpt4all "Minyu"
+      (gptel-make-openai "MinyuChat"
         :host minyuchat-host
         :key minyuchat-token
-        :stream nil
-        :models '(qwen2.5-coder-7b-instruct-q4_0.gguf
-                  Meta-Llama-3-8B-Instruct-Q4_0.gguf
-                  Llama-3.2-3B-Instruct-Q4_0.gguf))))
+        :stream t
+        :models '(deepseek-chat deepseek-coder deepseek-reasoner))))
+
+  ;; ;; GPT4All Gentoo-GMK 本地部署，直接(或其他设备通过ssh端口转发)进行请求。
+  ;; (defvar gptel--gpt4all
+  ;;   (gptel-make-gpt4all "GPT4All"
+  ;;     :protocol "http"
+  ;;     :host "localhost:4891"
+  ;;     :stream nil
+  ;;     :models '(qwen2.5-coder-7b-instruct-q4_0.gguf
+  ;;               Meta-Llama-3-8B-Instruct-Q4_0.gguf
+  ;;               Llama-3.2-3B-Instruct-Q4_0.gguf)))
+
+  ;; ;; 通过nginx反向代理转发，nginx中做简单的authorization
+  ;; (let ((minyuchat-host (get-api-host "MINYUCHAT_API_HOST" "chat.wminyu.top:433"))
+  ;;       (minyuchat-token (get-api-token "minyuchat/token" "MINYUCHAT_API_KEY")))
+  ;;   (defvar gptel--minyuchat
+  ;;     (gptel-make-gpt4all "Minyu"
+  ;;       :host minyuchat-host
+  ;;       :key minyuchat-token
+  ;;       :stream nil
+  ;;       :models '(qwen2.5-coder-7b-instruct-q4_0.gguf
+  ;;                 Meta-Llama-3-8B-Instruct-Q4_0.gguf
+  ;;                 Llama-3.2-3B-Instruct-Q4_0.gguf))))
 
   ;; 默认后端
-  (setq-default gptel-backend gptel--chatanywhere)
+  (setq-default gptel-backend gptel--minyuchat)
 
   (global-set-key (kbd "\C-ca") 'gptel)
   (map! :leader
