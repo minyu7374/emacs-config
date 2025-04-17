@@ -17,14 +17,15 @@
 ;;   (global-unset-key k))
 
 ;; comment
-(global-set-key (kbd "\C-c\C-c") 'comment-line)
 (global-set-key (kbd "\C-cc") 'comment-line)
 (map! :leader (:prefix "c"
-               :desc "comment or uncomment current line" :nv "m" #'comment-line))
+               ;;和vim中NERDCommenter快捷键保持一致
+               :desc "Comment line toggle" :nv "SPC" #'comment-line
+               :desc "Comment in box" :nv "b" #'comment-box))
 
 ;; set mark ctrl+space 和常用输入法切换快捷键冲突
 (global-unset-key (kbd "C-SPC"))
-;; alt+space 在Linux kde上是kruner，command+space是Albert(Linux)/Spotlight(Mac)
+
 (global-set-key (kbd "C-S-SPC") 'set-mark-command)
 
 ;; insert current datetime
@@ -34,22 +35,28 @@
   (insert (format-time-string "%Y-%m-%d %H:%M")))
 ;; (insert (format-time-string "%Y-%m-%d %r")))
 
-(global-set-key (kbd "\C-c\C-t") 'insert-current-datetime)
 (global-set-key (kbd "\C-cit") 'insert-current-datetime)
 (map! :leader (:prefix "i"
                :desc "insert current datetime" :nv "t" #'insert-current-datetime))
 
-;; imenu (lsp-sommand-map: <leader>cl)
-(global-set-key (kbd "\C-c\C-u") 'lsp-ui-mode)
+;; lsp (lsp-sommand-map: <leader>cl)
+(global-set-key (kbd "\C-clu") 'lsp-ui-mode)
 (map! :map lsp-command-map
       "u" #'lsp-ui-mode
       "c" #'+lsp/switch-client)
 
+;; lsp-ui-imenu(lsp-ui 开启后，才有imenu命令)
 (after! lsp-ui
-  (global-set-key (kbd "\C-c\C-m") 'lsp-ui-imenu)
+  (global-set-key (kbd "\C-clm") 'lsp-ui-imenu)
   (map! :map lsp-command-map
-        "m" #'lsp-ui-imenu)
-  )
+        "m" #'lsp-ui-imenu))
+
+;; treemacs
+(map! :leader (:prefix "t"
+               :desc "Project sidebar(treeemacs)" :nv "t" #'treemacs))
+
+;; evil
+(map! :nv "：" #'evil-ex)
 
 ;; window move
 ;; 和emacs本身的快捷键产生冲突，不使用了

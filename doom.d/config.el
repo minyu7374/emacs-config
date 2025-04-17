@@ -40,13 +40,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
-(+global-word-wrap-mode +1)
-
-(setq-default fill-column 120
-              delete-trailing-lines t)
-
+(setq org-directory "~/Documents/org/")
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -81,18 +75,27 @@
 ;; they are implemented.
 
 ;; lisp
-(add-to-list 'load-path "~/.doom.d/lisp")
+;; (add-to-list 'load-path (expand-file-name "lisp" (file-name-directory (or load-file-name buffer-file-name))))
+(add-to-list 'load-path (expand-file-name "lisp" doom-user-dir))
+(require 'base)
 (require 'hotkey)
 (require 'display)
 (require 'proxy)
 (require 'input)
+(require 'ai)
 
-(require 'shell-conf)
 (require 'markdown-conf)
 (require 'java-conf)
 (require 'cc-conf)
 (require 'format-conf)
 (require 'ampl-mode)
 (require 'mpl-conf)
+;; (require 'syntax-check)
+(require 'ui-conf)
 
+(require 'auto-insert-conf)
 ;; (require 'eaf-conf)
+
+(if (eq system-type 'darwin)
+    (require 'mac-opt)
+  )

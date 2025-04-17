@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: header
+# key: header
+# --
+# -*- coding: utf-8 -*-
+"""
+Author: `(shell-command-to-string "git config user.name | tr -d '\\n'")`
+Email: `(shell-command-to-string "git config user.email | tr -d '\\n'")`
+Created: `(format-time-string "%Y-%m-%d %H:%M")`
+Description: ${1:Description of the file/module}
+"""
+
+$0

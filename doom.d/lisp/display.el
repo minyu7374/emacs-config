@@ -21,8 +21,9 @@
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 ;; 中英文对齐 参考 https://emacs-china.org/t/org-mode/440/9
 
-(defvar default-font-size 13 "Default font size for doom theme.")
+(defvar default-font-size 14 "Default font size for doom theme.")
 (defvar big-font-size 18 "Big font size for doom theme.")
+;; 实测现在用的字体，缩放1.25倍后对齐两个英文字母，但是中文字体显得特别大，不太美观，平时还是用1.1吧
 (defvar chinese-font-rescale 1.1 "Chinese font scale ratio for doom theme.")
 
 ;; (require 'font-conf)
@@ -32,16 +33,17 @@
   "Set custom fonts for doom theme."
   (interactive)
 
-  ;; JetBrainsMono/Consolas[ NF]
-  (let ((default-font "JetBrainsMono NF ExtraLight")
+  ;; JetBrainsMono/Consolas[ NF(M)]  ExtraLight/Thin
+  (let ((default-font "JetBrainsMono NFM")
         ;; FZLiBian-S02/FZTieJinLiShu-S17/Microsoft YaHei
         (chinese-font "FZLiBian-S02"))
 
-    (setq doom-font (font-spec :family default-font :slant 'italic :size default-font-size)
-          doom-big-font (font-spec :family default-font :slant 'italic :size big-font-size)
-          doom-variable-pitch-font (font-spec :family default-font :slant 'italic :size default-font-size)
-          doom-serif-font (font-spec :family default-font :slant 'italic))
-    (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" default-font default-font-size) :slant 'italic)
+    (setq doom-font (font-spec :family default-font :weight 'light :slant 'italic :size default-font-size)
+          ;; doom-variable-pitch-font (font-spec :family default-font :weight 'light :slant 'italic :size default-font-size)
+          ;; doom-serif-font (font-spec :family default-font :weight 'light :slant 'italic :size default-font-size)
+          doom-big-font (font-spec :family default-font :weight 'light :slant 'italic :size big-font-size))
+    (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" default-font default-font-size) :weight 'light :slant 'italic)
+    (set-face-attribute 'bold nil :font (format "%s:pixelsize=%d" default-font default-font-size) :weight 'bold :slant 'normal)
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
                         (font-spec :family chinese-font)))
@@ -59,7 +61,7 @@
 (setq doom-theme (if (display-graphic-p) 'doom-dracula 'doom-one))
 
 ;; fullscreen
-(set-frame-parameter nil 'fullscreen 'fullboth)
+(set-frame-parameter nil 'fullscreen os-fullscreen-type)
 
 ;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -68,7 +70,7 @@
 (add-hook 'after-make-frame-functions
           (lambda (new-frame)
             (select-frame new-frame)
-            (set-frame-parameter nil 'fullscreen 'fullboth)
+            (set-frame-parameter nil 'fullscreen os-fullscreen-type)
             (if (display-graphic-p)
                 (load-theme 'doom-dracula 'no-confirm)
               (progn
@@ -97,6 +99,9 @@
   ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   (add-hook! 'dired-mode 'all-the-icons-dired-mode)
   )
+
+;; 光标离窗口顶部或底部多少行时，Emacs 将自动滚动窗口，以使光标保持在指定的行数之外，改善阅读体验
+(setq scroll-margin 5)
 
 (provide 'display)
 

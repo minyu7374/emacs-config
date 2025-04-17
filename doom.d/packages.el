@@ -45,16 +45,21 @@
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
 ;; (package! pangu-spacing)
 
+(package! math-preview)
+
 ;; (package! gmpl-mode)
 ;; (package! tmux-pane)
 
 ;; (package! treemacs-evil)
 
 ;; Mac GUI需要单独加载shell变量
-;; (package! exec-path-from-shell :ignore (not IS-MAC))
+;; (package! exec-path-from-shell :ignore (not (eq system-type 'darwin)))
 ;; WSL里的emacs daemon 模式下未正常自动加载shell变量
 (package! exec-path-from-shell)
 
+(package! gptel)
+(package! copilot
+  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...

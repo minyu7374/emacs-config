@@ -15,12 +15,28 @@
   :after-call after-find-file pre-command-hook
   :custom
   (rime-user-data-dir (concat doom-local-dir "rime/"))
-  ;; max下需要单独下载librime链接库文件
-  ;; (rime-emacs-module-header-root (if IS-MAC "/Applications/Emacs.app/Contents/Resources/include" nil))
-  ;;(rime-librime-root (if IS-MAC "~/.local/lib/librime/dist" nil))
+  :init
+  ;; MacOS下自动检测 emacs include 和 librime 路径
   ;; MacPorts: port install emacs-app librime-devel
-  (rime-emacs-module-header-root (if IS-MAC "/Applications/MacPorts/Emacs.app/Contents/Resources/include" nil))
-  (rime-librime-root (if IS-MAC "/opt/local" nil))
+  (when (eq system-type 'darwin)
+    (setq rime-emacs-module-header-root
+          (let ((dirs '("/Applications/MacPorts/Emacs.app/Contents/Resources/include/"
+                        "/opt/homebrew/opt/emacs-mac/include/"
+                        "/Applications/Emacs.app/Contents/Resources/include/")))
+            (cl-find-if (lambda (d) (and (file-directory-p d) d)) dirs)))
+    (setq rime-librime-root
+          ;; MacPorts安装的librime(/opt/local)可以正常使用，homebrew的librime包用起来有问题，还是优先用github releases的（放在.local/lib/librime/dist）
+          (let ((dirs '("/opt/local/"
+                        "~/.local/lib/librime/dist/"
+                        "/opt/homebrew/"
+                        "/usr/local/")))
+            (cl-find-if (lambda (d)
+                          (let ((lib-dir (expand-file-name "lib" d)))
+                            (and (file-directory-p lib-dir)
+                                 (directory-files lib-dir nil "librime.*\\.dylib" t)
+                                 d)))
+                        dirs)))
+    )
   :config
   (setq rime-show-candidate (if (display-graphic-p) 'posframe 'popup))
 
