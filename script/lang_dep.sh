@@ -34,6 +34,9 @@ fi
 function pre_task() {
     cabal update
     pip install --upgrade pip
+
+    npm_cmd=npm
+    which cnpm >/dev/null && npm_cmd=cnpm
 }
 
 function for_base() {
@@ -63,7 +66,7 @@ function for_c() {
         case "$DISTRO" in
         Gentoo)
             # USE extra  : Build extra tools (clangd, clang-tidy and a few more)
-            sudo emerge --update clang
+            sudo emerge --update llvm-core/clang
             sudo emerge --update ccls
             ;;
         Arch)
@@ -124,18 +127,18 @@ function for_haskell() {
 
 function for_markdown() {
     ##Markdown-specific
-    sudo npm install -g markdownlint --force
+    sudo $npm_cmd install -g markdownlint --force
     # sudo gem install mdl
 
     ## General (natural language)
     pip install proselint
-    sudo npm install -g textlint --force
+    sudo $npm_cmd install -g textlint --force
 
     ## MarkedJS
-    sudo npm install -g marked --force
+    sudo $npm_cmd install -g marked --force
 
     ## latex math preview
-    sudo npm install -g git+https://gitlab.com/matsievskiysv/math-preview
+    sudo $npm_cmd install -g git+https://gitlab.com/matsievskiysv/math-preview
 
     # pandoc/markdown
     if [ "$DISTRO" == "Gentoo" ]; then
@@ -163,7 +166,7 @@ function for_python() {
     pip install "python-language-server[all]"
     pip install "python-lsp-server[all]"
     pip install pyright
-    # sudo npm i -g pyright --force
+    # sudo $npm_cmd i -g pyright --force
 }
 
 function for_rust() {
@@ -195,7 +198,7 @@ function for_shell() {
         # stack install ShellCheck
     fi
 
-    sudo npm i -g bash-language-server --force
+    sudo $npm_cmd i -g bash-language-server --force
     go install mvdan.cc/sh/v3/cmd/shfmt@latest
 }
 
@@ -209,13 +212,13 @@ function for_web() {
 }
 
 function for_json() {
-    # sudo npm i -g vscode-langservers-extracted --force
-    sudo npm install -g vscode-json-languageserver --force
+    # sudo $npm_cmd i -g vscode-langservers-extracted --force
+    sudo $npm_cmd install -g vscode-json-languageserver --force
 }
 
 function for_docker() {
     if [ "$OS" == "Linux" ]; then
-        sudo npm install -g dockerfile-language-server-nodejs
+        sudo $npm_cmd install -g dockerfile-language-server-nodejs
     fi
 
     go install github.com/jessfraz/dockfmt@latest
