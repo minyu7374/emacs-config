@@ -58,6 +58,8 @@
 (package! gptel)
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+(package! transient)
+(package! aider :recipe (:host github :repo "tninja/aider.el"))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...

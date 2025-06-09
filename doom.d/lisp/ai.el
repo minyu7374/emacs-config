@@ -132,6 +132,19 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
     (kbd "C-n") (lambda () (interactive) (my/copilot-action-or-default #'copilot-next-completion))
     (kbd "C-p") (lambda () (interactive) (my/copilot-action-or-default #'copilot-previous-completion))))
 
+
+;; https://github.com/tninja/aider.el
+(use-package! aider
+  :after transient  ;; 确保 transient 加载完成后再加载 aider
+  :commands (aider-run-aider)   ;; 运行命令才加载
+  :config
+  (let ((api-host (get-api-host "CHATANYWHERE_API_HOST" "api.chatanywhere.tech"))
+        (api-key (get-api-token "chatanywhere/token" "CHATANYWHERE_API_KEY")))
+    (setq aider-args `("--openai-api-base" ,api-host "--openai-api-key" ,api-key "--model" "mini")))
+
+  ;; (require 'aider-helm)
+  (require 'aider-doom))
+
 (provide 'ai)
 
 ;;; ai.el ends here.
