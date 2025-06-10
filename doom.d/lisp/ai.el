@@ -83,7 +83,7 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
   ;; 默认后端
   (setq-default gptel-backend gptel--minyuchat)
 
-  (global-set-key (kbd "\C-ca") 'gptel)
+  (global-set-key (kbd "\C-cA") 'gptel)
   (map! :leader
         (:prefix ("ya" . "AI")
          :desc "Create new chat buffer" :nv "a" #'gptel
@@ -98,7 +98,7 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
 ;; copilot https://github.com/copilot-emacs/copilot.el
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
-  :hook (prog-mode . copilot-mode)
+  ;; :hook (prog-mode . copilot-mode) ;; 先不默认启动了
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)
@@ -108,6 +108,12 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
               ("C-n" . 'copilot-next-completion)
               ("C-p" . 'copilot-previous-completion))
   :config
+
+  ;; 添加开关
+  (global-set-key (kbd "\C-cG") #'copilot-mode)
+  (map! :leader
+        :desc "Toggle Copilot mode" "t G" #'copilot-mode)
+
   (add-to-list 'copilot-indentation-alist '(prog-mode 4))
   (add-to-list 'copilot-indentation-alist '(org-mode 2))
   (add-to-list 'copilot-indentation-alist '(text-mode 2))
