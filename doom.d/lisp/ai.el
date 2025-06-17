@@ -36,13 +36,21 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
      :ds-host ,(lambda () (get-llm-api-host "MINYUCHAT_DS_API_HOST" "chat.wminyu.top:433/v1"))
      :token ,(lambda () (get-llm-api-token "deepseek/web-token" "DEEPSEEK_WEB_API_KEY")))))
 
+(defvar llm-api-keys-cache (make-hash-table :test 'equal)
+  "Cache for storing already loaded llm api keys.")
+
 (defun get-llm-api-key (backend key)
-  "Retrieve property value for a llm api.
+  "Retrieve property value for a llm api, caching the result after first load.
 BACKEND is the name of the llm(e.g. gemini, chatanywhere, ...).
 KEY is the property to retrieve (:*host or :token)."
-  (let ((entry (alist-get backend llm-api-keys)))
-    (when-let ((val (plist-get entry key)))
-      (funcall val))))
+  (let ((cache-key (cons backend key)))
+    (or (gethash cache-key llm-api-keys-cache)
+        (let* ((entry (alist-get backend llm-api-keys))
+               (val (plist-get entry key))
+               (result (when val (funcall val))))
+          (when result
+            (puthash cache-key result llm-api-keys-cache))
+          result))))
 
 ;; gptel https://github.com/karthink/gptel
 (use-package! gptel
@@ -95,6 +103,7 @@ KEY is the property to retrieve (:*host or :token)."
         chatgpt-shell-deepseek-key             (get-llm-api-key 'minyuchat :token))
 
   (global-set-key (kbd "\C-cC") 'chatgpt-shell)
+  (global-set-key (kbd "\C-ce") 'chatgpt-shell-prompt-compose)
   (map! :leader
         (:prefix ("yc" . "chatgpt-shell")
          :desc "Start new Chatgpt-Shell interactive" :nv "c" #'chatgpt-shell
