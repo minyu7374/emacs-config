@@ -56,6 +56,9 @@
 (package! exec-path-from-shell :ignore (not (eq system-type 'darwin)))
 
 (package! gptel)
+;; (package! chatgpt-shell)
+(package! chatgpt-shell
+  :recipe (:host github :repo "xenodium/chatgpt-shell" :files ("chatgpt-shell*.el")))
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 (package! transient)
