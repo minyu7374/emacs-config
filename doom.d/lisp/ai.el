@@ -9,16 +9,18 @@
 ;;; Code:
 
 (defun get-llm-api-host (env-var default-host)
-  "Retrieve the llm api host from an environment variable.
+  "Retrieve the LLM API host from an environment variable.
 ENV-VAR is the name of the environment variable.
-DEFAULT-HOST is the fallback value if ENV-VAR is not set or empty."
+DEFAULT-HOST is the fallback value if ENV-VAR is not set or empty.
+Returns the host string."
   (let ((host (getenv env-var)))
     (if (or (not host) (string-empty-p host)) default-host host)))
 
 (defun get-llm-api-token (pass-var env-var)
-  "Retrieve the llm api token from a password manager or an environment variable.
+  "Retrieve the LLM API token from a password manager or an environment variable.
 PASS-VAR is the key for the token stored in GNU Pass.
-ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
+ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty.
+Returns the token string."
   (let ((token (string-trim (shell-command-to-string (format "pass %s" pass-var)))))
     (if (or (not token) (string-empty-p token))
         (getenv env-var) token)))
@@ -35,14 +37,19 @@ ENV-VAR is the environment variable to use as a fallback if PASS-VAR is empty."
      :host ,(lambda () (get-llm-api-host "MINYUCHAT_API_HOST" "chat.wminyu.top:433"))
      :ds-host ,(lambda () (get-llm-api-host "MINYUCHAT_DS_API_HOST" "chat.wminyu.top:433/v1"))
      :token ,(lambda () (get-llm-api-token "deepseek/web-token" "DEEPSEEK_WEB_API_KEY")))))
+"Alist of LLM API backend configurations.
+Each entry is a list (BACKEND-NAME :KEY-TYPE (lambda () (GET-FUNCTION ...))).
+Supported KEY-TYPEs are :host, :ds-host, and :token."
 
 (defvar llm-api-keys-cache (make-hash-table :test 'equal)
   "Cache for storing already loaded llm api keys.")
 
 (defun get-llm-api-key (backend key)
-  "Retrieve property value for a llm api, caching the result after first load.
-BACKEND is the name of the llm(e.g. gemini, chatanywhere, ...).
-KEY is the property to retrieve (:*host or :token)."
+  "Retrieve property value for a LLM API, caching the result after first load.
+BACKEND is the name of the LLM (e.g. gemini, chatanywhere, ...).
+KEY is the property to retrieve (:host, :ds-host, or :token).
+Returns the key value, or nil if not found.
+If a token or host is not found, a warning message is displayed."
   (let ((cache-key (cons backend key)))
     (or (gethash cache-key llm-api-keys-cache)
         (let* ((entry (alist-get backend llm-api-keys))
@@ -80,12 +87,12 @@ KEY is the property to retrieve (:*host or :token)."
       :models '(deepseek-chat deepseek-coder deepseek-reasoner)))
 
   ;; 默认后端
-  (setq-default gptel-backend gptel--minyuchat)
+  (setq-default gptel-backend gptel--gemini)
 
-  (global-set-key (kbd "\C-cA") 'gptel)
+  (global-set-key (kbd "\C-cg") 'gptel)
   (map! :leader
-        (:prefix ("ya" . "gptel")
-         :desc "Create new chat buffer" :nv "a" #'gptel
+        (:prefix ("yg" . "gptel")
+         :desc "Create new chat buffer" :nv "b" #'gptel
          :desc "Menu for chat preferences" :nv "m" #'gptel-menu
          :desc "Rewrite/refactor selected region" :nv "w" #'gptel-rewrite
          :desc "Add/remove region/buffer to chat context" :nv "d" #'gptel-add
@@ -102,11 +109,11 @@ KEY is the property to retrieve (:*host or :token)."
         chatgpt-shell-deepseek-api-url-base    (format "https://%s" (get-llm-api-key 'minyuchat :ds-host))
         chatgpt-shell-deepseek-key             (get-llm-api-key 'minyuchat :token))
 
-  (global-set-key (kbd "\C-cC") 'chatgpt-shell)
-  (global-set-key (kbd "\C-ce") 'chatgpt-shell-prompt-compose)
+  (global-set-key (kbd "\C-cG") 'chatgpt-shell)
+  (global-set-key (kbd "\C-cE") 'chatgpt-shell-prompt-compose)
   (map! :leader
-        (:prefix ("yc" . "chatgpt-shell")
-         :desc "Start new Chatgpt-Shell interactive" :nv "c" #'chatgpt-shell
+        (:prefix ("yG" . "chatgpt-shell")
+         :desc "Start new Chatgpt-Shell interactive" :nv "i" #'chatgpt-shell
          :desc "Compose and send prompt from a dedicated buffer" :nv "e" #'chatgpt-shell-prompt-compose
          :desc "Cancel and close compose buffer" :nv "q" #'chatgpt-shell-prompt-compose-cancel
          :desc "Chatgpt-Shell swap model" :nv "v" #'chatgpt-shell-swap-model
@@ -128,9 +135,9 @@ KEY is the property to retrieve (:*host or :token)."
   :config
 
   ;; 添加开关
-  (global-set-key (kbd "\C-cG") #'copilot-mode)
+  (global-set-key (kbd "\C-cC") #'copilot-mode)
   (map! :leader
-        :desc "Toggle Copilot mode" "t G" #'copilot-mode)
+        :desc "Toggle Copilot mode" "t C" #'copilot-mode)
 
   (add-to-list 'copilot-indentation-alist '(prog-mode 4))
   (add-to-list 'copilot-indentation-alist '(org-mode 2))
@@ -163,13 +170,55 @@ KEY is the property to retrieve (:*host or :token)."
 (use-package! aider
   :after transient  ;; 确保 transient 加载完成后再加载 aider
   :commands (aider-run-aider)   ;; 运行命令才加载
-  :config
-  (let ((api-host (get-api-host "CHATANYWHERE_API_HOST" "api.chatanywhere.tech"))
-        (api-key (get-api-token "chatanywhere/token" "CHATANYWHERE_API_KEY")))
-    (setq aider-args `("--openai-api-base" ,api-host "--openai-api-key" ,api-key "--model" "mini")))
+  :init
+  (setenv "AIDER_AUTO_COMMITS" "False") ;; 限制自动提交
+  (defvar aider-backends
+    '(("Gemini"
+       :setup (lambda ()
+                ;; (setq aider-args `("--api-key" ,(format "gemini=%s" (get-llm-api-key 'gemini :token))
+                ;;                    "--model" "gemini/gemini-2.5-flash"))))
+                (setenv "GEMINI_API_KEY" (get-llm-api-key 'gemini :token))
+                (setq aider-args `("--model" "gemini/gemini-2.5-flash"))))
+      ("MinyuChat"
+       :setup (lambda ()
+                (setenv "DEEPSEEK_API_BASE" (format "https://%s" (get-llm-api-key 'minyuchat :ds-host)))
+                (setenv "DEEPSEEK_API_KEY" (get-llm-api-key 'minyuchat :token))
+                (setq aider-args `("--model" "deepseek"))))))
+  (defvar aider-current-backend "Gemini"
+    "The currently active Aider backend.")
 
+  (defun aider-switch-backend ()
+    "Interactively switch the Aider backend.
+    Prompts the user to select from `aider-backends` and applies the
+    corresponding setup function. Updates `aider-current-backend`."
+    (interactive)
+    (let* ((backend-names (mapcar #'car aider-backends))
+           (selected-backend-name (completing-read "Select Aider backend: " backend-names nil t aider-current-backend))
+           (backend-entry (assoc selected-backend-name aider-backends))
+           (setup-fn (plist-get (cdr backend-entry) :setup)))
+      (when setup-fn
+        (funcall setup-fn)
+        (setq aider-current-backend selected-backend-name)
+        (message "Aider backend switched to: %s" aider-current-backend))))
+
+  :config
+  ;; Set initial backend without prompting
+  (let* ((default-backend-entry (assoc aider-current-backend aider-backends))
+         (default-setup-fn (plist-get (cdr default-backend-entry) :setup)))
+    (when default-setup-fn
+      (funcall default-setup-fn)
+      (message "Aider initial backend set to: %s" aider-current-backend)))
+
+  (aider-magit-setup-transients)
   ;; (require 'aider-helm)
-  (require 'aider-doom))
+  (require 'aider-doom)
+  )
+
+(global-set-key (kbd "\C-ca") 'aider-transient-menu) ;; for wider screen
+(map! :leader
+      (:prefix ("ya" . "aider")
+       :desc "Aider transient menu" :nv "m" #'aider-transient-menu
+       :desc "Switch Aider backend" :nv "s" #'aider-switch-backend))
 
 (provide 'ai)
 
