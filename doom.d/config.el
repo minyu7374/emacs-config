@@ -84,6 +84,7 @@
 (require 'input)
 (require 'ai)
 
+(require 'git)
 (require 'markdown-conf)
 (require 'java-conf)
 (require 'cc-conf)

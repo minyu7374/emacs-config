@@ -55,6 +55,9 @@
 ;; Mac GUI需要单独加载shell变量
 (package! exec-path-from-shell :ignore (not (eq system-type 'darwin)))
 
+;; GitLens
+(package! blamer :recipe (:host github :repo "artawower/blamer.el"))
+
 (package! gptel)
 ;; (package! chatgpt-shell)
 (package! chatgpt-shell
