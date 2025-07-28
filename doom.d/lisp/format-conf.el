@@ -15,6 +15,11 @@
 
 ;; 默认black太严格了，有些风格也不是很喜欢，可用autopep8/yapf/flake8/pylint等
 (setq-hook! 'python-mode-hook +format-with 'yapf)
+;; (setq-hook! 'python-mode-hook +format-with :none) ;; 禁用格式化
+
+;; 禁用 lsp formatter
+;; (setq +format-with-lsp nil)
+;; (setq-hook! 'sh-mode-hook +format-with-lsp nil)
 
 ;; 修改+format-inhibit的值没有作用，可通过.dir-locals.el 配置+format-on-save-disabled-modes(dot_conf/dir-locals.el)
 ;; ;; 检查环境变量以禁用自动格式化，可与direnv结合从而控制不同项目目录下的行为

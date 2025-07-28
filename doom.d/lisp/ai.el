@@ -25,7 +25,7 @@ Returns the token string."
     (if (or (not token) (string-empty-p token))
         (getenv env-var) token)))
 
-(defvar llm-api-keys
+(defvar +llm-api-keys
   `((openai
      :token ,(lambda () (get-llm-api-token "openai/token" "OPENAI_API_KEY")))
     (chatanywhere
@@ -41,7 +41,7 @@ Returns the token string."
 Each entry is a list (BACKEND-NAME :KEY-TYPE (lambda () (GET-FUNCTION ...))).
 Supported KEY-TYPEs are :host, :ds-host, and :token."
 
-(defvar llm-api-keys-cache (make-hash-table :test 'equal)
+(defvar +llm-api-keys-cache (make-hash-table :test 'equal)
   "Cache for storing already loaded llm api keys.")
 
 (defun get-llm-api-key (backend key)
@@ -51,12 +51,12 @@ KEY is the property to retrieve (:host, :ds-host, or :token).
 Returns the key value, or nil if not found.
 If a token or host is not found, a warning message is displayed."
   (let ((cache-key (cons backend key)))
-    (or (gethash cache-key llm-api-keys-cache)
-        (let* ((entry (alist-get backend llm-api-keys))
+    (or (gethash cache-key +llm-api-keys-cache)
+        (let* ((entry (alist-get backend +llm-api-keys))
                (val (plist-get entry key))
                (result (when val (funcall val))))
           (when result
-            (puthash cache-key result llm-api-keys-cache))
+            (puthash cache-key result +llm-api-keys-cache))
           result))))
 
 ;; gptel https://github.com/karthink/gptel
@@ -172,7 +172,7 @@ If a token or host is not found, a warning message is displayed."
   :commands (aider-run-aider)   ;; 运行命令才加载
   :init
   (setenv "AIDER_AUTO_COMMITS" "False") ;; 限制自动提交
-  (defvar aider-backends
+  (defvar +aider-backends
     '(("Gemini"
        :setup (lambda ()
                 ;; (setq aider-args `("--api-key" ,(format "gemini=%s" (get-llm-api-key 'gemini :token))
@@ -184,30 +184,30 @@ If a token or host is not found, a warning message is displayed."
                 (setenv "DEEPSEEK_API_BASE" (format "https://%s" (get-llm-api-key 'minyuchat :ds-host)))
                 (setenv "DEEPSEEK_API_KEY" (get-llm-api-key 'minyuchat :token))
                 (setq aider-args `("--model" "deepseek"))))))
-  (defvar aider-current-backend "Gemini"
-    "The currently active Aider backend.")
+  (defvar +aider-active-backend "Gemini"
+    "The active Aider backend.")
 
   (defun aider-switch-backend ()
     "Interactively switch the Aider backend.
-    Prompts the user to select from `aider-backends` and applies the
-    corresponding setup function. Updates `aider-current-backend`."
+    Prompts the user to select from `+aider-backends` and applies the
+    corresponding setup function. Updates `+aider-active-backend`."
     (interactive)
-    (let* ((backend-names (mapcar #'car aider-backends))
-           (selected-backend-name (completing-read "Select Aider backend: " backend-names nil t aider-current-backend))
-           (backend-entry (assoc selected-backend-name aider-backends))
+    (let* ((backend-names (mapcar #'car +aider-backends))
+           (selected-backend-name (completing-read "Select Aider backend: " backend-names nil t +aider-active-backend))
+           (backend-entry (assoc selected-backend-name +aider-backends))
            (setup-fn (plist-get (cdr backend-entry) :setup)))
       (when setup-fn
         (funcall setup-fn)
-        (setq aider-current-backend selected-backend-name)
-        (message "Aider backend switched to: %s" aider-current-backend))))
+        (setq +aider-active-backend selected-backend-name)
+        (message "Aider backend switched to: %s" +aider-active-backend))))
 
   :config
   ;; Set initial backend without prompting
-  (let* ((default-backend-entry (assoc aider-current-backend aider-backends))
+  (let* ((default-backend-entry (assoc +aider-active-backend +aider-backends))
          (default-setup-fn (plist-get (cdr default-backend-entry) :setup)))
     (when default-setup-fn
       (funcall default-setup-fn)
-      (message "Aider initial backend set to: %s" aider-current-backend)))
+      (message "Aider initial backend set to: %s" +aider-active-backend)))
 
   (aider-magit-setup-transients)
   ;; (require 'aider-helm)

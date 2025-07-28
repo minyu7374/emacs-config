@@ -3,6 +3,9 @@
 ;;;     git配置
 ;;; code:
 
+(defvar blamer-face-height 100 "Height for blamer face.")
+(require 'font-conf nil :noerror)
+
 (use-package! blamer
   :bind (("C-c b" . blamer-show-commit-info)
          ("C-c B" . blamer-show-posframe-commit-info))
@@ -17,7 +20,7 @@
   :custom-face
   (blamer-face ((t :foreground "#7a88cf"
                    :background nil
-                   :height 100
+                   :height ,blamer-face-height
                    :italic t)))
   :config
   (global-blamer-mode 0))

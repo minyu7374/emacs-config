@@ -11,6 +11,9 @@
 
 (setq mouse-drag-copy-region t)
 
+;; lsp-mode: plist`s provide better performance in deserialization and also put less presure than `hash-table`s.
+(setenv "LSP_USE_PLISTS" "true")
+
 (if (eq system-type 'darwin)
     (progn
       (defconst os-open-cmd 'open "The open cmd of current OS.")

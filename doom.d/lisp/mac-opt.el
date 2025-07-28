@@ -8,7 +8,7 @@
 (use-package! exec-path-from-shell
   :custom
   (exec-path-from-shell-arguments '("-l"))
-  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH" "LSP_USE_PLISTS"))
+  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
   :config
   ;;(setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize)

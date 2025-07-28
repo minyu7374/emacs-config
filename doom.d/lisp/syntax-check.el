@@ -3,22 +3,49 @@
 ;;      语法检查设置
 
 ;;; Code:
-;; (use-package lsp-pyright
-;;   :ensure t
-;;   :hook (python-mode . (lambda ()
-;;                          (setq lsp-diagnostics-provider :none) ;; don't use 'lsp as default flycheck checker, this will turn off the flycheck auto-start too.
-;;                          (setq flycheck-checker 'python-pyright) ;; use 'python-pyright instead as python checker.
-;;                          (global-flycheck-mode) ;; enable flycheck manually.
-;;                          (require 'lsp-pyright) ;; use lsp-pyright lsp
-;;                          (lsp-deferred)
 
-;; (defun use-python-pyright-checker ()
-;;   "Set flycheck to use python-pyright checker for Python files."
-;;   (setq-local flycheck-checker 'python-pyright)         ;; 强制使用 python-pyright
-;;   ;; (flycheck-disable-checker 'lsp)                       ;; 禁用 lsp checker
-;;   )
+;; Python 只开启一个 Flycheck 检查工具
+(defvar +python-flycheck-checkers
+  '(python-ruff python-pylint python-pyright python-flake8 python-pyflakes python-pycompile python-mypy lsp)
+  "List of available Flycheck checkers for Python.")
+(defvar +python-flycheck-active-checker 'python-pyright
+  "Global active Flycheck checker for Python buffers.")
 
-;; (add-hook 'python-mode-hook #'use-python-pyright-checker)
+(defun set-python-checker ()
+  "Set Flycheck checker for the current Python buffer."
+  (let ((disabled-checkers (remove +python-flycheck-active-checker +python-flycheck-checkers)))
+    (message "Using Flycheck checker for Python: %s" +python-flycheck-active-checker)
+    (setq-local flycheck-checker +python-flycheck-active-checker)
+    (setq-local flycheck-disabled-checkers disabled-checkers)))
+
+(defun switch-python-checker ()
+  "Interactively switch Python Flycheck checker."
+  (interactive)
+  (setq +python-flycheck-active-checker
+        (intern (completing-read "Set active Python checker: " (mapcar #'symbol-name +python-flycheck-checkers)
+                                 nil t (symbol-name +python-flycheck-active-checker))))
+  (set-python-checker))
+
+(after! python
+  (add-hook 'python-mode-hook #'set-python-checker)
+  ;; (add-hook 'python-mode-hook (lambda () (setq-local lsp-diagnostics-provider :none)))
+  (map! :mode python-mode
+        :leader
+        (:prefix "e"
+         :desc "Switch Flycheck checker" "s" #'switch-python-checker)))
+
+(map! :leader
+      (:prefix ("e" . "errors")
+       :desc "Next error"       "n" #'flycheck-next-error
+       :desc "Previous error"   "p" #'flycheck-previous-error
+       :desc "List errors"      "l" #'flycheck-list-errors
+       :desc "Disable checker"  "d" #'flycheck-disable-checker
+       :desc "Checker setup"   "v" #'flycheck-verify-setup
+       ))
+
+(map! (:prefix "g"
+       :nv "[" #'flycheck-previous-error
+       :nv "]" #'flycheck-next-error))
 
 (provide 'syntax-check)
 

@@ -157,16 +157,17 @@ function for_markdown() {
 }
 
 function for_python() {
-    pip install pytest
     #pip install nose
+    pip install pytest
 
     pip install autopep8 pylint yapf
-    pip install black pyflakes isort
-    pip install pipenv nose poetry
+    pip install black isort
+    pip install pipenv poetry
     pip install "python-language-server[all]"
     pip install "python-lsp-server[all]"
-    pip install pyright
-    # sudo $npm_cmd i -g pyright --force
+    #pip install pyright
+    sudo $npm_cmd i -g pyright --force
+    uv tool install ruff@latest
 }
 
 function for_rust() {

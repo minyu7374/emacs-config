@@ -91,7 +91,7 @@
 (require 'format-conf)
 (require 'ampl-mode)
 (require 'mpl-conf)
-;; (require 'syntax-check)
+(require 'syntax-check)
 (require 'ui-conf)
 
 (require 'auto-insert-conf)
