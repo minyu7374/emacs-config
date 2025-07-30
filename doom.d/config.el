@@ -86,15 +86,15 @@
 
 (require 'git)
 (require 'markdown-conf)
-(require 'java-conf)
 (require 'cc-conf)
-(require 'format-conf)
+(require 'java-conf)
 (require 'ampl-mode)
 (require 'mpl-conf)
+(require 'lsp-conf)
 (require 'syntax-check)
-(require 'ui-conf)
-
+(require 'format-conf)
 (require 'auto-insert-conf)
+
 ;; (require 'eaf-conf)
 
 (if (eq system-type 'darwin)

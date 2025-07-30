@@ -11,8 +11,11 @@
 
 (setq mouse-drag-copy-region t)
 
-;; lsp-mode: plist`s provide better performance in deserialization and also put less presure than `hash-table`s.
-(setenv "LSP_USE_PLISTS" "true")
+(after! word-wrap
+  (+global-word-wrap-mode +1))
+
+(setq-default fill-column 120
+              delete-trailing-lines t)
 
 (if (eq system-type 'darwin)
     (progn

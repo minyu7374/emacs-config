@@ -26,9 +26,9 @@
 (setq frame-resize-pixelwise t)                 ;; 更平滑的窗口缩放
 (setq line-move-visual nil)                     ;; 设置为物理行移动
 
-;;; 优化垃圾回收机制
-(setq gc-cons-threshold (* 50 1000 1000))       ;; 提升GC阈值至50MB
-(setq read-process-output-max (* 1024 1024))    ;; 提高进程读取输出的最大值
+;; ;;; 优化垃圾回收机制
+;; (setq gc-cons-threshold (* 128 1024 1024))       ;; 提升GC阈值至128MB
+;; (setq read-process-output-max (* 1024 1024))    ;; 提高进程读取输出的最大值
 
 ;;; 性能优化
 ;;Doom Emacs 在 macOS 上默认禁用 file-name-handler-alist 的一些处理，但可以确保你的配置文件包含以下代码，进一步降低文件系统操作的开销：

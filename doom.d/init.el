@@ -20,6 +20,9 @@
 ;;   (unless (eq 'nongnu-elpa (car recipe))
 ;;     (funcall fn recipe)))
 
+;; lsp-mode: plist`s provide better performance in deserialization and also put less presure than `hash-table`s.
+(setenv "LSP_USE_PLISTS" "true")
+
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
        ;;chinese
