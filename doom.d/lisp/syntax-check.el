@@ -43,14 +43,16 @@
 ;; 支持多种语言的 flycheck checker 持久化切换
 (defvar +flycheck-active-checkers (make-hash-table :test #'eq)
   "Hash table storing active Flycheck checkers per major mode.")
+
+;; 实际发现，还是默认优先使用lsp的支持比较好，可以标记出具体错误位置，比如对 unsed 置灰
 ;; (puthash 'python-mode 'python-pyright +flycheck-active-checkers)
-(defvar +flycheck-default-checkers
-  '((python-mode . python-pyright)
-    ;; 其他语言默认配置checker
-    )
-  "Default persistent Flycheck checkers per major mode.")
-(dolist (pair +flycheck-default-checkers)
-  (puthash (car pair) (cdr pair) +flycheck-active-checkers))
+;; (defvar +flycheck-default-checkers
+;;   '((python-mode . python-pyright)
+;;     ;; 其他语言默认配置checker
+;;     )
+;;   "Default persistent Flycheck checkers per major mode.")
+;; (dolist (pair +flycheck-default-checkers)
+;;   (puthash (car pair) (cdr pair) +flycheck-active-checkers))
 
 (after! flycheck
   (defun +flycheck/select-checker ()
