@@ -39,7 +39,7 @@ function pre_task() {
     which cnpm >/dev/null && npm_cmd=cnpm
 }
 
-function for_base() {
+function for_treesit() {
     if [ "$OS" == "Mac" ]; then
         # sudo port install tree-sitter-cli
         brew install tree-sitter-cli
@@ -53,7 +53,6 @@ function for_base() {
         # The command "cabal install [TARGETS]" doesn't expose libraries.
         cabal install --lib tree-sitter
     fi
-
 }
 
 function for_c() {
@@ -106,7 +105,7 @@ function for_go() {
         brew install golangci-lint
     else
         # binary will be $(go env GOPATH)/bin/golangci-lint
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin #v1.54.1
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$(go env GOPATH)/bin" #v1.54.1
         golangci-lint --version
     fi
 }
@@ -226,18 +225,10 @@ function for_docker() {
 }
 
 pre_task
-if [ -z "$1" ]; then
-    for_base
-    for_c
-    for_go
-    for_python
-    for_haskell
-    for_markdown
-    for_rust
-    for_shell
-    for_web
-    for_json
-    for_docker
-else
-    eval "for_$1"
-fi
+
+[ -z "$*" ] &&
+    set -- treesit c go python haskell markdown shell web json docker
+
+for lang in "$@"; do
+    eval "for_$lang"
+done

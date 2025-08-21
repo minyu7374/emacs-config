@@ -8,18 +8,17 @@
 (after! lsp-mode
   ;; ruff类型检查方面弱于pyright，风格检查方面因为有格式化工具也不太需要
   ;; (add-to-list 'lsp-disabled-clients 'ruff)
+  (add-hook! '(c-ts-mode-hook c++-ts-mode-hook c-or-c++-ts-mode-hook go-ts-mode-hook
+               python-ts-mode-hook java-ts-mode-hook bash-ts-mode-hook) #'lsp!)
   (map! :map lsp-command-map "s" #'+lsp/switch-client)
   (which-key-add-keymap-based-replacements lsp-command-map "s" "Switch LSP client"))
 
 ;; 明确针对python只使用pyright，避免多端共存引起dual diagnostics
-(after! python
-  (add-hook 'python-mode-hook
-            (lambda () (setq-local lsp-enabled-clients '(pyright)))))
+(setq-hook! '(python-mode-hook python-ts-mode-hook) lsp-enabled-clients '(pyright))
 
 ;; 使用basedpyright
-(use-package! lsp-pyright
-  :ensure t
-  :custom (lsp-pyright-langserver-command "basedpyright"))
+(after! lsp-pyright
+  (setq lsp-pyright-langserver-command "basedpyright"))
 
 (after! lsp-ui
   ;; 默认关闭lsp-ui-doc-mode，在打开时同时show-with-cursor生效

@@ -9,7 +9,7 @@
 (global-set-key (kbd "C-\\") 'toggle-input-method)
 (map! :leader
       (:prefix "t"
-       :desc "toggle input method" :nv "i" #'toggle-input-method))
+       :desc "toggle input method" :nv "z" #'toggle-input-method))
 
 (use-package! rime
   :after-call after-find-file pre-command-hook

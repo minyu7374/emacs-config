@@ -7,16 +7,16 @@
 ;; Mac(GUI) 只有基础的环境变量集，需加载shell环境变量
 (use-package! exec-path-from-shell
   :custom
-  (exec-path-from-shell-arguments '("-l"))
+  ;;(exec-path-from-shell-arguments '("-i"))
+  (exec-path-from-shell-arguments nil)
   (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
   :config
-  ;;(setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize)
   )
 
 ;; mac下shell脚本自动补全比较慢
 (after! sh-script 
-  (set-company-backend! 'sh-mode nil))
+  (set-company-backend! '(sh-mode bash-ts-mode) nil))
 
 ;;; 调整 Emacs GUI 选项
 

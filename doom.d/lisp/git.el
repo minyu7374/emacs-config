@@ -19,7 +19,7 @@
 
   :custom-face
   (blamer-face ((t :foreground "#7a88cf"
-                   :background nil
+                   :background unspecified
                    :height ,blamer-face-height
                    :italic t)))
   :config

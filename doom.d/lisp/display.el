@@ -103,6 +103,24 @@
 ;; 光标离窗口顶部或底部多少行时，Emacs 将自动滚动窗口，以使光标保持在指定的行数之外，改善阅读体验
 (setq scroll-margin 5)
 
+;; 缩进提示
+(after! indent-bars
+  (setq indent-bars-treesit-support t)  ;; 使用 treesit AST 判断缩进
+  (setq indent-bars-pattern ".") ;; 普通缩进用虚点
+  (setq indent-bars-color '(highlight :face-bg t :blend 0.15)) ;; 普通缩进颜色（浅灰）
+  (setq indent-bars-highlight-current-depth '(:face default :blend 0.3)) ;; 高亮当前缩进层级（更亮一些）
+  ;; 其它推荐设置
+  (setq indent-bars-width-frac 0.2)
+  (setq indent-bars-pad-frac 0.1)
+  (setq indent-bars-display-on-blank-lines t))
+
+;; treemacs 不用显示行号
+(after! treemacs
+  (add-hook 'treemacs-mode-hook
+            (lambda ()
+              (display-line-numbers-mode -1)
+              (setq-local display-line-numbers nil))))
+
 (provide 'display)
 
 ;;; display.el ends here.

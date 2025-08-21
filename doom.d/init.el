@@ -131,7 +131,6 @@
        :lang
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
-       ;;(cc +lsp)         ; C > C++ == 1
        (cc +lsp +tree-sitter)         ; C > C++ == 1
        ;;clojure           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
@@ -178,7 +177,7 @@
        graphviz          ; diagrams for confusing yourself even more
        ;;purescript        ; javascript, but functional
        ;; python            ; beautiful is better than ugly
-       ;; (python +lsp +tree-sitter +pyright)            ; beautiful is better than ugly
+       ;; (python +lsp +pyright)            ; beautiful is better than ugly
        (python +lsp +tree-sitter +pyright +cython +pyenv)            ; beautiful is better than ugly
 
        ;;qt                ; the 'cutest' gui framework ever
@@ -187,7 +186,7 @@
        ;;rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       ;; (rust +lsp +tree-sitter)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       ;; (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps
        ;; sh                ; she sells {ba,z,fi}sh shells on the C xor
