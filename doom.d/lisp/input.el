@@ -22,13 +22,14 @@
     (setq rime-emacs-module-header-root
           (let ((dirs '("/Applications/MacPorts/Emacs.app/Contents/Resources/include/"
                         "/opt/homebrew/opt/emacs-mac/include/"
+                        "/opt/homebrew/opt/emacs-plus/include/"
                         "/Applications/Emacs.app/Contents/Resources/include/")))
             (cl-find-if (lambda (d) (and (file-directory-p d) d)) dirs)))
     (setq rime-librime-root
-          ;; MacPorts安装的librime(/opt/local)可以正常使用，homebrew的librime包用起来有问题，还是优先用github releases的（放在.local/lib/librime/dist）
+          ;; MacPorts安装的librime在/opt/local，github releases下载的放在.local/lib/librime/dist
           (let ((dirs '("/opt/local/"
-                        "~/.local/lib/librime/dist/"
                         "/opt/homebrew/"
+                        "~/.local/lib/librime/dist/"
                         "/usr/local/")))
             (cl-find-if (lambda (d)
                           (let ((lib-dir (expand-file-name "lib" d)))

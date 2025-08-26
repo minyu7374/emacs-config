@@ -7,9 +7,9 @@
 ;; Mac(GUI) 只有基础的环境变量集，需加载shell环境变量
 (use-package! exec-path-from-shell
   :custom
-  ;;(exec-path-from-shell-arguments '("-i"))
-  (exec-path-from-shell-arguments nil)
-  (exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
+  (exec-path-from-shell-arguments (if (string-match-p "emacs-plus" invocation-directory) '("-l") nil))
+  ;;(exec-path-from-shell-arguments nil)
+  (exec-path-from-shell-variables '("PATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
   :config
   (exec-path-from-shell-initialize)
   )
