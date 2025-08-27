@@ -60,7 +60,8 @@ If a token or host is not found, a warning message is displayed."
           result))))
 
 ;; gptel https://github.com/karthink/gptel
-(use-package! gptel
+;; tools/llm, 自定义部分改为after!
+(after! gptel
   :config
   (setq gptel-max-tokens 4096)
   (setq gptel-track-media t)
@@ -88,17 +89,18 @@ If a token or host is not found, a warning message is displayed."
 
   ;; 默认后端
   (setq-default gptel-backend gptel--gemini)
-
-  (global-set-key (kbd "\C-cg") 'gptel)
-  (map! :leader
-        (:prefix ("yg" . "gptel")
-         :desc "Create new chat buffer" :nv "b" #'gptel
-         :desc "Menu for chat preferences" :nv "m" #'gptel-menu
-         :desc "Rewrite/refactor selected region" :nv "w" #'gptel-rewrite
-         :desc "Add/remove region/buffer to chat context" :nv "d" #'gptel-add
-         :desc "Add a file to chat context" :nv "f" #'gptel-add-file
-         :desc "Stop active gptel process" :nv "k" #'gptel-abort))
+  (setq-default gptel-model 'gemini-2.5-flash)
   )
+
+(global-set-key (kbd "\C-cg") 'gptel)
+(map! :leader
+      (:prefix ("yg" . "gptel")
+       :desc "Create new chat buffer" :nv "b" #'gptel
+       :desc "Menu for chat preferences" :nv "m" #'gptel-menu
+       :desc "Rewrite/refactor selected region" :nv "w" #'gptel-rewrite
+       :desc "Add/remove region/buffer to chat context" :nv "d" #'gptel-add
+       :desc "Add a file to chat context" :nv "f" #'gptel-add-file
+       :desc "Stop active gptel process" :nv "k" #'gptel-abort))
 
 ;; chatgpt-shell https://github.com/xenodium/chatgpt-shell
 (use-package! chatgpt-shell
@@ -108,17 +110,18 @@ If a token or host is not found, a warning message is displayed."
         chatgpt-shell-google-key               (get-llm-api-key 'gemini :token)
         chatgpt-shell-deepseek-api-url-base    (format "https://%s" (get-llm-api-key 'minyuchat :ds-host))
         chatgpt-shell-deepseek-key             (get-llm-api-key 'minyuchat :token))
-
-  (global-set-key (kbd "\C-cG") 'chatgpt-shell)
-  (global-set-key (kbd "\C-cE") 'chatgpt-shell-prompt-compose)
-  (map! :leader
-        (:prefix ("yG" . "chatgpt-shell")
-         :desc "Start new Chatgpt-Shell interactive" :nv "i" #'chatgpt-shell
-         :desc "Compose and send prompt from a dedicated buffer" :nv "e" #'chatgpt-shell-prompt-compose
-         :desc "Cancel and close compose buffer" :nv "q" #'chatgpt-shell-prompt-compose-cancel
-         :desc "Chatgpt-Shell swap model" :nv "v" #'chatgpt-shell-swap-model
-         :desc "Chatgpt-Shell swap prompt" :nv "s" #'chatgpt-shell-swap-system-prompt))
+  (setq chatgpt-shell-model-version "gemini-2.5-flash")
   )
+
+(global-set-key (kbd "\C-cG") 'chatgpt-shell)
+(global-set-key (kbd "\C-cE") 'chatgpt-shell-prompt-compose)
+(map! :leader
+      (:prefix ("yG" . "chatgpt-shell")
+       :desc "Start new Chatgpt-Shell interactive" :nv "i" #'chatgpt-shell
+       :desc "Compose and send prompt from a dedicated buffer" :nv "e" #'chatgpt-shell-prompt-compose
+       :desc "Cancel and close compose buffer" :nv "q" #'chatgpt-shell-prompt-compose-cancel
+       :desc "Chatgpt-Shell swap model" :nv "v" #'chatgpt-shell-swap-model
+       :desc "Chatgpt-Shell swap prompt" :nv "s" #'chatgpt-shell-swap-system-prompt))
 
 ;; copilot https://github.com/copilot-emacs/copilot.el
 ;; accept completion from copilot and fallback to company

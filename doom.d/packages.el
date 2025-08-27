@@ -58,7 +58,8 @@
 ;; GitLens
 (package! blamer :recipe (:host github :repo "artawower/blamer.el"))
 
-(package! gptel)
+;; tools/llm
+;; (package! gptel)
 ;; (package! chatgpt-shell)
 (package! chatgpt-shell
   :recipe (:host github :repo "xenodium/chatgpt-shell" :files ("chatgpt-shell*.el")))
