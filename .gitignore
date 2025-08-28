@@ -1,2 +1,3 @@
 doom.d/custom.el
-doom.d/lisp/font-conf.el
+doom.d/lisp/font-spec.el
+.aider*

@@ -64,7 +64,7 @@
   (setenv "PATH" (concat "/opt/openjdk-bin-11:" (getenv "PATH")))
   )
 
-(defun java-env-opnjdk17()
+(defun java-env-openjdk17()
   "OpenJDK17 Java environment variables."
   (interactive)
 
@@ -98,7 +98,7 @@
     (cond
      ;; ((string-equal choice "OracleJDK 8") (java-env-oraclejdk8))
      ((string-equal choice "OpenJDK 11") (java-env-openjdk11))
-     ((string-equal choice "OpenJDK 17") (java-env-opnjdk17))
+     ((string-equal choice "OpenJDK 17") (java-env-openjdk17))
      (t (message "Invalid choice")))))
 
 (defun maven-set-switch()

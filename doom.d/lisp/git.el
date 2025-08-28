@@ -3,8 +3,8 @@
 ;;;     git配置
 ;;; code:
 
-(defvar blamer-face-height 100 "Height for blamer face.")
-(require 'font-conf nil :noerror)
+;; (defvar blamer-face-height 100 "Height for blamer face.")
+;; (require 'font-conf nil :noerror)
 
 (use-package! blamer
   :bind (("C-c b" . blamer-show-commit-info)

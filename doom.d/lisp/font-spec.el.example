@@ -1,0 +1,6 @@
+(setq default-font-size 16
+    big-font-size 20)
+
+;;(setq blamer-face-height 150)
+
+(provide 'font-spec)

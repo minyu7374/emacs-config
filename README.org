@@ -44,10 +44,10 @@ doom-emacs 配置，目标路径: =~/.doom.d=
 + =package.el=: 一些个人额外安装的 =package=
 + =custom.el=: 个人定制的变量参数，一般是doom自动写入的
 + =lisp=: 主要存放一些单独整理出的配置块
-  + =display.el=: 针对图形和文本界面显示相关的配置，根据系统dpi软链到 =display.el.normal= 或 =display.el.hidpi=
-  + =input-method.el=: 输入法配置，这次直接使用了 =emacs-rime= ，感觉比 =pyim+liberime= 的方案好用
+  + =font.el=: 动态字体配置（可参考example文件创建 =font-spec.el= 自行配置合适值）
+  + =display.el=: 针对图形和文本界面显示相关的配置
+  + =input.el=: 输入法配置，这次直接使用了 =emacs-rime= ，感觉比 =pyim+liberime= 的方案好用
   + =markdown.el=: markdown相关的配置，这里做了一些使用外部软件预览和导出为ppt的功能
-  + =tmux.el=: emacs和tmux面板无缝切换的配置
   + =eaf-conf.el=: =emacs-application-framework= 相关的配置，这个比较重，默认在 =init.el= 里不进行require
 
 ** rime

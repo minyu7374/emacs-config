@@ -78,6 +78,7 @@
 ;; (add-to-list 'load-path (expand-file-name "lisp" (file-name-directory (or load-file-name buffer-file-name))))
 (add-to-list 'load-path (expand-file-name "lisp" doom-user-dir))
 (require 'base)
+(require 'font)
 (require 'hotkey)
 (require 'display)
 (require 'proxy)

@@ -21,13 +21,13 @@
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 ;; 中英文对齐 参考 https://emacs-china.org/t/org-mode/440/9
 
-(defvar default-font-size 14 "Default font size for doom theme.")
-(defvar big-font-size 18 "Big font size for doom theme.")
-;; 实测现在用的字体，缩放1.25倍后对齐两个英文字母，但是中文字体显得特别大，不太美观，平时还是用1.1吧
-(defvar chinese-font-rescale 1.1 "Chinese font scale ratio for doom theme.")
+;; (defvar default-font-size 14 "Default font size for doom theme.")
+;; (defvar big-font-size 18 "Big font size for doom theme.")
+;; ;; 实测现在用的字体，缩放1.25倍后对齐两个英文字母，但是中文字体显得特别大，不太美观，平时还是用1.1吧
+;; (defvar chinese-font-rescale 1.1 "Chinese font scale ratio for doom theme.")
 
-;;(condition-case nil (require 'font-conf) (error nil))
-(require 'font-conf nil :noerror)
+;; ;;(condition-case nil (require 'font-conf) (error nil))
+;; (require 'font-conf nil :noerror)
 
 (defun doom/reload-custom-font()
   "Set custom fonts for doom theme."
