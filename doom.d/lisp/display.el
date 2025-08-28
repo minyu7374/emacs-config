@@ -50,7 +50,6 @@
     (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
     ))
 
-;; (add-hook 'doom-load-theme-hook 'doom/reload-custom-font)
 (add-hook 'doom-load-theme-hook (lambda() (if (display-graphic-p) (doom/reload-custom-font))))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
@@ -68,15 +67,14 @@
 
 ;; when using emacs daemon
 (add-hook 'after-make-frame-functions
-          (lambda (new-frame)
-            (select-frame new-frame)
-            (set-frame-parameter nil 'fullscreen os-fullscreen-type)
-            (if (display-graphic-p)
-                (load-theme 'doom-dracula 'no-confirm)
-              (progn
-                (load-theme 'doom-one 'no-confirm)
-                (menu-bar-mode -1)))
-            ))
+          (lambda (frame)
+            (with-selected-frame frame
+              (set-frame-parameter nil 'fullscreen os-fullscreen-type)
+              (if (display-graphic-p frame)
+                  (setq doom-theme 'doom-dracula)
+                (progn
+                  (setq doom-theme 'doom-one)
+                  (menu-bar-mode -1))))))
 
 ;; (map! :leader
 ;;       (:prefix ("hrc" . "custom")
