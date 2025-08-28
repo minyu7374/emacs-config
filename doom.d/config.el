@@ -77,6 +77,11 @@
 ;; lisp
 ;; (add-to-list 'load-path (expand-file-name "lisp" (file-name-directory (or load-file-name buffer-file-name))))
 (add-to-list 'load-path (expand-file-name "lisp" doom-user-dir))
+
+(if (eq system-type 'darwin)
+    (require 'mac-opt)
+  )
+
 (require 'base)
 (require 'font)
 (require 'hotkey)
@@ -97,7 +102,3 @@
 (require 'auto-insert-conf)
 
 ;; (require 'eaf-conf)
-
-(if (eq system-type 'darwin)
-    (require 'mac-opt)
-  )
