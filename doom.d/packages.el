@@ -40,6 +40,8 @@
 ;; Use `:pin' to specify a particular commit to install.
 ;; (package! builtin-package :pin "1a2b3c4d5e")
 
+;; (package! benchmark-init)
+
 (package! rime)
 ;; (package! pyim)
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
@@ -58,13 +60,16 @@
 ;; GitLens
 (package! blamer :recipe (:host github :repo "artawower/blamer.el"))
 
-;; tools/llm
+;; gptel: tools/llm 中启用
 ;; (package! gptel)
-;; (package! chatgpt-shell)
-(package! chatgpt-shell
-  :recipe (:host github :repo "xenodium/chatgpt-shell" :files ("chatgpt-shell*.el")))
+
+;; chatgpt-shell: 加载效率太低，功能和gptel差不多，暂时不用了
+;; (package! chatgpt-shell
+;;   :recipe (:host github :repo "xenodium/chatgpt-shell" :files ("chatgpt-shell*.el")))
+
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+
 (package! transient)
 (package! aider :recipe (:host github :repo "tninja/aider.el"))
 

@@ -19,6 +19,7 @@
          (use-socks-str (read-string "Use SOCKS proxy(y/N)? " nil nil "N"))
          (use-socks (string-equal (downcase use-socks-str) "y")))
 
+    (message "set socks proxy server: %s:%d, use-socks: %s" ip port use-socks-str)
     (_proxy-on ip port use-socks))
   )
 
@@ -26,16 +27,13 @@
   (if use-socks
       (progn
         (setq url-gateway-method 'socks)
-        (setq socks-server `("Default server" ,ip ,port 5))
-        (message "set socks proxy server: %s:%d" ip port))
+        (setq socks-server `("Default server" ,ip ,port 5)))
     (progn
       (setq url-gateway-method 'native)
       (setq url-proxy-services
             `(("no_proxy" . "^\\(localhost\\|127\\..*\\|10\\..*\\|192\\.168\\..*\\)")  ; elisp正则 \\( \\| \\. 即普通正则的( | \.
-              ("http" . ,(format "%s:%d" ip port))))
-      (message "set http proxy server: %s:%d" ip port)))
-  (setq proxy-status t)
-  )
+              ("http" . ,(format "%s:%d" ip port))))))
+  (setq proxy-status t))
 
 (defun proxy-off()
   "Proxy Off."

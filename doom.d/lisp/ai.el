@@ -59,69 +59,74 @@ If a token or host is not found, a warning message is displayed."
             (puthash cache-key result +llm-api-keys-cache))
           result))))
 
+;; key 不大可能变动，不常需要，就不设置快捷键了
+(defun clear-llm-cache ()
+  "Clear the LLM API keys cache. Useful when API keys are updated."
+  (interactive)
+  (clrhash +llm-api-keys-cache)
+  (setq +gptel--backend-setup-done nil
+        +aider--backend-setup-done nil)
+  (message "LLM cache cleared, backends will be reinitialized"))
+
 ;; gptel https://github.com/karthink/gptel
-;; tools/llm, 自定义部分改为after!
+;; 用tools/llm, 改为 after!
 (after! gptel
-  :config
-  (setq gptel-max-tokens 4096)
+  (setq gptel-max-tokens 8192)
   (setq gptel-track-media t)
 
-  ;; (setq gptel-api-key (get-llm-api-key 'openai :token))
+  ;;随便设置一个值，避免执行gptel时选用和api-key判空
+  (setq gptel-backend (gptel-make-openai " By SetUp"))
+  (setq gptel-api-key "sk-null")
 
-  (defvar gptel--gemini (gptel-make-gemini "Gemini" :key (get-llm-api-key 'gemini :token) :stream t))
+  (defvar +gptel--backends nil "gptel backends can use.")
+  (defvar +gptel--backend-setup-done nil)
 
-  (defvar gptel--chatanywhere
-    (gptel-make-openai "ChatAnyWhere"
-      :host (get-llm-api-key 'chatanywhere :host)
-      :key (get-llm-api-key 'chatanywhere :token)
-      ;; :header `(("Authorization" . ,(concat "Bearer " chatanywhere-token)))
-      ;; :endpoint "/v1/chat/completions"
-      :stream t
-      :models '(gpt-4 gpt-4o gpt-4o-mini)))
+  (defun +gptel--backend-setup ()
+    "Setup backend for gptel."
+    (interactive)
+    (unless +gptel--backend-setup-done
+      ;; (setq gptel-api-key (get-llm-api-key 'openai :token))
+      (setq +gptel--backends
+            `((gemini . ,(gptel-make-gemini "Gemini" :key (get-llm-api-key 'gemini :token) :stream t))
 
-  ;; deepseek web页面逆向api部署本地，nginx反向代理
-  (defvar gptel--minyuchat
-    (gptel-make-openai "MinyuChat"
-      :host (get-llm-api-key 'minyuchat :host)
-      :key (get-llm-api-key 'minyuchat :token)
-      :stream t
-      :models '(deepseek-chat deepseek-coder deepseek-reasoner)))
+              (chatanywhere . ,(gptel-make-openai "ChatAnyWhere"
+                                 :host (get-llm-api-key 'chatanywhere :host)
+                                 :key (get-llm-api-key 'chatanywhere :token)
+                                 ;; :header `(("Authorization" . ,(concat "Bearer " chatanywhere-token)))
+                                 ;; :endpoint "/v1/chat/completions"
+                                 :stream t
+                                 :models '(gpt-4 gpt-4o gpt-4o-mini)))
 
-  ;; 默认后端
-  (setq-default gptel-backend gptel--gemini)
-  (setq-default gptel-model 'gemini-2.5-flash)
-  )
+              ;; deepseek web页面逆向api部署本地，nginx反向代理
+              (minyuchat . ,(gptel-make-openai "MinyuChat"
+                              :host (get-llm-api-key 'minyuchat :host)
+                              :key (get-llm-api-key 'minyuchat :token)
+                              :stream t
+                              :models '(deepseek-chat deepseek-coder deepseek-reasoner)))))
+
+      ;; 默认后端
+      (setq gptel-backend (alist-get 'gemini +gptel--backends))
+      (setq gptel-model 'gemini-2.5-flash)
+      (message "gptel backend set to: %s" (gptel-backend-name gptel-backend))
+      (setq +gptel--backend-setup-done t)))
+
+  (defun +gptel--ensure-backend (&rest _args) 
+    (+gptel--backend-setup))
+
+  (advice-add  #'gptel :before #'+gptel--ensure-backend) ;; 明确指定gptel函数引用
+  (advice-add 'gptel-menu :before #'+gptel--ensure-backend)
+  (advice-add 'gptel-rewrite :before #'+gptel--ensure-backend))
 
 (global-set-key (kbd "\C-cg") 'gptel)
 (map! :leader
       (:prefix ("yg" . "gptel")
-       :desc "Create new chat buffer" :nv "b" #'gptel
-       :desc "Menu for chat preferences" :nv "m" #'gptel-menu
-       :desc "Rewrite/refactor selected region" :nv "w" #'gptel-rewrite
+       :desc "gptel backend setup"         :nv "b" #'+gptel--backend-setup
+       :desc "Create new chat buffer"      :nv "g" #'gptel
+       :desc "Menu for chat preferences"   :nv "m" #'gptel-menu
+       :desc "Rewrite/refactor selected region"         :nv "w" #'gptel-rewrite
        :desc "Add/remove region/buffer to chat context" :nv "d" #'gptel-add
-       :desc "Add a file to chat context" :nv "f" #'gptel-add-file
-       :desc "Stop active gptel process" :nv "k" #'gptel-abort))
-
-;; chatgpt-shell https://github.com/xenodium/chatgpt-shell
-(use-package! chatgpt-shell
-  :config
-  (setq chatgpt-shell-api-url-base             (format "https://%s" (get-llm-api-key 'chatanywhere :host))
-        chatgpt-shell-openai-key               (get-llm-api-key 'chatanywhere :token)
-        chatgpt-shell-google-key               (get-llm-api-key 'gemini :token)
-        chatgpt-shell-deepseek-api-url-base    (format "https://%s" (get-llm-api-key 'minyuchat :ds-host))
-        chatgpt-shell-deepseek-key             (get-llm-api-key 'minyuchat :token))
-  (setq chatgpt-shell-model-version "gemini-2.5-flash")
-  )
-
-(global-set-key (kbd "\C-cG") 'chatgpt-shell)
-(global-set-key (kbd "\C-cE") 'chatgpt-shell-prompt-compose)
-(map! :leader
-      (:prefix ("yG" . "chatgpt-shell")
-       :desc "Start new Chatgpt-Shell interactive" :nv "i" #'chatgpt-shell
-       :desc "Compose and send prompt from a dedicated buffer" :nv "e" #'chatgpt-shell-prompt-compose
-       :desc "Cancel and close compose buffer" :nv "q" #'chatgpt-shell-prompt-compose-cancel
-       :desc "Chatgpt-Shell swap model" :nv "v" #'chatgpt-shell-swap-model
-       :desc "Chatgpt-Shell swap prompt" :nv "s" #'chatgpt-shell-swap-system-prompt))
+       :desc "Add a file to chat context"  :nv "f" #'gptel-add-file
+       :desc "Stop active gptel process"   :nv "k" #'gptel-abort))
 
 ;; copilot https://github.com/copilot-emacs/copilot.el
 ;; accept completion from copilot and fallback to company
@@ -169,56 +174,72 @@ If a token or host is not found, a warning message is displayed."
 ;; https://github.com/tninja/aider.el
 (use-package! aider
   :after transient  ;; 确保 transient 加载完成后再加载 aider
-  :commands (aider-run-aider)   ;; 运行命令才加载
+  :commands (aider-run-aider aider-transient-menu)   ;; 运行命令才加载
   :init
   (setenv "AIDER_AUTO_COMMITS" "False") ;; 限制自动提交
-  (defvar +aider-backends
-    '(("Gemini"
-       :setup (lambda ()
-                ;; (setq aider-args `("--api-key" ,(format "gemini=%s" (get-llm-api-key 'gemini :token))
-                ;;                    "--model" "gemini/gemini-2.5-flash"))))
-                (setenv "GEMINI_API_KEY" (get-llm-api-key 'gemini :token))
-                (setq aider-args `("--model" "gemini/gemini-2.5-flash"))))
-      ("MinyuChat"
-       :setup (lambda ()
-                (setenv "DEEPSEEK_API_BASE" (format "https://%s" (get-llm-api-key 'minyuchat :ds-host)))
-                (setenv "DEEPSEEK_API_KEY" (get-llm-api-key 'minyuchat :token))
-                (setq aider-args `("--model" "deepseek"))))))
-  (defvar +aider-active-backend "Gemini"
-    "The active Aider backend.")
 
-  (defun aider-switch-backend ()
-    "Interactively switch the Aider backend.
-    Prompts the user to select from `+aider-backends` and applies the
-    corresponding setup function. Updates `+aider-active-backend`."
+  (defvar +aider--backends nil "Aider backends can use.")
+  (defvar +aider--active-backend nil "The active Aider backend.")
+  (defvar +aider--backend-setup-done nil)
+
+  (defun +aider--backend-setup ()
+    "Setup backend for Aider."
     (interactive)
-    (let* ((backend-names (mapcar #'car +aider-backends))
-           (selected-backend-name (completing-read "Select Aider backend: " backend-names nil t +aider-active-backend))
-           (backend-entry (assoc selected-backend-name +aider-backends))
-           (setup-fn (plist-get (cdr backend-entry) :setup)))
-      (when setup-fn
-        (funcall setup-fn)
-        (setq +aider-active-backend selected-backend-name)
-        (message "Aider backend switched to: %s" +aider-active-backend))))
+    (unless +aider--backend-setup-done
+      (setq +aider--backends
+            '(("Gemini"
+               :setup (lambda ()
+                        ;; (setq aider-args `("--api-key" ,(format "gemini=%s" (get-llm-api-key 'gemini :token))
+                        ;;                    "--model" "gemini/gemini-2.5-flash"))))
+                        (setenv "GEMINI_API_KEY" (get-llm-api-key 'gemini :token))
+                        (setq aider-args `("--model" "gemini/gemini-2.5-flash"))))
+              ("MinyuChat"
+               :setup (lambda ()
+                        (setenv "DEEPSEEK_API_BASE" (format "https://%s" (get-llm-api-key 'minyuchat :ds-host)))
+                        (setenv "DEEPSEEK_API_KEY" (get-llm-api-key 'minyuchat :token))
+                        (setq aider-args `("--model" "deepseek"))))))
+      (setq +aider--active-backend "Gemini")
+      (+aider--set-backend +aider--active-backend)
+      (setq +aider--backend-setup-done t)))
+
+  (defun +aider--switch-backend ()
+    "Interactively switch the Aider backend.
+    Prompts the user to select from `+aider--backends` and applies the
+    corresponding setup function. Updates `+aider--active-backend`."
+    (interactive)
+    (let* ((backend-names (mapcar #'car +aider--backends))
+           (selected-backend (completing-read "Select Aider active backend: " backend-names nil t +aider--active-backend)))
+      (when selected-backend
+        (setq +aider--active-backend selected-backend)
+        (+aider--set-backend selected-backend)
+        (message "Aider active backend switched to: %s" selected-backend))))
+
+  (defun +aider--set-backend (backend)
+    (let* ((default-backend-entry (assoc backend +aider--backends))
+           (default-setup-fn (plist-get (cdr default-backend-entry) :setup)))
+      (when default-setup-fn
+        (funcall default-setup-fn)
+        (message "Aider backend set to: %s" backend))))
+
+  (defun +aider--ensure-backend (&rest _args)
+    (unless +aider--backend-setup-done
+      (+aider--backend-setup)))
+
+  (advice-add 'aider-run-aider :before #'+aider--ensure-backend)
+  (advice-add 'aider-transient-menu :before #'+aider--ensure-backend)
 
   :config
-  ;; Set initial backend without prompting
-  (let* ((default-backend-entry (assoc +aider-active-backend +aider-backends))
-         (default-setup-fn (plist-get (cdr default-backend-entry) :setup)))
-    (when default-setup-fn
-      (funcall default-setup-fn)
-      (message "Aider initial backend set to: %s" +aider-active-backend)))
-
   (aider-magit-setup-transients)
   ;; (require 'aider-helm)
-  (require 'aider-doom)
-  )
+  (require 'aider-doom))
 
 (global-set-key (kbd "\C-ca") 'aider-transient-menu) ;; for wider screen
 (map! :leader
       (:prefix ("ya" . "aider")
-       :desc "Aider transient menu" :nv "m" #'aider-transient-menu
-       :desc "Switch Aider backend" :nv "s" #'aider-switch-backend))
+       :desc "Aider backend setup"   :nv "b" #'+aider--backend-setup
+       :desc "Switch Aider backend"  :nv "s" #'+aider--switch-backend
+       :desc "Run Aider"             :nv "a" #'aider-run-aider
+       :desc "Aider transient menu"  :nv "m" #'aider-transient-menu))
 
 (provide 'ai)
 
