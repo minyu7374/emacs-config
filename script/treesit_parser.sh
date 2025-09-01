@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # set -x
 
 typeset -A PARSER_ARGS=(
@@ -20,11 +20,11 @@ typeset -A PARSER_ARGS=(
     [make]="alemuller/tree-sitter-make"
     [markdown]="MDeiml/tree-sitter-markdown tree-sitter-markdown"
     [markdown-inline]="MDeiml/tree-sitter-markdown tree-sitter-markdown-inline"
-    [ocaml]="tree-sitter/tree-sitter-ocaml ocaml"
+    [ocaml]="tree-sitter/tree-sitter-ocaml grammars/ocaml"
     [org]="milisims/tree-sitter-org"
     [haskell]="tree-sitter/tree-sitter-haskell"
     [python]="tree-sitter/tree-sitter-python"
-    [php]="tree-sitter/tree-sitter-php"
+    [php]="tree-sitter/tree-sitter-php php"
     [typescript]="tree-sitter/tree-sitter-typescript typescript"
     [tsx]="tree-sitter/tree-sitter-typescript tsx"
     [ruby]="tree-sitter/tree-sitter-ruby"
@@ -43,7 +43,7 @@ TREESIT_PARSER_CODE_DIR="/tmp/treesit_parser_$(uuidgen)"
 mkdir -p "$LOCAL_TREESIT_LIB_DIR"
 ln -sfn "$LOCAL_TREESIT_LIB_DIR" "$EMACS_TREESIT_LIB_DIR"
 mkdir -p "$TREESIT_PARSER_CODE_DIR"
-trap 'rm -rf "$TREESIT_PARSER_CODE_DIR"' EXIT
+[[ -z "$TREESIT_PARSER_COMPILE_DEBUG" ]] && trap 'rm -rf "$TREESIT_PARSER_CODE_DIR"' EXIT
 
 [[ "$(uname -s)" = "Darwin" ]] && so_suffix="dylib" || so_suffix="so"
 
@@ -52,23 +52,31 @@ function install_parser() {
     repo="$2"
     parser_dir="$3"
     code_dir="$TREESIT_PARSER_CODE_DIR/$lang"
+
     so="libtree-sitter-$lang.$so_suffix"
+    [[ -z "$TREESIT_PARSER_FORCE_COMPILE" && -f "$LOCAL_TREESIT_LIB_DIR/$so" ]] && {
+        echo "$so already exists"
+        return
+    }
 
     git clone git@github.com:"$repo".git "$code_dir" &&
         cd "$code_dir/$parser_dir" || return 1
     [[ "$lang" = "toml" ]] && npm install regexp-util
 
-    tree-sitter generate
-    srcs=("src/parser.c")
-    [[ -f "src/scanner.c" ]] && srcs+=("src/scanner.c")
-    [[ -f "src/scanner.cc" ]] && srcs+=("src/scanner.cc")
+    ([ -f Makefile ] && make) || {
+        tree-sitter generate
+        srcs=("src/parser.c")
+        [[ -f "src/scanner.c" ]] && srcs+=("src/scanner.c")
+        [[ -f "src/scanner.cc" ]] && srcs+=("src/scanner.cc")
+        # sed -ri 's/<tree_sitter\/(parser|alloc).h>/"tree_sitter\/\1.h"/' "${srcs[@]}"
 
-    if [[ " ${srcs[*]} " == *".cc"* ]]; then
-        g++ -fPIC -O2 -shared -o "$so" "${srcs[@]}"
-    else
-        gcc -fPIC -O2 -shared -o "$so" "${srcs[@]}"
-    fi
-    mv "$so" "$LOCAL_TREESIT_LIB_DIR/"
+        if [[ " ${srcs[*]} " == *".cc"* ]]; then
+            g++ -Isrc -fPIC -O2 -shared -o "$so" "${srcs[@]}"
+        else
+            gcc -Isrc -fPIC -O2 -shared -o "$so" "${srcs[@]}"
+        fi
+    }
+    mv "$so"* "$LOCAL_TREESIT_LIB_DIR/"
 }
 
 [ -z "$*" ] && set -- "${!PARSER_ARGS[@]}"
