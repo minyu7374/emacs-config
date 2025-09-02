@@ -12,10 +12,12 @@
        :desc "toggle input method" :nv "z" #'toggle-input-method))
 
 (use-package! rime
+  :defer t
   :after-call after-find-file pre-command-hook
   :custom
   (rime-user-data-dir (concat doom-local-dir "rime/"))
-  :init
+  ;; :init ;; rime-librime-root 等放在config延后执行
+  :config
   ;; MacOS下自动检测 emacs include 和 librime 路径
   ;; MacPorts: port install emacs-app librime-devel
   (when (eq system-type 'darwin)
@@ -36,9 +38,7 @@
                             (and (file-directory-p lib-dir)
                                  (directory-files lib-dir nil "librime.*\\.dylib" t)
                                  d)))
-                        dirs)))
-    )
-  :config
+                        dirs))))
   (setq rime-show-candidate (if (display-graphic-p) 'posframe 'popup))
 
   ;; 在 evil-normal-state 中、在英文字母后面以及代码中自动使用英文

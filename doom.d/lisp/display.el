@@ -119,6 +119,17 @@
               (display-line-numbers-mode -1)
               (setq-local display-line-numbers nil))))
 
+;; 控制 * 搜索不跳转，原本的行为绑定到 g*
+(after! evil
+  ;; 实际实现是照抄evil-ex-search-word-forward的逻辑，只是为了不跳转将count设置为0
+  (defun my/highlight-word-no-jump (&optional symbol)
+    "Highlight word/symbol at point without jumping, identical logic to evil-ex-search-word-forward."
+    (interactive (list evil-symbol-word-search))
+    (evil-ex-start-word-search nil 'forward 0 symbol))
+
+(map! :n "g*" #'evil-ex-search-word-forward
+      :n "*"  #'my/highlight-word-no-jump))
+
 (provide 'display)
 
 ;;; display.el ends here.

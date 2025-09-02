@@ -131,6 +131,7 @@ If a token or host is not found, a warning message is displayed."
 ;; copilot https://github.com/copilot-emacs/copilot.el
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
+  :defer t
   ;; :hook (prog-mode . copilot-mode) ;; 先不默认启动了
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
@@ -173,6 +174,7 @@ If a token or host is not found, a warning message is displayed."
 
 ;; https://github.com/tninja/aider.el
 (use-package! aider
+  :defer t
   :after transient  ;; 确保 transient 加载完成后再加载 aider
   :commands (aider-run-aider aider-transient-menu)   ;; 运行命令才加载
   :init
