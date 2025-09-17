@@ -127,8 +127,8 @@
     (interactive (list evil-symbol-word-search))
     (evil-ex-start-word-search nil 'forward 0 symbol))
 
-(map! :n "g*" #'evil-ex-search-word-forward
-      :n "*"  #'my/highlight-word-no-jump))
+  (map! :n "g*" #'evil-ex-search-word-forward
+        :n "*"  #'my/highlight-word-no-jump))
 
 (provide 'display)
 

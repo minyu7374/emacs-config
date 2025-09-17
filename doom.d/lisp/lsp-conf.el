@@ -8,8 +8,9 @@
 (after! lsp-mode
   ;; ruff类型检查方面弱于pyright，风格检查方面因为有格式化工具也不太需要
   ;; (add-to-list 'lsp-disabled-clients 'ruff)
-  (add-hook! '(c-ts-mode-hook c++-ts-mode-hook c-or-c++-ts-mode-hook go-ts-mode-hook
-               python-ts-mode-hook java-ts-mode-hook bash-ts-mode-hook) #'lsp!)
+  ;; doomemacs 已完成treesit迁移，不需要再添加hook了
+  ;; (add-hook! '(c-ts-mode-hook c++-ts-mode-hook c-or-c++-ts-mode-hook go-ts-mode-hook
+  ;;              python-ts-mode-hook java-ts-mode-hook bash-ts-mode-hook) #'lsp!)
   (map! :map lsp-command-map "s" #'+lsp/switch-client)
   (which-key-add-keymap-based-replacements lsp-command-map "s" "Switch LSP client"))
 
