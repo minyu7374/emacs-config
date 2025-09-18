@@ -11,20 +11,18 @@
   ;;(exec-path-from-shell-arguments nil)
   (exec-path-from-shell-variables '("PATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
   :config
-  (exec-path-from-shell-initialize)
-  )
+  (exec-path-from-shell-initialize))
 
 ;; mac下shell脚本自动补全比较慢
 (after! sh-script 
   (set-company-backend! '(sh-mode bash-ts-mode) nil))
 
 ;;; 调整 Emacs GUI 选项
-
 ;; (setq mac-allow-anti-aliasing nil)              ;; 禁用字体抗锯齿，减少渲染压力
-(setq frame-inhibit-implied-resize t)           ;; 禁止窗口自动调整大小
-(setq inhibit-compacting-font-caches t)         ;; 禁止压缩字体缓存，减少卡顿
-(setq frame-resize-pixelwise t)                 ;; 更平滑的窗口缩放
-(setq line-move-visual nil)                     ;; 设置为物理行移动
+;; (setq frame-inhibit-implied-resize t)           ;; 禁止窗口自动调整大小
+;; (setq inhibit-compacting-font-caches t)         ;; 禁止压缩字体缓存，减少卡顿
+;; (setq frame-resize-pixelwise t)                 ;; 更平滑的窗口缩放
+;; (setq line-move-visual nil)                     ;; 设置为物理行移动
 
 ;; ;;; 优化垃圾回收机制
 ;; (setq gc-cons-threshold (* 128 1024 1024))       ;; 提升GC阈值至128MB
@@ -32,7 +30,7 @@
 
 ;;; 性能优化
 ;;Doom Emacs 在 macOS 上默认禁用 file-name-handler-alist 的一些处理，但可以确保你的配置文件包含以下代码，进一步降低文件系统操作的开销：
-(setq file-name-handler-alist nil)
+;; (setq file-name-handler-alist nil)
 
 ;; 在 macOS 上，使用无标题栏的模式可以提升窗口性能，Doom 中可以这样设置
 ;; (add-to-list 'default-frame-alist '(undecorated . t))
