@@ -64,6 +64,17 @@
          :desc "rime select scheme" :nv "s" #'rime-select-schema))
   )
 
+;; 优化fcitx使用体验
+(use-package! fcitx
+  :config
+  (setq fcitx-remote-command "fcitx5-remote")
+  (setq fcitx-use-dbus 'fcitx5)
+  (fcitx-evil-turn-on)
+  ;; (fcitx-prefix-keys-add "C-x")
+  ;; (fcitx-prefix-keys-add "C-c")
+  (fcitx-prefix-keys-setup)
+  (fcitx-prefix-keys-turn-on))
+
 ;; 拼写检查
 ;;(setq ispell-program-name "aspell")
 ;;(setq ispell-dictionary "en_US")
