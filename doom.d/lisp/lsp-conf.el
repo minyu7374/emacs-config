@@ -23,7 +23,7 @@
 
 (after! lsp-ui
   ;; 默认关闭lsp-ui-doc-mode，在打开时同时show-with-cursor生效
-  (setq lsp-ui-doc-enable nil)
+  ;; (setq lsp-ui-doc-enable nil)
   ;;top/bottom/at-point
   (setq lsp-ui-doc-position 'at-point)
   ;; (setq lsp-ui-doc-side 'right)
@@ -42,9 +42,9 @@
   (define-globalized-minor-mode global-lsp-ui-doc-mode
     lsp-ui-doc-mode (lambda () (lsp-ui-doc-mode 1)))
 
-  ;; 默认启用lsp-ui，关闭lsp-ui-doc
+  ;; 默认启用lsp-ui 和 lsp-ui-doc (1/-1)
   (global-lsp-ui-mode 1)
-  (global-lsp-ui-doc-mode -1)
+  (global-lsp-ui-doc-mode 1)
   ;; doomemacs 在加载lsp-ui的时候加上了lsp-mode的hook，想由global-lsp-ui-mode控制需要去除
   (remove-hook 'lsp-mode-hook #'lsp-ui-mode)
 
