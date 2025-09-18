@@ -42,6 +42,7 @@
 
 ;; (package! benchmark-init)
 
+(package! fcitx)
 (package! rime)
 ;; (package! pyim)
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
