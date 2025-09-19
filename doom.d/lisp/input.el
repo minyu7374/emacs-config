@@ -65,15 +65,16 @@
   )
 
 ;; 优化fcitx使用体验
-(use-package! fcitx
-  :config
-  (setq fcitx-remote-command "fcitx5-remote")
-  (setq fcitx-use-dbus 'fcitx5)
-  (fcitx-evil-turn-on)
-  ;; (fcitx-prefix-keys-add "C-x")
-  ;; (fcitx-prefix-keys-add "C-c")
-  (fcitx-prefix-keys-setup)
-  (fcitx-prefix-keys-turn-on))
+(when (eq system-type 'gnu/linux)
+  (use-package! fcitx
+    :config
+    (setq fcitx-remote-command "fcitx5-remote")
+    (setq fcitx-use-dbus 'fcitx5)
+    ;; (fcitx-evil-turn-on)
+    ;; (fcitx-prefix-keys-setup)
+    ;; (fcitx-prefix-keys-turn-on)
+    ;; (fcitx-aggressive-setup)
+    (fcitx-default-setup)))
 
 ;; 拼写检查
 ;;(setq ispell-program-name "aspell")

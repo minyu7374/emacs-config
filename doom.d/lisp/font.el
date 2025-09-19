@@ -30,12 +30,12 @@
 (require 'font-spec nil :noerror)
 
 (unless (featurep 'font-spec)
-  (when (string= system-type "darwin")
+  (when (eq system-type 'darwin)
     (setq blamer-face-height 150) ; 仅macOS使用
     (setq default-font-size 16
           big-font-size 20))
 
-  (when (string= system-type "gnu/linux")
+  (when (eq system-type 'gnu/linux)
     ;; 根据屏幕分辨率和DPI选择字体大小 (兼容 emacs daemon)
     (when (display-graphic-p) (my/setup-font-based-on-monitor))
     (add-hook 'after-make-frame-functions
