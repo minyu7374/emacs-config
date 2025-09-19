@@ -42,7 +42,7 @@
 
 ;; (package! benchmark-init)
 
-(package! fcitx)
+(package! fcitx :ignore (not (eq system-type 'gnu/linux)))
 (package! rime)
 ;; (package! pyim)
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))
@@ -73,6 +73,8 @@
 
 (package! transient)
 (package! aider :recipe (:host github :repo "tninja/aider.el"))
+
+(package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...
