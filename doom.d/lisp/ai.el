@@ -33,6 +33,9 @@ Returns the token string."
      :token ,(lambda () (get-llm-api-token "chatanywhere/token" "CHATANYWHERE_API_KEY")))
     (gemini
      :token ,(lambda () (get-llm-api-token "gemini/token" "GEMINI_API_KEY")))
+    (wq
+     :host ,(lambda () (get-llm-api-host "WQ_API_HOST" "wanqing.streamlakeapi.com/api/gateway/v1/endpoints/ep-xxx-xxx/claude-code-proxy"))
+     :token ,(lambda () (get-llm-api-token "wq/token" "WQ_API_KEY")))
     (minyuchat
      :host ,(lambda () (get-llm-api-host "MINYUCHAT_API_HOST" "chat.wminyu.top:433"))
      :ds-host ,(lambda () (get-llm-api-host "MINYUCHAT_DS_API_HOST" "chat.wminyu.top:433/v1"))
@@ -242,6 +245,31 @@ If a token or host is not found, a warning message is displayed."
        :desc "Switch Aider backend"  :nv "s" #'+aider--switch-backend
        :desc "Run Aider"             :nv "a" #'aider-run-aider
        :desc "Aider transient menu"  :nv "m" #'aider-transient-menu))
+
+;; https://github.com/stevemolitor/claude-code.el
+(use-package! claude-code
+  :config 
+  (setenv "ANTHROPIC_BASE_URL" (get-llm-api-key 'wq :host))
+  (setenv "ANTHROPIC_AUTH_TOKEN" (get-llm-api-key 'wq :token))
+
+  ;; optional IDE integration with Monet
+  ;; (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
+  ;; (monet-mode 1)
+  (setq claude-code-terminal-backend 'vterm)
+  (claude-code-mode)
+
+  :bind-keymap
+  ("C-c c" . claude-code-command-map) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
+
+  ;; Optionally define a repeat map so that "M" will cycle thru Claude auto-accept/plan/confirm modes after invoking claude-code-cycle-mode / C-c M.
+  :bind
+  (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
+
+(map! :leader
+      (:prefix ("yc" . "Claude Code")
+       :desc "Claude Code" :nv "c" #'claude-code
+       :desc "Claude Code transient menu" :nv "m" #'claude-code-transient
+       :desc "Claude Code slash commands" :nv "/" #'claude-code-slash-commands))
 
 (provide 'ai)
 

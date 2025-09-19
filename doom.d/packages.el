@@ -74,6 +74,7 @@
 (package! transient)
 (package! aider :recipe (:host github :repo "tninja/aider.el"))
 
+;; (package! eat)
 (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
