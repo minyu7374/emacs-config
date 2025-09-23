@@ -53,6 +53,12 @@
   ;; Any single character that not trigger auto commit
   (setq rime-inline-ascii-holder ?x)
 
+  ;; 补全用到的快捷键（参考build后的schema配置）
+  (setq rime-translate-keybindings
+        '("C-f" "C-b" "C-n" "C-p" "C-a" "C-e" "C-d" "C-k" "C-h" "C-g"
+          "<left>" "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>"
+          "C-!" "C-@" "C-#" "C-$" "C-%" "C-^" "C-&"))
+
   (global-set-key (kbd "C-,") 'rime-inline-ascii)
   (global-set-key (kbd "C-.") 'rime-force-enable)
   (global-set-key (kbd "C-|") 'rime-select-schema)
