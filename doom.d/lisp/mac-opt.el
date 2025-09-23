@@ -13,9 +13,12 @@
   :config
   (exec-path-from-shell-initialize))
 
-;; mac下shell脚本自动补全比较慢
-(after! sh-script 
-  (set-company-backend! '(sh-mode bash-ts-mode) nil))
+;; mac下shell脚本自动补全比较慢(应该也和扫描/opt/homebrew有关)
+;;(after! sh-script 
+;;  (set-company-backend! '(sh-mode bash-ts-mode) nil))
+
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-file-watch-ignored-directories "/opt/homebrew"))
 
 ;;; 调整 Emacs GUI 选项
 ;; (setq mac-allow-anti-aliasing nil)              ;; 禁用字体抗锯齿，减少渲染压力
