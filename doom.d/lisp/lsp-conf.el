@@ -14,12 +14,12 @@
   (map! :map lsp-command-map "s" #'+lsp/switch-client)
   (which-key-add-keymap-based-replacements lsp-command-map "s" "Switch LSP client"))
 
+;; 使用basedpyright，尽早设置，防止lsp-pyright加载时仍然使用pyright
+;; (after! lsp-pyright (setq lsp-pyright-langserver-command "basedpyright"))
+(setq lsp-pyright-langserver-command "basedpyright")
+
 ;; 明确针对python只使用pyright，避免多端共存引起dual diagnostics
 (setq-hook! '(python-mode-hook python-ts-mode-hook) lsp-enabled-clients '(pyright))
-
-;; 使用basedpyright
-(after! lsp-pyright
-  (setq lsp-pyright-langserver-command "basedpyright"))
 
 (after! lsp-ui
   ;; 默认关闭lsp-ui-doc-mode，在打开时同时show-with-cursor生效
