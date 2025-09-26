@@ -70,7 +70,7 @@ function install_parser() {
         [[ -f "src/scanner.cc" ]] && srcs+=("src/scanner.cc")
         # sed -ri 's/<tree_sitter\/(parser|alloc).h>/"tree_sitter\/\1.h"/' "${srcs[@]}"
 
-        if [[ " ${srcs[*]} " == *".cc"* ]]; then
+        if [[ "${srcs[*]}" == *".cc"* ]]; then
             g++ -Isrc -fPIC -O2 -shared -o "$so" "${srcs[@]}"
         else
             gcc -Isrc -fPIC -O2 -shared -o "$so" "${srcs[@]}"

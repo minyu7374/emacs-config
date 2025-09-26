@@ -34,7 +34,8 @@ Returns the token string."
     (gemini
      :token ,(lambda () (get-llm-api-token "gemini/token" "GEMINI_API_KEY")))
     (wq
-     :host ,(lambda () (get-llm-api-host "WQ_API_HOST" "wanqing.streamlakeapi.com/api/gateway/v1/endpoints/ep-xxx-xxx/claude-code-proxy"))
+     :host ,(lambda () (get-llm-api-host "WQ_API_HOST" "wanqing.streamlakeapi.com/api/gateway/v1/endpoints/ep-{{EP_ID}}/claude-code-proxy"))
+     :ep ,(lambda () (get-llm-api-token "wq/ep" "WQ_EP_ID"))
      :token ,(lambda () (get-llm-api-token "wq/token" "WQ_API_KEY")))
     (minyuchat
      :host ,(lambda () (get-llm-api-host "MINYUCHAT_API_HOST" "chat.wminyu.top:433"))
@@ -249,7 +250,7 @@ If a token or host is not found, a warning message is displayed."
 ;; https://github.com/stevemolitor/claude-code.el
 (use-package! claude-code
   :config 
-  (setenv "ANTHROPIC_BASE_URL" (get-llm-api-key 'wq :host))
+  (setenv "ANTHROPIC_BASE_URL" (replace-regexp-in-string "{{EP_ID}}" (get-llm-api-key 'wq :ep) (get-llm-api-key 'wq :host)))
   (setenv "ANTHROPIC_AUTH_TOKEN" (get-llm-api-key 'wq :token))
 
   ;; optional IDE integration with Monet
