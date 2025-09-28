@@ -17,17 +17,15 @@
 (setq-default fill-column 120
               delete-trailing-lines t)
 
-(if (eq system-type 'darwin)
-    (progn
-      (defconst os-open-cmd 'open "The open cmd of current OS.")
-      (defconst os-fullscreen-type 'maximized "The fullscreen type to use for cueernt OS.")
-      )
-  (progn
-    (defconst os-open-cmd 'xdg-open "The open cmd of current OS.")
-    (defconst os-fullscreen-type 'fullboth "The fullscreen type to use for cueernt OS.")
-    ))
+(cond
+ ((eq system-type 'darwin)
+  (defconst os-open-cmd "open" "The open cmd of current OS.")
+  (defconst os-fullscreen-type 'maximized "The fullscreen type to use for current OS."))
+ (t
+  (defconst os-open-cmd "xdg-open" "The open cmd of current OS.")
+  (defconst os-fullscreen-type 'fullboth "The fullscreen type to use for current OS.")))
 
-;; ;; treesit 迁移
+;; ;; treesit 迁移; doomeamcs 已支持，不需要自己处理了
 ;; (setq treesit-font-lock-level 4)
 ;; (setq treesit-language-source-alist
 ;;       '((bash       . ("https://github.com/tree-sitter/tree-sitter-bash"))

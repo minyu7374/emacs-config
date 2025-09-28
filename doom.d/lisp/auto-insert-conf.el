@@ -10,8 +10,7 @@
 (defun auto-insert-header()
   "Automatically insert a file header snippet for supported file types."
   (when (zerop (buffer-size))                   ; 确保文件为空
-    (yas-expand-snippet (yas-lookup-snippet "header" major-mode)))
-  )
+    (yas-expand-snippet (yas-lookup-snippet "header" major-mode))))
 
 (auto-insert-mode 1)
 ;; (setq auto-insert-query nil)                    ; 自动插入时不询问

@@ -47,8 +47,7 @@
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font) charset
                         (font-spec :family chinese-font)))
-    (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))
-    ))
+    (setq face-font-rescale-alist `((,chinese-font . ,chinese-font-rescale)))))
 
 (add-hook 'doom-load-theme-hook (lambda() (if (display-graphic-p) (doom/reload-custom-font))))
 
@@ -94,9 +93,7 @@
 
 ;; icons
 (after! dired
-  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-  (add-hook! 'dired-mode 'all-the-icons-dired-mode)
-  )
+  (add-hook! 'dired-mode 'all-the-icons-dired-mode))
 
 ;; 光标离窗口顶部或底部多少行时，Emacs 将自动滚动窗口，以使光标保持在指定的行数之外，改善阅读体验
 (setq scroll-margin 5)

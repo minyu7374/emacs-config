@@ -20,8 +20,7 @@
          (use-socks (string-equal (downcase use-socks-str) "y")))
 
     (message "set socks proxy server: %s:%d, use-socks: %s" ip port use-socks-str)
-    (_proxy-on ip port use-socks))
-  )
+    (_proxy-on ip port use-socks)))
 
 (defun _proxy-on(ip port use-socks)
   (if use-socks
@@ -43,17 +42,13 @@
   (setq socks-server nil)
   (setq url-proxy-services nil)
   (setq proxy-status nil)
-  (message "off proxy server")
-  )
+  (message "off proxy server"))
 
 (defun proxy-toggle()
   "Proxy Toggle."
   (interactive)
 
-  (if proxy-status
-      (proxy-off)
-    (proxy-on))
-  )
+  (if proxy-status (proxy-off) (proxy-on)))
 
 ;; 现在使用chatgpt，启动emacs就按默认值开启代理
 (_proxy-on default-proxy-ip default-proxy-port nil)

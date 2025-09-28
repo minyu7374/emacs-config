@@ -20,16 +20,14 @@
     "Markdown Preview by Marp"
     (interactive)
     ;; (async-shell-command (format "npx marp -p '%s'" buffer-file-name))
-    (start-process-shell-command "marp-preview" nil (format "npx marp -p '%s'" buffer-file-name))
-    )
+    (start-process-shell-command "marp-preview" nil (format "npx marp -p '%s'" buffer-file-name)))
 
   (defun marp-export-open()
     (interactive)
     (let ((out-ppt (concat (shell-command-to-string "mktemp") ".pptx")))
       (start-process-shell-command
        "marp_export_open" nil
-       (format "npx marp --pptx --allow-local-files '%s' -o '%s' && %s '%s'" buffer-file-name out-ppt os-open-cmd out-ppt)))
-    )
+       (format "npx marp --pptx --allow-local-files '%s' -o '%s' && %s '%s'" buffer-file-name out-ppt os-open-cmd out-ppt))))
 
   (defun reveal-preview()
     "Markdown Preview by Reveal"
@@ -42,8 +40,7 @@
       (start-process-shell-command
        "md2reveal_preview" nil
        (format "pandoc -t revealjs -s --mathjax --toc -V theme=sky -V revealjs-url='file://%s' --include-in-header='%s' -o '%s' '%s' && %s '%s'"
-               reveal-root custom-css out-html buffer-file-name os-open-cmd out-html)))
-    )
+               reveal-root custom-css out-html buffer-file-name os-open-cmd out-html))))
 
   (map! :map markdown-mode-map
         :localleader
@@ -56,8 +53,7 @@
          :desc "Preview equations at point" :nv "p" #'math-preview-at-point
          :desc "Clear equations in buffer" :nv "A" #'math-preview-clear-all
          :desc "Clear equations in region" :nv "R" #'math-preview-clear-region
-         :desc "Clear equations at point" :nv "P" #'math-preview-clear-at-point))
-  )
+         :desc "Clear equations at point" :nv "P" #'math-preview-clear-at-point)))
 
 
 (provide 'markdown-conf)

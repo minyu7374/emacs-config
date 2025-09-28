@@ -61,8 +61,7 @@
   (_remove-java-home-from-path)
   (setenv "JAVA_HOME" "/opt/openjdk-bin-11")
   (setenv "JDK_HOME" "/opt/openjdk-bin-11")
-  (setenv "PATH" (concat "/opt/openjdk-bin-11:" (getenv "PATH")))
-  )
+  (setenv "PATH" (concat "/opt/openjdk-bin-11:" (getenv "PATH"))))
 
 (defun java-env-openjdk17()
   "OpenJDK17 Java environment variables."
@@ -71,22 +70,19 @@
   (_remove-java-home-from-path)
   (setenv "JAVA_HOME" "/opt/openjdk-bin-17")
   (setenv "JDK_HOME" "/opt/openjdk-bin-17")
-  (setenv "PATH" (concat "/opt/openjdk-bin-17:" (getenv "PATH")))
-  )
+  (setenv "PATH" (concat "/opt/openjdk-bin-17:" (getenv "PATH"))))
 
 (defun maven-set-default()
   "Set Default Maven config."
   (interactive)
 
-  (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-default.xml")
-  )
+  (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-default.xml"))
 
 (defun maven-set-work()
   "Set Work Maven config."
   (interactive)
 
-  (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-work.xml")
-  )
+  (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-work.xml"))
 
 (defun java-env-switch()
   "Switch between different Java environments."

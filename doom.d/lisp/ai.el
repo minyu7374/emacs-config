@@ -144,18 +144,18 @@ If a token or host is not found, a warning message is displayed."
               ("S-TAB" . 'copilot-accept-completion-by-word)
               ("C-n" . 'copilot-next-completion)
               ("C-p" . 'copilot-previous-completion))
-  :config
-
-  ;; 添加开关
-  (global-set-key (kbd "\C-cC") #'copilot-mode)
-  (map! :leader
-        :desc "Toggle Copilot mode" "t C" #'copilot-mode)
+  ;; :config
 
   ;; (add-to-list 'copilot-indentation-alist '(prog-mode 4))
   ;; (add-to-list 'copilot-indentation-alist '(org-mode 2))
   ;; (add-to-list 'copilot-indentation-alist '(text-mode 2))
   ;; (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))
   )
+
+;; 添加开关
+(global-set-key (kbd "\C-cC") #'copilot-mode)
+(map! :leader
+      :desc "Toggle Copilot mode" "t C" #'copilot-mode)
 
 ;; (after! (evil copilot)
 ;;   ;; Define a custom function for handling Copilot or fallback actions
@@ -259,13 +259,14 @@ If a token or host is not found, a warning message is displayed."
   (setq claude-code-terminal-backend 'vterm)
   (claude-code-mode)
 
-  :bind-keymap
-  ("C-c c" . claude-code-command-map) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
+  ;; :bind-keymap
+  ;; ("C-c c" . claude-code-command-map) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
 
   ;; Optionally define a repeat map so that "M" will cycle thru Claude auto-accept/plan/confirm modes after invoking claude-code-cycle-mode / C-c M.
   :bind
   (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
 
+(global-set-key (kbd "\C-cc") 'claude-code-command-map) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
 (map! :leader
       (:prefix ("yc" . "Claude Code")
        :desc "Claude Code" :nv "c" #'claude-code

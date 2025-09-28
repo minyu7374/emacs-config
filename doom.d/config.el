@@ -84,8 +84,7 @@
 (add-to-list 'load-path (expand-file-name "lisp" doom-user-dir))
 
 (if (eq system-type 'darwin)
-    (require 'mac-opt)
-  )
+    (require 'mac-opt))
 
 (require 'base)
 (require 'font)

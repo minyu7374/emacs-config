@@ -14,7 +14,7 @@
   (exec-path-from-shell-initialize))
 
 ;; mac下shell脚本自动补全比较慢(应该也和扫描/opt/homebrew有关)
-;;(after! sh-script 
+;; (after! sh-script
 ;;  (set-company-backend! '(sh-mode bash-ts-mode) nil))
 
 (with-eval-after-load 'lsp-mode

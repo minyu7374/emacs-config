@@ -11,6 +11,7 @@
 
 (defun my/setup-font-based-on-monitor (&optional frame)
   "Adjust font size according to monitor attributes for FRAME."
+  ;; wayland 中 高分屏 dpi 还是96, 所以同时判断屏幕分辨率
   (interactive)
   (let* ((attrs (frame-monitor-attributes frame))
          (geom (alist-get 'geometry attrs))
