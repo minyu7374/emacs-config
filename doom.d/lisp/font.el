@@ -28,7 +28,8 @@
       (setq default-font-size 16 big-font-size 20)))))
 
 ;; 尝试加载 'font-spec' 。如果成功加载，则跳过动态字体配置。
-(require 'font-spec nil :noerror)
+(when (file-exists-p (expand-file-name "lisp/font-spec.el" doom-user-dir))
+  (require 'font-spec nil :noerror))
 
 (unless (featurep 'font-spec)
   (when (eq system-type 'darwin)
