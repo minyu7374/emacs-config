@@ -8,6 +8,12 @@
 ;; (setq-default indent-tabs-mode nil)
 (setq-default c-basic-offset 4)
 
+;; 禁用dockerfile的自动格式化
+(add-to-list '+format-on-save-disabled-modes 'dockerfile-mode)
+;; 方便添加其他需要禁用的mode
+;; (setq +format-on-save-disabled-modes (append '(dockerfile-mode)
+;;                                              +format-on-save-disabled-modes))
+
 ;; 默认black太严格了，有些风格也不是很喜欢，可用autopep8/yapf/flake8/pylint等
 ;; (after! python (setq +format-with 'yapf)) ;; 全局设置，没有正常生效
 (setq-hook! '(python-mode-hook python-ts-mode-hook) +format-with 'yapf)
