@@ -49,6 +49,8 @@
 ;; (package! pangu-spacing)
 
 (package! math-preview)
+(package! mermaid-mode)
+(package! d2-mode)
 
 ;; (package! gmpl-mode)
 ;; (package! tmux-pane)

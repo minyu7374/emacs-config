@@ -211,6 +211,19 @@ function for_web() {
 
 }
 
+function for_graph() {
+    if [ "$OS" == "Mac" ]; then
+        brew install graphviz
+    elif [ "$DISTRO" == "Gentoo" ]; then
+        sudo emerge --update media-gfx/graphviz
+    elif [ "$DISTRO" == "Arch" ]; then
+        sudo pacman -Sy --noconfirm graphviz
+    fi
+
+    go install oss.terrastruct.com/d2@latest
+    sudo $npm_cmd install -g @mermaid-js/mermaid-cli
+}
+
 function for_json() {
     # sudo $npm_cmd i -g vscode-langservers-extracted --force
     sudo $npm_cmd install -g vscode-json-languageserver --force
@@ -227,7 +240,7 @@ function for_docker() {
 pre_task
 
 [ -z "$*" ] &&
-    set -- treesit c go python haskell markdown shell web json docker
+    set -- treesit c go python haskell markdown shell web graph json docker
 
 for lang in "$@"; do
     eval "for_$lang"
