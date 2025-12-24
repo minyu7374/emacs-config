@@ -73,8 +73,8 @@
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 
-;; (package! transient)  ;; tool/magit 中已添加
-(package! aider :recipe (:host github :repo "tninja/aider.el"))
+;; ;; (package! transient)  ;; tool/magit 中已添加
+;; (package! aider :recipe (:host github :repo "tninja/aider.el"))
 
 ;; (package! eat) ;; 使用vterm，不需要再安装eat
 (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
