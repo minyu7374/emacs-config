@@ -31,6 +31,11 @@ if [ "$OS" == Linux ]; then
     }
 fi
 
+if [ "$OS" == Mac ]; then
+    which port 2>/dev/null && DISTRO="MacPorts"
+    which brew 2>/dev/null && DISTRO="Homebrew"
+fi
+
 function pre_task() {
     cabal update
     pip install --upgrade pip
@@ -40,52 +45,63 @@ function pre_task() {
 }
 
 function for_treesit() {
-    if [ "$OS" == "Mac" ]; then
-        # sudo port install tree-sitter-cli
-        brew install tree-sitter-cli
-    elif [ "$DISTRO" == "Gentoo" ]; then
+    case "$DISTRO" in
+    Gentoo)
         sudo emerge --update dev-util/tree-sitter-cli
-    elif [ "$DISTRO" == "Arch" ]; then
+        ;;
+    Arch)
         sudo pacman -Sy --noconfirm tree-sitter
-    elif [ "$DISTRO" == "SUSE" ]; then
+        ;;
+    SUSE)
         sudo zypper in -y tree-sitter
-    else
+        ;;
+    MacPorts)
+        sudo port install tree-sitter-cli
+        ;;
+    Homebrew)
+        brew install tree-sitter-cli
+        ;;
+    *)
         # The command "cabal install [TARGETS]" doesn't expose libraries.
         cabal install --lib tree-sitter
-    fi
+        ;;
+    esac
 }
 
 function for_c() {
     # +lsp need one of clangd v9+ or ccls.
     # clangd 目前最稳定健壮，但是尚无索引系统, ccls 可搜索引用
-    if [ "$OS" == "Mac" ]; then
-        # sudo port install llvm ccls
+    case "$DISTRO" in
+    Gentoo)
+        # USE extra  : Build extra tools (clangd, clang-tidy and a few more)
+        sudo emerge --update llvm-core/clang
+        sudo emerge --update ccls
+        ;;
+    Arch)
+        sudo pacman -Sy --noconfirm clang
+        sudo pacman -Sy --noconfirm ccls
+        ;;
+    SUSE)
+        sudo zypper in -y clang
+        sudo zypper in -y ccls
+        ;;
+    Debian)
+        sudo apt-get install clangd-11
+        sudo apt-get install ccls
+        ;;
+    RHEL)
+        sudo dnf install clang-tools-extra
+        sudo dnf install ccls
+        ;;
+    MacPorts)
+        sudo port install tree-sitter-cli
+        sudo port install llvm ccls
+        ;;
+    Homebrew)
+        brew install tree-sitter-cli
         brew install llvm ccls
-    else
-        case "$DISTRO" in
-        Gentoo)
-            # USE extra  : Build extra tools (clangd, clang-tidy and a few more)
-            sudo emerge --update llvm-core/clang
-            sudo emerge --update ccls
-            ;;
-        Arch)
-            sudo pacman -Sy --noconfirm clang
-            sudo pacman -Sy --noconfirm ccls
-            ;;
-        SUSE)
-            sudo zypper in -y clang
-            sudo zypper in -y ccls
-            ;;
-        Debian)
-            sudo apt-get install clangd-11
-            sudo apt-get install ccls
-            ;;
-        RHEL)
-            sudo dnf install clang-tools-extra
-            sudo dnf install ccls
-            ;;
-        esac
-    fi
+        ;;
+    esac
     pip install cmake-language-server
 }
 
@@ -100,28 +116,39 @@ function for_go() {
     go install github.com/cweill/gotests/gotests@latest
     go install github.com/fatih/gomodifytags@latest
 
-    if [ "$OS" == "Mac" ]; then
-        #sudo port install golangci-lint
+    case "$DISTRO" in
+    MacPorts)
+        sudo port install golangci-lint
+        ;;
+    Homebrew)
         brew install golangci-lint
-    else
+        ;;
+    *)
         # binary will be $(go env GOPATH)/bin/golangci-lint
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$(go env GOPATH)/bin" #v1.54.1
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
+            sh -s -- -b "$(go env GOPATH)/bin" #v1.54.1
         golangci-lint --version
-    fi
+        ;;
+    esac
 }
 
 function for_haskell() {
-    if [ "$DISTRO" == "Gentoo" ]; then
+    case "$DISTRO" in
+    Gentoo)
         sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
-    elif [ "$DISTRO" == "Arch" ]; then
+        ;;
+    Arch)
         sudo pacman -Sy --noconfirm ghc haskell-language-server hoogle hlint cabal-install
-    elif [ "$DISTRO" == "SUSE" ]; then
+        ;;
+    SUSE)
         sudo zypper in -y ghc ghc-hlint cabal-install
-    else
+        ;;
+    *)
         # ghcup install ghc hls
         cabal install haskell-language-server hlint hoogle
         #cabal install haskell-mode
-    fi
+        ;;
+    esac
 }
 
 function for_markdown() {
@@ -140,19 +167,27 @@ function for_markdown() {
     sudo $npm_cmd install -g git+https://gitlab.com/matsievskiysv/math-preview
 
     # pandoc/markdown
-    if [ "$DISTRO" == "Gentoo" ]; then
+    case "$DISTRO" in
+    Gentoo)
         sudo emerge --update discount app-text/pandoc-bin
-    elif [ "$DISTRO" == "Arch" ]; then
+        ;;
+    Arch)
         sudo pacman -Sy --noconfirm discount pandoc-cli
-    elif [ "$DISTRO" == "SUSE" ]; then
+        ;;
+    SUSE)
         sudo zypper in -y discount pandoc
         # sudo zypper in -y MultiMarkdown-6
-    elif [ "$OS" == "Mac" ]; then
-        # sudo port install pandoc discount multimarkdown
+        ;;
+    MacPorts)
+        sudo port install pandoc discount multimarkdown
+        ;;
+    Homebrew)
         brew install pandoc discount
-    else
+        ;;
+    *)
         echo "software to install: discount pandoc"
-    fi
+        ;;
+    esac
 }
 
 function for_python() {
@@ -171,13 +206,17 @@ function for_python() {
 
 function for_rust() {
     # for +lsp, need rust-analyzer
-    if [ "$DISTRO" == "Gentoo" ]; then
+    case "$DISTRO" in
+    Gentoo)
         echo -e "USE config for rust:\n\t dev-lang/rust clippy rust-analyzer rustfmt rust-src"
-    elif [ "$DISTRO" == "Arch" ]; then
+        ;;
+    Arch)
         sudo pacman -Sy --noconfirm rust rust-src rust-analyzer
-    elif [ "$DISTRO" == "SUSE" ]; then
+        ;;
+    SUSE)
         sudo zypper in -y rust cargo
-    fi
+        ;;
+    esac
 
     # rustup component add rustfmt-preview
     # rustup component add clippy-preview
@@ -185,40 +224,58 @@ function for_rust() {
 }
 
 function for_shell() {
-    if [ "$OS" == "Mac" ]; then
-        brew install shellcheck
-    elif [ "$DISTRO" == "Gentoo" ]; then
+    case "$DISTRO" in
+    Gentoo)
         sudo emerge --update shellcheck
-    elif [ "$DISTRO" == "Arch" ]; then
+        ;;
+    Arch)
         sudo pacman -Sy --noconfirm shellcheck
-    elif [ "$DISTRO" == "SUSE" ]; then
+        ;;
+    SUSE)
         sudo zypper in -y ShellCheck
-    else
+        ;;
+    MacPorts)
+        sudo port install shellcheck
+        ;;
+    Homebrew)
+        brew install shellcheck
+        ;;
+    *)
         cabal install ShellCheck --overwrite-policy=always
         # stack install ShellCheck
-    fi
+        ;;
+    esac
 
     sudo $npm_cmd i -g bash-language-server --force
     go install mvdan.cc/sh/v3/cmd/shfmt@latest
 }
 
 function for_web() {
-    if [ "$DISTRO" == "Gentoo" ]; then
+    case "$DISTRO" in
+    Gentoo)
         sudo emerge --update app-text/htmltidy
-    elif [ "$DISTRO" == "Arch" ]; then
+        ;;
+    Arch)
         sudo pacman -Sy --noconfirm tidy
-    fi
-
+        ;;
+    esac
 }
 
 function for_graph() {
-    if [ "$OS" == "Mac" ]; then
-        brew install graphviz
-    elif [ "$DISTRO" == "Gentoo" ]; then
+    case "$DISTRO" in
+    Gentoo)
         sudo emerge --update media-gfx/graphviz
-    elif [ "$DISTRO" == "Arch" ]; then
+        ;;
+    Arch)
         sudo pacman -Sy --noconfirm graphviz
-    fi
+        ;;
+    MacPorts)
+        sudo port install graphviz
+        ;;
+    Homebrew)
+        brew install graphviz
+        ;;
+    esac
 
     go install oss.terrastruct.com/d2@latest
     sudo $npm_cmd install -g @mermaid-js/mermaid-cli
@@ -240,7 +297,8 @@ function for_docker() {
 pre_task
 
 [ -z "$*" ] &&
-    set -- treesit c go python haskell markdown shell web graph json docker
+    # grep -oP '(?<=for_).*(?=\(\) \{)' ./script/lang_dep.sh | xargs
+    set -- treesit c go haskell markdown python rust shell web graph json docker
 
 for lang in "$@"; do
     eval "for_$lang"
