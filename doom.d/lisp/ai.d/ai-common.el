@@ -38,8 +38,8 @@ Returns the token string."
      :ep ,(lambda () (get-llm-api-token "wq/ep" "WQ_EP_ID"))
      :token ,(lambda () (get-llm-api-token "wq/token" "WQ_API_KEY")))
     (minyuchat
-     :host ,(lambda () (get-llm-api-host "MINYUCHAT_API_HOST" "chat.wminyu.top:433"))
-     :ds-host ,(lambda () (get-llm-api-host "MINYUCHAT_DS_API_HOST" "chat.wminyu.top:433/v1"))
+     :host ,(lambda () (get-llm-api-host "MINYUCHAT_API_HOST" "openai.wminyu.top:433"))
+     :ds-host ,(lambda () (get-llm-api-host "MINYUCHAT_DS_API_HOST" "openai.wminyu.top:433/v1"))
      :token ,(lambda () (get-llm-api-token "deepseek/web-token" "DEEPSEEK_WEB_API_KEY"))))
   "Alist of LLM API backend configurations.
 Each entry is a list (BACKEND-NAME :KEY-TYPE (lambda () (GET-FUNCTION ...))).
