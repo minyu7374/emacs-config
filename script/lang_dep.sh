@@ -40,8 +40,8 @@ function pre_task() {
     cabal update
     pip install --upgrade pip
 
-    npm_cmd=npm
-    which cnpm >/dev/null && npm_cmd=cnpm
+    npm_install="npm install -g"
+    which pnpm >/dev/null && npm_install="pnpm add -g"
 }
 
 function for_treesit() {
@@ -134,9 +134,10 @@ function for_go() {
 
 function for_haskell() {
     case "$DISTRO" in
-    Gentoo)
-        sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
-        ;;
+    # Gentoo)
+        # # sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
+        # cabal install hlint hoogle
+        # ;;
     Arch)
         sudo pacman -Sy --noconfirm ghc haskell-language-server hoogle hlint cabal-install
         ;;
@@ -144,8 +145,8 @@ function for_haskell() {
         sudo zypper in -y ghc ghc-hlint cabal-install
         ;;
     *)
-        # ghcup install ghc hls
-        cabal install haskell-language-server hlint hoogle
+        # ghcup install ghc cabal hls stack
+        cabal install hlint hoogle
         #cabal install haskell-mode
         ;;
     esac
@@ -153,18 +154,18 @@ function for_haskell() {
 
 function for_markdown() {
     ##Markdown-specific
-    sudo $npm_cmd install -g markdownlint --force
+    $npm_install markdownlint
     # sudo gem install mdl
 
     ## General (natural language)
     pip install proselint
-    sudo $npm_cmd install -g textlint --force
+    $npm_install textlint
 
     ## MarkedJS
-    sudo $npm_cmd install -g marked --force
+    $npm_install marked
 
     ## latex math preview
-    sudo $npm_cmd install -g git+https://gitlab.com/matsievskiysv/math-preview
+    $npm_install git+https://gitlab.com/matsievskiysv/math-preview
 
     # pandoc/markdown
     case "$DISTRO" in
@@ -199,8 +200,8 @@ function for_python() {
     pip install pipenv poetry
     pip install "python-language-server[all]"
     pip install "python-lsp-server[all]"
-    #pip install pyright
-    sudo $npm_cmd i -g pyright --force
+    # $npm_cmd i -g pyright --force
+    pip install basedpyright
     uv tool install ruff@latest
 }
 
@@ -226,7 +227,9 @@ function for_rust() {
 function for_shell() {
     case "$DISTRO" in
     Gentoo)
-        sudo emerge --update shellcheck
+        # 对haskell 那一套依赖太重了，改成直接安装编译好的
+        #sudo emerge --update shellcheck
+        sudo emerge --update shellcheck-bin
         ;;
     Arch)
         sudo pacman -Sy --noconfirm shellcheck
@@ -246,7 +249,7 @@ function for_shell() {
         ;;
     esac
 
-    sudo $npm_cmd i -g bash-language-server --force
+    $npm_cmd i -g bash-language-server --force
     go install mvdan.cc/sh/v3/cmd/shfmt@latest
 }
 
@@ -278,17 +281,17 @@ function for_graph() {
     esac
 
     go install oss.terrastruct.com/d2@latest
-    sudo $npm_cmd install -g @mermaid-js/mermaid-cli
+    $npm_install @mermaid-js/mermaid-cli
 }
 
 function for_json() {
-    # sudo $npm_cmd i -g vscode-langservers-extracted --force
-    sudo $npm_cmd install -g vscode-json-languageserver --force
+    # $npm_cmd i -g vscode-langservers-extracted --force
+    $npm_install vscode-json-languageserver
 }
 
 function for_docker() {
     if [ "$OS" == "Linux" ]; then
-        sudo $npm_cmd install -g dockerfile-language-server-nodejs
+        $npm_install dockerfile-language-server-nodejs
     fi
 
     go install github.com/jessfraz/dockfmt@latest
