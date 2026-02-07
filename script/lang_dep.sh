@@ -167,6 +167,9 @@ function for_markdown() {
     ## latex math preview
     $npm_install git+https://gitlab.com/matsievskiysv/math-preview
 
+    # mdopen go-grip grip
+    go install github.com/chrishrb/go-grip@latest
+
     # pandoc/markdown
     case "$DISTRO" in
     Gentoo)
@@ -192,7 +195,7 @@ function for_markdown() {
 }
 
 function for_python() {
-    #pip install nose
+    pip install nose
     pip install pytest
 
     pip install autopep8 pylint yapf
@@ -200,8 +203,9 @@ function for_python() {
     pip install pipenv poetry
     pip install "python-language-server[all]"
     pip install "python-lsp-server[all]"
-    # $npm_cmd i -g pyright --force
+    # $npm_install pyright
     pip install basedpyright
+    pip install cython
     uv tool install ruff@latest
 }
 
@@ -249,7 +253,7 @@ function for_shell() {
         ;;
     esac
 
-    $npm_cmd i -g bash-language-server --force
+    $npm_install bash-language-server
     go install mvdan.cc/sh/v3/cmd/shfmt@latest
 }
 
@@ -285,7 +289,7 @@ function for_graph() {
 }
 
 function for_json() {
-    # $npm_cmd i -g vscode-langservers-extracted --force
+    # $npm_install vscode-langservers-extracted
     $npm_install vscode-json-languageserver
 }
 
