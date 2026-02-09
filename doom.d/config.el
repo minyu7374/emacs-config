@@ -99,7 +99,6 @@
 (require 'cc-conf)
 (require 'java-conf)
 (require 'ampl-mode)
-(require 'mpl-conf)
 (require 'lsp-conf)
 (require 'syntax-check)
 (require 'format-conf)
