@@ -30,12 +30,19 @@
                         ;; (setq aider-args `("--api-key" ,(format "gemini=%s" (get-llm-api-key 'gemini :token))
                         ;;                    "--model" "gemini/gemini-2.5-flash"))))
                         (setenv "GEMINI_API_KEY" (get-llm-api-key 'gemini :token))
-                        (setq aider-args `("--model" "gemini/gemini-2.5-flash"))))
+                        (setq aider-args `("--model" "gemini/gemini-3-flash-preview"))))
+
+              ("Zai"
+               :setup (lambda ()
+                        (setenv "OPENAI_API_BASE" (format "https://%s" (get-llm-api-key 'zai :host)))
+                        (setenv "OPENAI_API_KEY" (get-llm-api-key 'zai :token))
+                        (setq aider-args `("--model" "openai/glm-4.7" "--no-show-model-warnings"))))
+
               ("MinyuChat"
                :setup (lambda ()
                         (setenv "DEEPSEEK_API_BASE" (format "https://%s" (get-llm-api-key 'minyuchat :ds-host)))
                         (setenv "DEEPSEEK_API_KEY" (get-llm-api-key 'minyuchat :token))
-                        (setq aider-args `("--model" "deepseek"))))))
+                        (setq aider-args `("--model" "deepseek/deepseek-chat"))))))
       (setq +aider--active-backend "Gemini")
       (+aider--set-backend +aider--active-backend)
       (setq +aider--backend-setup-done t)))

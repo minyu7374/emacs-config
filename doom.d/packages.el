@@ -77,6 +77,7 @@
 ;; (package! aider :recipe (:host github :repo "tninja/aider.el"))
 
 ;; (package! eat) ;; 使用vterm，不需要再安装eat
+(package! monet :recipe (:host github :repo "stevemolitor/monet"))
 (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to

@@ -29,20 +29,26 @@
       (setq +gptel--backends
             `((gemini . ,(gptel-make-gemini "Gemini" :key (get-llm-api-key 'gemini :token) :stream t))
 
+              (zai . ,(gptel-make-openai "Zai"
+                        :host (get-llm-api-key 'zai :host)
+                        :key (get-llm-api-key 'zai :token)
+                        :models '(gml-4.7)
+                        :stream t))
+
               (chatanywhere . ,(gptel-make-openai "ChatAnyWhere"
                                  :host (get-llm-api-key 'chatanywhere :host)
                                  :key (get-llm-api-key 'chatanywhere :token)
                                  ;; :header `(("Authorization" . ,(concat "Bearer " chatanywhere-token)))
                                  ;; :endpoint "/v1/chat/completions"
-                                 :stream t
-                                 :models '(gpt-4 gpt-4o gpt-4o-mini)))
+                                 :models '(gpt-5 gpt-5.1-ca gpt-4 gpt-4o gpt-4o-mini)
+                                 :stream t))
 
               ;; deepseek web页面逆向api部署本地，nginx反向代理
               (minyuchat . ,(gptel-make-openai "MinyuChat"
                               :host (get-llm-api-key 'minyuchat :host)
                               :key (get-llm-api-key 'minyuchat :token)
-                              :stream t
-                              :models '(deepseek-chat deepseek-coder deepseek-reasoner)))))
+                              :models '(deepseek-chat deepseek-coder deepseek-reasoner)
+                              :stream t))))
 
       ;; 默认后端
       (setq gptel-backend (alist-get 'gemini +gptel--backends))

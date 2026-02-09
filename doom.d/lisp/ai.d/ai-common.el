@@ -33,10 +33,10 @@ Returns the token string."
      :token ,(lambda () (get-llm-api-token "chatanywhere/token" "CHATANYWHERE_API_KEY")))
     (gemini
      :token ,(lambda () (get-llm-api-token "gemini/token" "GEMINI_API_KEY")))
-    (wq
-     :host ,(lambda () (get-llm-api-host "WQ_API_HOST" "wanqing.streamlakeapi.com/api/gateway/v1/endpoints/ep-{{EP_ID}}/claude-code-proxy"))
-     :ep ,(lambda () (get-llm-api-token "wq/ep" "WQ_EP_ID"))
-     :token ,(lambda () (get-llm-api-token "wq/token" "WQ_API_KEY")))
+    (zai
+     :host ,(lambda () (get-llm-api-host "ZAI_API_HOST" "open.bigmodel.cn/api/pass/v4"))
+     :claude-host ,(lambda () (get-llm-api-host "ZAI_CLAUDE_API_HOST" "open.bigmodel.cn/api/anthropic"))
+     :token ,(lambda () (get-llm-api-token "zai/token" "ZAI_API_KEY")))
     (minyuchat
      :host ,(lambda () (get-llm-api-host "MINYUCHAT_API_HOST" "openai.wminyu.top:433"))
      :ds-host ,(lambda () (get-llm-api-host "MINYUCHAT_DS_API_HOST" "openai.wminyu.top:433/v1"))

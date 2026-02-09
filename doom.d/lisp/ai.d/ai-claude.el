@@ -10,14 +10,16 @@
 
 ;; https://github.com/stevemolitor/claude-code.el
 (use-package! claude-code
-  :config 
-  (setenv "ANTHROPIC_BASE_URL" (replace-regexp-in-string "{{EP_ID}}" (get-llm-api-key 'wq :ep) (get-llm-api-key 'wq :host)))
-  (setenv "ANTHROPIC_AUTH_TOKEN" (get-llm-api-key 'wq :token))
+  :config
+  (setenv "ANTHROPIC_BASE_URL" (format "https://%s" (get-llm-api-key 'zai :claude-host)))
+  (setenv "ANTHROPIC_API_KEY" (get-llm-api-key 'zai :token))
+
+  (setq claude-code-terminal-backend 'vterm)
 
   ;; optional IDE integration with Monet
-  ;; (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
-  ;; (monet-mode 1)
-  (setq claude-code-terminal-backend 'vterm)
+  (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
+  (monet-mode 1)
+
   (claude-code-mode)
 
   ;; :bind-keymap
