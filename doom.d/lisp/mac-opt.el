@@ -7,11 +7,13 @@
 ;; Mac(GUI) 只有基础的环境变量集，需加载shell环境变量
 (use-package! exec-path-from-shell
   :custom
-  (exec-path-from-shell-arguments (if (string-match-p "emacs-plus" invocation-directory) '("-l") nil))
-  ;;(exec-path-from-shell-arguments nil)
+  ;; (exec-path-from-shell-arguments (if (string-match-p "emacs-plus" invocation-directory) '("-l") nil))
+  (exec-path-from-shell-arguments '("-l"))
   (exec-path-from-shell-variables '("PATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
   :config
-  (exec-path-from-shell-initialize))
+  ;; (when (not (boundp 'mac-carbon-version-string)) ;; emacs-mac 独有变量
+  (when (not (eq window-system 'mac))                ;; 常规eamcs上对应值为ns
+    (exec-path-from-shell-initialize)))
 
 ;; mac下shell脚本自动补全比较慢(应该也和扫描/opt/homebrew有关)
 ;; (after! sh-script
