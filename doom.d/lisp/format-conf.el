@@ -31,6 +31,10 @@
 ;;   (when (string= (getenv "FORMAT_ON_SAVE") "false")
 ;;     (setq-local +format-inhibit t)))
 
+;; 改为默认不开启onsave，go语言始终需要开启在这里设置，其他语言结合 .dir-locals.el 进行项目级细化控制
+(add-hook! '(go-mode-hook go-ts-mode-hook) #'apheleia-mode)
+(add-hook! '(lisp-mode-hook emacs-lisp-mode-hook) #'apheleia-mode)
+
 ;; 按C/C++多行注释风格进行注释
 (defun comment-region-in-clike-multi-line-style (beg end)
   "Comment the region from BEG to END using C-like multi-line style."

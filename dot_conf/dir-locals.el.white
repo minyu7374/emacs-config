@@ -1,0 +1,24 @@
+;; ;; 所有文件开启
+;; ((nil . ((eval . (apheleia-mode 1)))))
+
+;; ;; 分mode控制
+;; ((c-mode       . ((eval . (apheleia-mode 1))))
+;;  (c++-mode     . ((eval . (apheleia-mode 1))))
+;;  (c-ts-mode    . ((eval . (apheleia-mode 1))))
+;;  (c++-ts-mode  . ((eval . (apheleia-mode 1))))
+;;  (python-mode  . ((eval . (apheleia-mode 1))))
+;;  (python-ts-mode . ((eval . (apheleia-mode 1))))
+;;  (java-mode    . ((eval . (apheleia-mode 1))))
+;;  (java-ts-mode . ((eval . (apheleia-mode 1))))
+;;  (json-mode    . ((eval . (apheleia-mode 1))))
+;;  (json-ts-mode . ((eval . (apheleia-mode 1))))
+;;  (sql-mode     . ((eval . (apheleia-mode 1)))))
+
+;; dolist
+((nil . ((eval . (dolist (mode '(c-mode c++-mode c-ts-mode c++-ts-mode 
+                                 python-mode python-ts-mode 
+                                 java-mode java-ts-mode 
+                                 json-mode json-ts-mode 
+                                 sql-mode))
+                   (when (derived-mode-p mode)
+                     (apheleia-mode 1)))))))
