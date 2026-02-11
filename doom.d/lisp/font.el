@@ -34,8 +34,8 @@
 (unless (featurep 'font-spec)
   (when (eq system-type 'darwin)
     (setq blamer-face-height 150) ; 仅macOS使用
-    (setq default-font-size 16
-          big-font-size 20))
+    (setq default-font-size 15
+          big-font-size 18))
 
   (when (eq system-type 'gnu/linux)
     ;; 根据屏幕分辨率和DPI选择字体大小 (兼容 emacs daemon)

@@ -58,8 +58,8 @@
 ;; doom-dracula/doom-one/doom-tomorrow-night
 (setq doom-theme (if (display-graphic-p) 'doom-dracula 'doom-one))
 
-;; fullscreen
-(set-frame-parameter nil 'fullscreen os-fullscreen-type)
+;; fullscreen (不再区分 os-fullscreen-type)
+(set-frame-parameter nil 'fullscreen 'maximized)
 
 ;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -68,7 +68,7 @@
 (add-hook 'after-make-frame-functions
           (lambda (frame)
             (with-selected-frame frame
-              (set-frame-parameter nil 'fullscreen os-fullscreen-type)
+              (set-frame-parameter nil 'fullscreen 'maximized)
               (if (display-graphic-p frame)
                   (setq doom-theme 'doom-dracula)
                 (progn
