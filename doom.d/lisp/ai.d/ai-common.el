@@ -26,13 +26,14 @@ Returns the token string."
         (getenv env-var) token)))
 
 (defvar +llm-api-keys
-  `((openai
-     :token ,(lambda () (get-llm-api-token "openai/token" "OPENAI_API_KEY")))
+  `((gemini
+     :token ,(lambda () (get-llm-api-token "gemini/token" "GEMINI_API_KEY")))
     (chatanywhere
      :host ,(lambda () (get-llm-api-host "CHATANYWHERE_API_HOST" "api.chatanywhere.tech"))
      :token ,(lambda () (get-llm-api-token "chatanywhere/token" "CHATANYWHERE_API_KEY")))
-    (gemini
-     :token ,(lambda () (get-llm-api-token "gemini/token" "GEMINI_API_KEY")))
+    (nvidia
+     :host ,(lambda () (get-llm-api-host "NVIDIA_NIM_API_HOST" "integrate.api.nvidia.com/v1"))
+     :token ,(lambda () (get-llm-api-token "nvidia/token" "NVIDIA_NIM_API_KEY")))
     (zai
      :host ,(lambda () (get-llm-api-host "ZAI_API_HOST" "open.bigmodel.cn/api/pass/v4"))
      :claude-host ,(lambda () (get-llm-api-host "ZAI_CLAUDE_API_HOST" "open.bigmodel.cn/api/anthropic"))

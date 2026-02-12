@@ -32,6 +32,12 @@
                         (setenv "GEMINI_API_KEY" (get-llm-api-key 'gemini :token))
                         (setq aider-args `("--model" "gemini/gemini-3-flash-preview"))))
 
+              ("Nvidia"
+               :setup (lambda ()
+                        (setenv "OPENAI_API_BASE" (format "https://%s" (get-llm-api-key 'nvidia :host)))
+                        (setenv "OPENAI_API_KEY" (get-llm-api-key 'nvidia :token))
+                        (setq aider-args `("--model" "openai/z-ai/glm4.7" "--no-show-model-warnings"))))
+
               ("Zai"
                :setup (lambda ()
                         (setenv "OPENAI_API_BASE" (format "https://%s" (get-llm-api-key 'zai :host)))
@@ -43,7 +49,7 @@
                         (setenv "DEEPSEEK_API_BASE" (format "https://%s" (get-llm-api-key 'minyuchat :ds-host)))
                         (setenv "DEEPSEEK_API_KEY" (get-llm-api-key 'minyuchat :token))
                         (setq aider-args `("--model" "deepseek/deepseek-chat"))))))
-      (setq +aider--active-backend "Gemini")
+      (setq +aider--active-backend "Zai")
       (+aider--set-backend +aider--active-backend)
       (setq +aider--backend-setup-done t)))
 

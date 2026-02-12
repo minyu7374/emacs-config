@@ -29,6 +29,12 @@
       (setq +gptel--backends
             `((gemini . ,(gptel-make-gemini "Gemini" :key (get-llm-api-key 'gemini :token) :stream t))
 
+              (nvidia . ,(gptel-make-openai "Nvidia"
+                           :host (get-llm-api-key 'nvidia :host)
+                           :key (get-llm-api-key 'nvidia :token)
+                           :models '(z-ai/glm4.7 minimaxai/minimax-m2.1)
+                           :stream t))
+
               (zai . ,(gptel-make-openai "Zai"
                         :host (get-llm-api-key 'zai :host)
                         :key (get-llm-api-key 'zai :token)
