@@ -9,7 +9,7 @@
   :custom
   ;; (exec-path-from-shell-arguments (if (string-match-p "emacs-plus" invocation-directory) '("-l") nil))
   (exec-path-from-shell-arguments '("-l"))
-  (exec-path-from-shell-variables '("PATH" "GOPATH" "PYTHONPATH" "C_INCLUDE_PATH"))
+  (exec-path-from-shell-variables '("PATH" "GOPATH" "PNPM_HOME" "PYENV_ROOT"))
   :config
   ;; (when (not (boundp 'mac-carbon-version-string)) ;; emacs-mac 独有变量
   (when (not (eq window-system 'mac))                ;; 常规eamcs上对应值为ns
