@@ -75,8 +75,9 @@
 
 ;; ;; (package! transient)  ;; tool/magit 中已添加
 ;; (package! aider :recipe (:host github :repo "tninja/aider.el"))
+(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))
 
-;; (package! eat) ;; 使用vterm，不需要再安装eat
+(package! eat) ;; 在claude-code中看起来比vterm稳定
 (package! monet :recipe (:host github :repo "stevemolitor/monet"))
 (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
 

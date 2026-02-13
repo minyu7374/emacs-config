@@ -8,89 +8,83 @@
 
 ;;; Code:
 
-;; https://github.com/tninja/aider.el
-(use-package! aider
-  :defer t
-  :after transient  ;; 确保 transient 加载完成后再加载 aider
-  :commands (aider-run-aider aider-transient-menu)   ;; 运行命令才加载
+;; https://github.com/MatthewZMD/aidermacs
+(use-package! aidermacs
+  :commands (aidermacs-run aidermacs-transient-menu)   ;; 运行命令才加载
   :init
-  (setenv "AIDER_AUTO_COMMITS" "False") ;; 限制自动提交
-
-  (defvar +aider--backends nil "Aider backends can use.")
-  (defvar +aider--active-backend nil "The active Aider backend.")
+  (defvar +aider--backends nil "Aider backends list.")
+  (defvar +aider--active-backend nil "Current Active Aider backend.")
   (defvar +aider--backend-setup-done nil)
-
-  (defun +aider--backend-setup ()
-    "Setup backend for Aider."
+  ;; backends里设置的是lambda函数，不存储数据。llm-cache清理，也不用重置，无需注册
+  ;; (add-hook '+llm-cache-clearers (lambda () (setq +aider--backend-setup-done nil)) 'append)
+  
+  (defun +aider--backend-setup (&optional backend)
+    "Setup backend for aidermacs."
     (interactive)
     (unless +aider--backend-setup-done
+      ;; 一定要修改下 aidermacs-default-model 的设置，不然会被早早地设置成sonet
       (setq +aider--backends
-            '(("Gemini"
-               :setup (lambda ()
-                        ;; (setq aider-args `("--api-key" ,(format "gemini=%s" (get-llm-api-key 'gemini :token))
-                        ;;                    "--model" "gemini/gemini-2.5-flash"))))
-                        (setenv "GEMINI_API_KEY" (get-llm-api-key 'gemini :token))
-                        (setq aider-args `("--model" "gemini/gemini-3-flash-preview"))))
+            `((gemini . ,(lambda ()
+                           (setq aidermacs-default-model "gemini/gemini-3-flash-preview")
+                           (setenv "GEMINI_API_KEY" (+llm-get-provider-conf 'gemini :token))
+                           (setenv "AIDER_MODEL" "gemini/gemini-3-flash-preview")
+                           (setenv "AIDER_WEAK_MODEL" "gemini/gemini-2.5-flash")))
 
-              ("Nvidia"
-               :setup (lambda ()
-                        (setenv "OPENAI_API_BASE" (format "https://%s" (get-llm-api-key 'nvidia :host)))
-                        (setenv "OPENAI_API_KEY" (get-llm-api-key 'nvidia :token))
-                        (setq aider-args `("--model" "openai/z-ai/glm4.7" "--no-show-model-warnings"))))
+              (nvidia . ,(lambda ()
+                           (setq aidermacs-default-model "openai/z-ai/glm4.7")
+                           (setenv "OPENAI_API_BASE" (format "https://%s/v1" (+llm-get-provider-conf 'nvidia :host)))
+                           (setenv "OPENAI_API_KEY" (+llm-get-provider-conf 'nvidia :token))
+                           (setenv "AIDER_MODEL" "openai/z-ai/glm4.7")
+                           (setenv "AIDER_WEAK_MODEL" "openai/minimaxai/minimax-m2.1")))
 
-              ("Zai"
-               :setup (lambda ()
-                        (setenv "OPENAI_API_BASE" (format "https://%s" (get-llm-api-key 'zai :host)))
-                        (setenv "OPENAI_API_KEY" (get-llm-api-key 'zai :token))
-                        (setq aider-args `("--model" "openai/glm-4.7" "--no-show-model-warnings"))))
+              (zai . ,(lambda ()
+                        (setq aidermacs-default-model "openai/glm-4.6v")
+                        (setenv "OPENAI_API_BASE" (format "https://%s" (+llm-get-provider-conf 'zai :host)))
+                        (setenv "OPENAI_API_KEY" (+llm-get-provider-conf 'zai :token))
+                        (setenv "AIDER_MODEL" "openai/glm-4.6v")
+                        (setenv "AIDER_WEAK_MODEL" "openai/glm-4.5-air")))
 
-              ("MinyuChat"
-               :setup (lambda ()
-                        (setenv "DEEPSEEK_API_BASE" (format "https://%s" (get-llm-api-key 'minyuchat :ds-host)))
-                        (setenv "DEEPSEEK_API_KEY" (get-llm-api-key 'minyuchat :token))
-                        (setq aider-args `("--model" "deepseek/deepseek-chat"))))))
-      (setq +aider--active-backend "Zai")
-      (+aider--set-backend +aider--active-backend)
+              (deepseek . ,(lambda ()
+                             (setq aidermacs-default-model "deepseek/deepseek-coder")
+                             (setenv "DEEPSEEK_API_BASE" (format "https://%s/v1" (+llm-get-provider-conf 'minyuchat :host)))
+                             (setenv "DEEPSEEK_API_KEY" (+llm-get-provider-conf 'minyuchat :token))
+                             (setenv "AIDER_MODEL" "deepseek/deepseek-coder")
+                             (setenv "AIDER_WEAK_MODEL" "deepseek/deepseek-chat")))))
+
+      (+aider--switch-backend (or backend +aider--active-backend (caar +aider--backends)))
       (setq +aider--backend-setup-done t)))
 
-  (defun +aider--switch-backend ()
-    "Interactively switch the Aider backend.
-    Prompts the user to select from `+aider--backends` and applies the
-    corresponding setup function. Updates `+aider--active-backend`."
-    (interactive)
-    (let* ((backend-names (mapcar #'car +aider--backends))
-           (selected-backend (completing-read "Select Aider active backend: " backend-names nil t +aider--active-backend)))
-      (when selected-backend
-        (setq +aider--active-backend selected-backend)
-        (+aider--set-backend selected-backend)
-        (message "Aider active backend switched to: %s" selected-backend))))
+  (defun +aider--switch-backend (backend)
+    "Switch aidermacs backend to BACKEND."
+    (interactive
+     (list (intern (completing-read "Select backend: " (mapcar #'car +aider--backends) nil t))))
+    (setq +aider--active-backend backend)
+    (let ((func (alist-get +aider--active-backend +aider--backends)))
+      (when func
+        (funcall func)
+        (message "Aidermacs backend success switched to: %s" +aider--active-backend))))
 
-  (defun +aider--set-backend (backend)
-    (let* ((default-backend-entry (assoc backend +aider--backends))
-           (default-setup-fn (plist-get (cdr default-backend-entry) :setup)))
-      (when default-setup-fn
-        (funcall default-setup-fn)
-        (message "Aider backend set to: %s" backend))))
-
-  (defun +aider--ensure-backend (&rest _args)
-    (unless +aider--backend-setup-done
-      (+aider--backend-setup)))
-
-  (advice-add 'aider-run-aider :before #'+aider--ensure-backend)
-  (advice-add 'aider-transient-menu :before #'+aider--ensure-backend)
+  ;; 实测switch只设置 active-backend的值，单独创建set函数，借助这个hook才执行真正的方案，结果是混乱的
+  ;; (add-hook 'aidermacs-before-run-backend-hook #'+aider--set-backend)
 
   :config
-  (aider-magit-setup-transients)
-  ;; (require 'aider-helm)
-  (require 'aider-doom))
+  (+aider--backend-setup 'nvidia)
 
-(global-set-key (kbd "\C-ca") 'aider-transient-menu) ;; for wider screen
+  :custom
+  ;; See the Configuration section below
+  ;; (aidermacs-default-chat-mode 'architect) ;; code/architect/ask
+  (aidermacs-extra-args `("--chat-language" "zh" "--no-show-model-warnings"))
+
+  (aidermacs-auto-commits nil))
+
+(global-set-key (kbd "\C-ca") 'aidermacs-transient-menu)
 (map! :leader
-      (:prefix ("ya" . "aider")
-       :desc "Aider backend setup"   :nv "b" #'+aider--backend-setup
-       :desc "Switch Aider backend"  :nv "s" #'+aider--switch-backend
-       :desc "Run Aider"             :nv "a" #'aider-run-aider
-       :desc "Aider transient menu"  :nv "m" #'aider-transient-menu))
+      (:prefix ("ya" . "Aidermacs")
+       :desc "Aidermacs run"               :nv "a" #'aidermacs-run
+       :desc "Aidermacs quit"              :nv "q" #'aidermacs-exit
+       :desc "Aidermacs backend setup"     :nv "b" #'+aider--backend-setup
+       :desc "Switch Aidermacs backend"    :nv "s" #'+aider--switch-backend
+       :desc "Aidermacs transient menu"    :nv "m" #'aidermacs-transient-menu))
 
 (provide 'ai-aider)
 

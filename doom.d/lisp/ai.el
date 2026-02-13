@@ -13,8 +13,8 @@
 (require 'ai-common)
 (require 'ai-gptel)
 (require 'ai-copilot)
-;; (require 'ai-aider)
 (require 'ai-claude)
+(require 'ai-aider)
 
 (provide 'ai)
 ;;; ai.el ends here.

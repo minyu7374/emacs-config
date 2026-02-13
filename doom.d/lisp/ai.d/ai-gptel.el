@@ -8,72 +8,73 @@
 
 ;;; Code:
 
+(defvar +gptel--backends nil "Gptel backends list.")
+(defvar +gptel--active-backend nil "Current Active gptel backend.")
+(defvar +gptel--backend-setup-done nil)
+(add-hook '+llm-cache-clearers (lambda () (setq +gptel--backend-setup-done nil)) 'append)
+
+(defun +gptel--backend-setup (&optional backend)
+  "Setup backend for gptel."
+  (interactive)
+  (unless +gptel--backend-setup-done
+    (setq +gptel--backends
+          `((gemini . (,(gptel-make-gemini "Gemini" :key (+llm-get-provider-conf 'gemini :token) :stream t) gemini-2.5-flash))
+
+            (nvidia . (,(gptel-make-openai "Nvidia"
+                          :host (+llm-get-provider-conf 'nvidia :host)
+                          :key (+llm-get-provider-conf 'nvidia :token)
+                          :models '(z-ai/glm4.7 minimaxai/minimax-m2.1)
+                          :stream t) minimaxai/minimax-m2.1))
+
+            (zai . (,(gptel-make-openai "Zai"
+                       :host (+llm-get-provider-conf 'zai :host)
+                       :key (+llm-get-provider-conf 'zai :token)
+                       :endpoint "/chat/completions"
+                       :models '(glm-5 glm-4.7 glm-4.6v glm-4.5 glm-4.5-air)
+                       :stream t) glm-4.5-air))
+
+            (chatanywhere . (,(gptel-make-openai "ChatAnyWhere"
+                                :host (+llm-get-provider-conf 'chatanywhere :host)
+                                :key (+llm-get-provider-conf 'chatanywhere :token)
+                                :models '(gpt-5.1 gpt-5-mini gpt-4 gpt-4o gpt-4o-mini)
+                                :stream t) gpt-5-mini))
+
+            ;; deepseek web页面逆向api部署本地，nginx反向代理
+            (minyuchat . (,(gptel-make-openai "MinyuChat"
+                             :host (+llm-get-provider-conf 'minyuchat :host)
+                             :key (+llm-get-provider-conf 'minyuchat :token)
+                             :models '(deepseek-chat deepseek-coder deepseek-reasoner)
+                             :stream t) deepseek-chat))))
+
+    (+gptel--switch-backend (or backend +gptel--active-backend (caar +gptel--backends)))
+    (setq +gptel--backend-setup-done t)))
+
+(defun +gptel--switch-backend (backend)
+  "Switch gptel backend to BACKEND."
+  (interactive
+   (progn
+     (unless +gptel--backend-setup-done (+gptel--backend-setup))
+     (list (intern (completing-read "Select backend: " (mapcar #'car +gptel--backends) nil t)))))
+  (setq +gptel--active-backend backend)
+  (let ((backend-obj (alist-get +gptel--active-backend +gptel--backends)))
+    (when backend-obj
+      (setq gptel-backend (car backend-obj))
+      (setq gptel-model (cadr backend-obj))
+      (message "gptel backend switched to: %s" (gptel-backend-name gptel-backend)))))
+
 ;; gptel https://github.com/karthink/gptel
 ;; 用tools/llm, 改为 after!
 (after! gptel
   (setq gptel-max-tokens 8192)
   (setq gptel-track-media t)
-
-  ;;随便设置一个值，避免执行gptel时选用和api-key判空
-  (setq gptel-backend (gptel-make-openai " By SetUp"))
-  (setq gptel-api-key "sk-null")
-
-  (defvar +gptel--backends nil "gptel backends can use.")
-  (defvar +gptel--backend-setup-done nil)
-
-  (defun +gptel--backend-setup ()
-    "Setup backend for gptel."
-    (interactive)
-    (unless +gptel--backend-setup-done
-      ;; (setq gptel-api-key (get-llm-api-key 'openai :token))
-      (setq +gptel--backends
-            `((gemini . ,(gptel-make-gemini "Gemini" :key (get-llm-api-key 'gemini :token) :stream t))
-
-              (nvidia . ,(gptel-make-openai "Nvidia"
-                           :host (get-llm-api-key 'nvidia :host)
-                           :key (get-llm-api-key 'nvidia :token)
-                           :models '(z-ai/glm4.7 minimaxai/minimax-m2.1)
-                           :stream t))
-
-              (zai . ,(gptel-make-openai "Zai"
-                        :host (get-llm-api-key 'zai :host)
-                        :key (get-llm-api-key 'zai :token)
-                        :models '(gml-4.7)
-                        :stream t))
-
-              (chatanywhere . ,(gptel-make-openai "ChatAnyWhere"
-                                 :host (get-llm-api-key 'chatanywhere :host)
-                                 :key (get-llm-api-key 'chatanywhere :token)
-                                 ;; :header `(("Authorization" . ,(concat "Bearer " chatanywhere-token)))
-                                 ;; :endpoint "/v1/chat/completions"
-                                 :models '(gpt-5 gpt-5.1-ca gpt-4 gpt-4o gpt-4o-mini)
-                                 :stream t))
-
-              ;; deepseek web页面逆向api部署本地，nginx反向代理
-              (minyuchat . ,(gptel-make-openai "MinyuChat"
-                              :host (get-llm-api-key 'minyuchat :host)
-                              :key (get-llm-api-key 'minyuchat :token)
-                              :models '(deepseek-chat deepseek-coder deepseek-reasoner)
-                              :stream t))))
-
-      ;; 默认后端
-      (setq gptel-backend (alist-get 'gemini +gptel--backends))
-      (setq gptel-model 'gemini-2.5-flash)
-      (message "gptel backend set to: %s" (gptel-backend-name gptel-backend))
-      (setq +gptel--backend-setup-done t)))
-
-  (defun +gptel--ensure-backend (&rest _args) 
-    (+gptel--backend-setup))
-
-  (advice-add  #'gptel :before #'+gptel--ensure-backend) ;; 明确指定gptel函数引用
-  (advice-add 'gptel-menu :before #'+gptel--ensure-backend)
-  (advice-add 'gptel-rewrite :before #'+gptel--ensure-backend))
+  (+gptel--backend-setup))
 
 (global-set-key (kbd "\C-cg") 'gptel)
 (map! :leader
       (:prefix ("yg" . "gptel")
-       :desc "gptel backend setup"         :nv "b" #'+gptel--backend-setup
        :desc "Create new chat buffer"      :nv "g" #'gptel
+       :desc "gptel backend setup"         :nv "b" #'+gptel--backend-setup
+       :desc "Switch gptel backend"        :nv "s" #'+gptel--switch-backend
        :desc "Menu for chat preferences"   :nv "m" #'gptel-menu
        :desc "Rewrite/refactor selected region"         :nv "w" #'gptel-rewrite
        :desc "Add/remove region/buffer to chat context" :nv "d" #'gptel-add
