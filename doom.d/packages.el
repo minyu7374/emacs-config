@@ -78,8 +78,9 @@
 (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))
 
 (package! eat) ;; 在claude-code中看起来比vterm稳定
-(package! monet :recipe (:host github :repo "stevemolitor/monet"))
-(package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
+; (package! monet :recipe (:host github :repo "stevemolitor/monet"))
+; (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
+(package! claudemacs :recipe (:host github :repo "cpoile/claudemacs"))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...

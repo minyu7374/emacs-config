@@ -8,8 +8,9 @@
 
 ;;; Code:
 
-;; https://github.com/stevemolitor/claude-code.el
-(use-package! claude-code
+;; https://github.com/cpoile/claudemacs
+(use-package! claudemacs
+  :commands (claudemacs-start-menu claudemacs-resume-menu claudemacs-transient-menu)   ;; 运行命令才加载
   :init
   (defvar +claude--backends nil "Claude backends list.")
   (defvar +claude--active-backend nil "Current Active Claude backend.")
@@ -22,7 +23,10 @@
     (interactive)
     (unless +claude--backend-setup-done
       (setq +claude--backends
-            `((ccr . ,(lambda ()
+            `((gemini . ,(lambda()
+                           ;; 支持gemini
+                           (setenv "GEMINI_API_KEY" (+llm-get-provider-conf 'gemini :token))))
+              (ccr . ,(lambda ()
                         (setenv "ANTHROPIC_BASE_URL" (format "%s://%s" (+llm-get-provider-protocol 'ccr) (+llm-get-provider-conf 'ccr :host)))
                         (setenv "ANTHROPIC_AUTH_TOKEN" (+llm-get-provider-conf 'ccr :token))))
               (zai . ,(lambda ()
@@ -45,33 +49,17 @@
         (message "Claude backend success switched to: %s" +claude--active-backend))))
 
   :config
-  (+claude--backend-setup 'ccr)
+  (+claude--backend-setup 'ccr))
 
-  (setq claude-code-terminal-backend 'eat) ;; vterm/eat
-
-  ;; optional IDE integration with Monet
-  (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
-  (monet-mode 1)
-
-  (claude-code-mode)
-
-  ;; :bind-keymap
-  ;; ("C-c c" . claude-code-command-map) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
-
-  ;; Optionally define a repeat map so that "M" will cycle thru Claude auto-accept/plan/confirm modes after invoking claude-code-cycle-mode / C-c M.
-  :bind
-  (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
-
-(global-set-key (kbd "\C-cc") 'claude-code-command-map) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
+(global-set-key (kbd "\C-cc") 'claudemacs-transient-menu) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
 (map! :leader
-      (:prefix ("yc" . "Claude Code")
-       :desc "Claude Code"                 :nv "c" #'claude-code
-       :desc "Kill Claude Code"            :nv "k" #'claude-code-kill
-       :desc "Kill All Claude Code"        :nv "K" #'claude-code-kill-all
-       :desc "Claude backend setup"        :nv "b" #'+claude--backend-setup
-       :desc "Switch Claude backend"       :nv "s" #'+claude--switch-backend
-       :desc "Claude Code transient menu"  :nv "m" #'claude-code-transient
-       :desc "Claude Code slash commands"  :nv "/" #'claude-code-slash-commands))
+      (:prefix ("yc" . "Claudemacs")
+       :desc "Claudemacs start"           :nv "c" #'claudemacs-start-menu
+       :desc "Claudemacs resume"          :nv "r" #'claudemacs-resume-menu
+       :desc "Kill Claudemacs"            :nv "k" #'claudemacs-kill
+       :desc "Claude backend setup"       :nv "b" #'+claude--backend-setup
+       :desc "Switch Claude backend"      :nv "s" #'+claude--switch-backend
+       :desc "Claudemacs transient menu"  :nv "m" #'claudemacs-transient-menu))
 
 (provide 'ai-claude)
 
