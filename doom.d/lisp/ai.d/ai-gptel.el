@@ -39,12 +39,18 @@
                                 :models '(gpt-5.1 gpt-5-mini gpt-4 gpt-4o gpt-4o-mini)
                                 :stream t) gpt-5-mini))
 
-            ;; deepseek web页面逆向api部署本地，nginx反向代理
-            (minyuchat . (,(gptel-make-openai "MinyuChat"
-                             :host (+llm-get-provider-conf 'minyuchat :host)
-                             :key (+llm-get-provider-conf 'minyuchat :token)
-                             :models '(deepseek-chat deepseek-coder deepseek-reasoner)
-                             :stream t) deepseek-chat))))
+            ;; web页面逆向api部署本地，nginx反向代理
+            ;; (minyu-ds . (,(gptel-make-openai "MinyuDeepseek"
+            ;;                 :host (+llm-get-provider-conf 'minyu-ds :host)
+            ;;                 :key (+llm-get-provider-conf 'minyu-ds :token)
+            ;;                 :models '(deepseek-chat deepseek-coder deepseek-reasoner)
+            ;;                 :stream t) deepseek-chat))
+
+            (minyu-qwen . (,(gptel-make-openai "MinyuQwen"
+                              :host (+llm-get-provider-conf 'minyu-qwen :host)
+                              :key (+llm-get-provider-conf 'minyu-qwen :token)
+                              :models '(qwen-max qwen-plus qwen-coder)
+                              :stream t) qwen-plus))))
 
     (+gptel--switch-backend (or backend +gptel--active-backend (caar +gptel--backends)))
     (setq +gptel--backend-setup-done t)))

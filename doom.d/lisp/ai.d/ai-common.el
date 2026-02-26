@@ -42,9 +42,12 @@ Returns the token string."
      :host ,(lambda () (+llm--get-host "CCR_API_HOST" "127.0.0.1:3456"))
      :token ,(lambda () (+llm--get-token "ccr/token" "CCR_API_KEY"))
      :protocol "http")
-    (minyuchat
-     :host ,(lambda () (+llm--get-host "MINYUCHAT_API_HOST" "openai.wminyu.top:433"))
-     :token ,(lambda () (+llm--get-token "deepseek/web-token" "DEEPSEEK_WEB_API_KEY"))))
+    (minyu-ds
+     :host ,(lambda () (+llm--get-host "MINYU_DEEPSEEK_API_HOST" "openai.wminyu.top:433/deepseek"))
+     :token ,(lambda () (+llm--get-token "deepseek/web-token" "DEEPSEEK_WEB_API_KEY")))
+    (minyu-qwen
+     :host ,(lambda () (+llm--get-host "MINYU_QWEN_API_HOST" "openai.wminyu.top:433/qwen"))
+     :token ,(lambda () (+llm--get-token "qwen/web-token" "QWEN_WEB_API_KEY"))))
   "Alist of LLM API backend configurations.
 Each entry is a list (BACKEND-NAME :KEY-TYPE (lambda () (GET-FUNCTION ...))).
 Supported KEY-TYPEs are :host, :claude-host, :token and :protocol.")
