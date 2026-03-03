@@ -29,6 +29,9 @@
                   :completion (:detailedLabel t))))
   (set-lsp-priority! 'ccls 1)) ; optional as ccls is the default in Doom
 
+;; cmakelsp => neocmakelsp stdio 代替 cmake-language-server
+(setq lsp-cmake-server-command "cmakelsp")
+
 ;;; eglot
 ;; (set-eglot-client! 'cc-mode '("clangd" "-j=12" "--clang-tidy"))
 ;; (set-eglot-client! 'cc-mode '("ccls" "--init={\"index\": {\"threads\": 0}}"))

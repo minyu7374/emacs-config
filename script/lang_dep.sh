@@ -32,8 +32,9 @@ if [ "$OS" == Linux ]; then
 fi
 
 if [ "$OS" == Mac ]; then
-    which port 2>/dev/null && DISTRO="MacPorts"
-    which brew 2>/dev/null && DISTRO="Homebrew"
+    for cmd in port brew; do
+        which $cmd 2>/dev/null && DISTRO="MacPorts" && break
+    done
 fi
 
 function pre_task() {
@@ -95,14 +96,18 @@ function for_c() {
         ;;
     MacPorts)
         sudo port install tree-sitter-cli
-        sudo port install llvm ccls
+        # 仓库里的ccls使用clang版本过低，改为手动编译
+        sudo port install llvm #ccls
+        echo "Please compile ccls with new clang"
         ;;
     Homebrew)
         brew install tree-sitter-cli
         brew install llvm ccls
         ;;
     esac
-    pip install cmake-language-server
+    # pip install cmake-language-server
+    # cmake-language-server维护状态不行了, 改用neocmakelsp
+    cargo install neocmakelsp
 }
 
 function for_go() {
