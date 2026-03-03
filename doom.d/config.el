@@ -97,7 +97,7 @@
 (require 'git)
 (require 'markdown-conf)
 (require 'cc-conf)
-(require 'java-conf)
+;; (require 'java-conf)
 (require 'ampl-mode)
 (require 'lsp-conf)
 (require 'syntax-check)
