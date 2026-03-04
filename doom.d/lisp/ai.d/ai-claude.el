@@ -35,8 +35,8 @@
                         ;; (setenv "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4.7")
                         (setenv "ANTHROPIC_BASE_URL" (format "%s://%s" (+llm-get-provider-protocol 'zai) (+llm-get-provider-conf 'zai :claude-host)))
                         (setenv "ANTHROPIC_AUTH_TOKEN" (+llm-get-provider-conf 'zai :token))))))
-      (+claude--switch-backend (or backend +claude--active-backend (caar +claude--backends)))
-      (setq +claude--backend-setup-done t)))
+      (setq +claude--backend-setup-done t))
+    (+claude--switch-backend (or backend +claude--active-backend (caar +claude--backends))))
 
   (defun +claude--switch-backend (backend)
     "Switch claude-code backend to BACKEND."

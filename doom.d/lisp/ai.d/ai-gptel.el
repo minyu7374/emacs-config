@@ -52,8 +52,8 @@
                               :models '(qwen-max qwen-plus qwen-coder)
                               :stream t) qwen-plus))))
 
-    (+gptel--switch-backend (or backend +gptel--active-backend (caar +gptel--backends)))
-    (setq +gptel--backend-setup-done t)))
+    (setq +gptel--backend-setup-done t))
+  (+gptel--switch-backend (or backend +gptel--active-backend (caar +gptel--backends))))
 
 (defun +gptel--switch-backend (backend)
   "Switch gptel backend to BACKEND."

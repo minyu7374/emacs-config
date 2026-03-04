@@ -64,8 +64,8 @@
                                (setq aidermacs-default-model "openai/qwen-max")
                                (setq aidermacs-weak-model "openai/qwen-plus")))))
 
-      (+aider--switch-backend (or backend +aider--active-backend (caar +aider--backends)))
-      (setq +aider--backend-setup-done t)))
+      (setq +aider--backend-setup-done t))
+    (+aider--switch-backend (or backend +aider--active-backend (caar +aider--backends))))
 
   (defun +aider--switch-backend (backend)
     "Switch aidermacs backend to BACKEND."
