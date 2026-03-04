@@ -1,16 +1,17 @@
-Language:        Cpp
-BasedOnStyle:    LLVM
-IndentWidth:     4
-TabWidth:        4
-UseTab:          Never
-ColumnLimit:     120
+# BasedOnStyle: LLVM
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 120
 
-# PointerAlignment: Left
+# 允许将简单的函数（如析构、构造函数）放在同一行
+# AllowShortFunctionsOnASingleLine: Inline
+AllowShortFunctionsOnASingleLine: All
 
-AlignTrailingComments: true
-AlignConsecutiveMacros: true
-AlignConsecutiveDeclarations: true
-# AlignConsecutiveAssignments: true
-# AlignEscapedNewlines: true
+# 确保块定义不会强制换行
+AllowShortBlocksOnASingleLine: Always
 
-# IndentCaseLabels: true
+# 允许将简单的循环（for/while）放在同一行
+AllowShortLoopsOnASingleLine: true
+
+# 允许将简单的 if 语句放在同一行
+AllowShortIfStatementsOnASingleLine: WithoutElse

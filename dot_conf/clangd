@@ -1,0 +1,15 @@
+Index:
+  Background: Build      # 对应 --background-index
+
+Diagnostics:
+  ClangTidy:
+    Add: [bugprone-*, performance-*, modernize-*] # 对应 --clang-tidy
+  UnusedIncludes: Strict # 配合 header-insertion
+
+Completion:
+  AllScopes: true        # 对应 --all-scopes-completion
+  DetailedSymbolInfo: true # 对应 --completion-style=detailed
+
+InlayHints:              # 额外推荐：LSP 极其优雅的内联提示
+  Designators: true
+  ParameterNames: true

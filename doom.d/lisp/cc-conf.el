@@ -4,30 +4,37 @@
 
 ;;; Code:
 
-;; lsp-mode
+;; lsp + clangd
 (after! lsp-clangd
+  (set-lsp-priority! 'clangd 2)
+  ;;emacs里不过多设置参数，行为控制还是通过 .clangd 配置更好
   (setq lsp-clients-clangd-args
-        '("-j=12"
-          "--background-index"
-          "--clang-tidy"
-          "--completion-style=detailed"
-          "--header-insertion=never"
-          "--header-insertion-decorators=0"
-          "--limit-results=25"
-          ;; "--limit-references=100"     ;; 限制引用数量
-          "--pch-storage=memory"))        ;; 使用内存存储 PCH，可能加快索引速度
-  (set-lsp-priority! 'clangd 2))
+        `(,(format "-j=%d" (max 1 (/ (* (doom-system-cpus) 2) 3)))
+          ;; 使用内存存储 PCH，可能加快索引速度
+          "--pch-storage=memory"
+          ;; Linux 才支持 malloc-trim
+          ,@(when (eq system-type 'gnu/linux) '("--malloc-trim"))
+          ;; "--background-index"
+          ;; "--clang-tidy"
+          ;; "--all-scopes-completion"
+          ;; "--completion-style=detailed"
+          ;; "--header-insertion=iwyu"
+          ;; "--header-insertion-decorators=0"
+          ;; "--limit-results=25"
+          ;; "--limit-references=100"
+          )))
 
+;; lsp + ccls
 (after! ccls
+  ;; (set-lsp-priority! 'ccls 2)
   ;; https://github.com/MaskRay/ccls/wiki/Customization#initialization-options
   (setq ccls-initialization-options
         (append ccls-initialization-options
                 `(:index (:comments 2
                           :threads ,(max 1 (/ (* (doom-system-cpus) 2) 3))
-                          :initialBlacklist '(".ccls-cache" ".cache" "build" "external" "third_party"))
+                          :initialBlacklist '(".ccls-cache" ".cache" "build" "external"))
                   ;; :diagnostics (:onChange 500) ;; 降低诊断频率
-                  :completion (:detailedLabel t))))
-  (set-lsp-priority! 'ccls 1)) ; optional as ccls is the default in Doom
+                  :completion (:detailedLabel t)))))
 
 ;; cmakelsp => neocmakelsp stdio 代替 cmake-language-server
 (setq lsp-cmake-server-command "cmakelsp")
