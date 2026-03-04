@@ -63,6 +63,10 @@
 ;; GitLens
 (package! blamer :recipe (:host github :repo "artawower/blamer.el"))
 
+;; 翻译
+(package! pdd :recipe (:host github :repo "lorniu/pdd.el"))
+(package! gt :recipe (:host github :repo "lorniu/gt.el"))
+
 ;; gptel: tools/llm 中启用
 ;; (package! gptel)
 

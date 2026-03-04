@@ -56,9 +56,9 @@
 (global-set-key (kbd "\C-ctp") 'proxy-toggle)
 (map! :leader
       (:prefix ("yp" . "proxy")
-       :desc "proxy toggle" :nv "t" #'proxy-toggle
-       :desc "proxy on" :nv "o" #'proxy-on
-       :desc "proxy off" :nv "f" #'proxy-off))
+               :desc "proxy toggle" :nv "t" #'proxy-toggle
+               :desc "proxy on" :nv "o" #'proxy-on
+               :desc "proxy off" :nv "f" #'proxy-off))
 
 (provide 'proxy)
 

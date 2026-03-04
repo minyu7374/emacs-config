@@ -92,6 +92,7 @@
 (require 'display)
 (require 'proxy)
 (require 'input)
+(require 'translate)
 (require 'ai)
 
 (require 'git)
