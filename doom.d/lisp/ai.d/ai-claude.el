@@ -38,15 +38,22 @@
       (setq +claude--backend-setup-done t))
     (+claude--switch-backend (or backend +claude--active-backend (caar +claude--backends))))
 
+  ;; switch 函数拆分为两份：一份仅设置选中的后端，另一份才执行后端配置，在eat启动时运行，保证环境变量更好地继承
   (defun +claude--switch-backend (backend)
-    "Switch claude-code backend to BACKEND."
+    "Switch claudemacs backend to BACKEND."
     (interactive
      (list (intern (completing-read "Select backend: " (mapcar #'car +claude--backends) nil t))))
     (setq +claude--active-backend backend)
+    (message "Claudemacs active backend switch to: %s" +claude--active-backend))
+
+  (defun +claude--set-backend (&rest _)
     (let ((func (alist-get +claude--active-backend +claude--backends)))
       (when func
         (funcall func)
-        (message "Claude backend success switched to: %s" +claude--active-backend))))
+        (message "Claudemacs backend success set to: %s" +claude--active-backend))))
+
+  (dolist (cmd '(claudemacs-start-menu claudemacs-resume-menu claudemacs-transient-menu))
+    (advice-add cmd :before #'+claude--set-backend))
 
   :config
   (+claude--backend-setup 'ccr))
@@ -54,12 +61,12 @@
 (global-set-key (kbd "\C-cc") 'claudemacs-transient-menu) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
 (map! :leader
       (:prefix ("yc" . "Claudemacs")
-       :desc "Claudemacs start"           :nv "c" #'claudemacs-start-menu
-       :desc "Claudemacs resume"          :nv "r" #'claudemacs-resume-menu
-       :desc "Kill Claudemacs"            :nv "k" #'claudemacs-kill
-       :desc "Claude backend setup"       :nv "b" #'+claude--backend-setup
-       :desc "Switch Claude backend"      :nv "s" #'+claude--switch-backend
-       :desc "Claudemacs transient menu"  :nv "m" #'claudemacs-transient-menu))
+       :desc "Claudemacs start"            :nv "c" #'claudemacs-start-menu
+       :desc "Claudemacs resume"           :nv "r" #'claudemacs-resume-menu
+       :desc "Quit Claudemacs"             :nv "q" #'claudemacs-kill
+       :desc "Claudemacs backend setup"    :nv "b" #'+claude--backend-setup
+       :desc "Switch Claudemacs backend"   :nv "s" #'+claude--switch-backend
+       :desc "Claudemacs transient menu"   :nv "m" #'claudemacs-transient-menu))
 
 (provide 'ai-claude)
 

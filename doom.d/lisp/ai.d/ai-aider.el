@@ -67,18 +67,25 @@
       (setq +aider--backend-setup-done t))
     (+aider--switch-backend (or backend +aider--active-backend (caar +aider--backends))))
 
+  ;; switch 函数拆分为两份：一份仅设置选中的后端，另一份才执行后端配置，在eat启动时运行，保证环境变量更好地继承
   (defun +aider--switch-backend (backend)
     "Switch aidermacs backend to BACKEND."
     (interactive
      (list (intern (completing-read "Select backend: " (mapcar #'car +aider--backends) nil t))))
     (setq +aider--active-backend backend)
+    (message "Aidermacs active backend switch to: %s" +aider--active-backend))
+
+  (defun +aider--set-backend (&rest _)
     (let ((func (alist-get +aider--active-backend +aider--backends)))
       (when func
         (funcall func)
-        (message "Aidermacs backend success switched to: %s" +aider--active-backend))))
+        (message "Aidermacs backend success set to: %s" +aider--active-backend))))
 
   ;; 实测switch只设置 active-backend的值，单独创建set函数，借助这个hook才执行真正的方案，结果是混乱的
   ;; (add-hook 'aidermacs-before-run-backend-hook #'+aider--set-backend)
+  ;; 用advice-add效果更稳定
+  (dolist (cmd '(aidermacs-run aidermacs-transient-menu))
+    (advice-add cmd :before #'+aider--set-backend))
 
   :config
   (+aider--backend-setup 'nvidia)
