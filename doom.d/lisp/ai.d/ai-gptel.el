@@ -73,19 +73,25 @@
 (after! gptel
   (setq gptel-max-tokens 8192)
   (setq gptel-track-media t)
-  (+gptel--backend-setup))
+  (+gptel--backend-setup 'gemini))
 
+;; 全面覆盖tools/llm中的快捷键
 (global-set-key (kbd "\C-cg") 'gptel)
 (map! :leader
       (:prefix ("yg" . "gptel")
        :desc "Create new chat buffer"      :nv "g" #'gptel
-       :desc "gptel backend setup"         :nv "b" #'+gptel--backend-setup
+       :desc "Open gptel in same window"   :nv "G" #'+llm/open-in-same-window
+       :desc "Gptel backend setup"         :nv "b" #'+gptel--backend-setup
        :desc "Switch gptel backend"        :nv "s" #'+gptel--switch-backend
        :desc "Menu for chat preferences"   :nv "m" #'gptel-menu
-       :desc "Rewrite/refactor selected region"         :nv "w" #'gptel-rewrite
-       :desc "Add/remove region/buffer to chat context" :nv "d" #'gptel-add
+       :desc "Send to gptel"               :nv "s" #'gptel-send
+       :desc "Stop active gptel process"   :nv "k" #'gptel-abort
+       :desc "Add text to context"         :nv "a" #'gptel-add
+       :desc "Explain"                     :nv "e" #'gptel-quick
        :desc "Add a file to chat context"  :nv "f" #'gptel-add-file
-       :desc "Stop active gptel process"   :nv "k" #'gptel-abort))
+       :desc "Rewrite/refactor"            :nv "r" #'gptel-rewrite
+       :desc "Org: set topic"              :nv "o" #'gptel-org-set-topic
+       :desc "Org: set properties"         :nv "O" #'gptel-org-set-properties))
 
 (provide 'ai-gptel)
 
