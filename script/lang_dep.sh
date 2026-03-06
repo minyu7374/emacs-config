@@ -117,17 +117,21 @@ function for_go() {
     go install golang.org/x/tools/cmd/godoc@latest
     go install golang.org/x/tools/cmd/goimports@latest
     go install golang.org/x/tools/cmd/gorename@latest
-    go install golang.org/x/tools/cmd/guru@latest
+    # go install golang.org/x/tools/cmd/guru@latest
     go install github.com/cweill/gotests/gotests@latest
     go install github.com/fatih/gomodifytags@latest
 
     case "$DISTRO" in
-    MacPorts)
-        sudo port install golangci-lint
-        ;;
-    Homebrew)
-        brew install golangci-lint
-        ;;
+    # 包管理系统更新都比较慢，doom却需要较新版本
+    # Gentoo)
+        # sudo emerge --update golangci-lint
+        # ;;
+    # MacPorts)
+        # sudo port install golangci-lint
+        # ;;
+    # Homebrew)
+        # brew install golangci-lint
+        # ;;
     *)
         # binary will be $(go env GOPATH)/bin/golangci-lint
         curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
