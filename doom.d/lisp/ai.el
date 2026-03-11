@@ -13,6 +13,7 @@
 (require 'ai-common)
 (require 'ai-gptel)
 (require 'ai-copilot)
+(require 'ai-codeium)
 (require 'ai-claude)
 (require 'ai-aider)
 

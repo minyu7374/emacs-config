@@ -28,6 +28,8 @@ Returns the token string."
 (defvar +llm-providers
   `((gemini
      :token ,(lambda () (+llm--get-token "gemini/token" "GEMINI_API_KEY")))
+    (codeium
+     :key ,(lambda () (+llm--get-token "codeium/key" "CODEIUM_API_KEY")))
     (chatanywhere
      :host ,(lambda () (+llm--get-host "CHATANYWHERE_API_HOST" "api.chatanywhere.tech"))
      :token ,(lambda () (+llm--get-token "chatanywhere/token" "CHATANYWHERE_API_KEY")))

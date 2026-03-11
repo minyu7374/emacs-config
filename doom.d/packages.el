@@ -74,8 +74,10 @@
 ;; (package! chatgpt-shell
 ;;   :recipe (:host github :repo "xenodium/chatgpt-shell" :files ("chatgpt-shell*.el")))
 
+;; AI code completion
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+(package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 
 ;; ;; (package! transient)  ;; tool/magit 中已添加
 ;; (package! aider :recipe (:host github :repo "tninja/aider.el"))
