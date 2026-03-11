@@ -7,6 +7,8 @@
 (setq-default tab-width 4)
 ;; (setq-default indent-tabs-mode nil)
 (setq-default c-basic-offset 4)
+(setq-default c-ts-mode-indent-offset 4)
+(setq-default go-ts-mode-indent-offset 4)
 
 ;; 禁用dockerfile的自动格式化
 (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode)
