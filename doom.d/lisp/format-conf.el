@@ -53,7 +53,7 @@
 (defun my/comment-region (beg end)
   "Comment the region from BEG to END using the appropriate style for the current mode."
   (interactive "r")
-  (if (member major-mode '(c-mode c++-mode go-mode))
+  (if (member major-mode '(c-mode c++-mode go-mode c-ts-mode c++-ts-mode go-ts-mode))
       (comment-region-in-clike-multi-line-style beg end)
     (comment-region beg end)))
 
