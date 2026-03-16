@@ -17,7 +17,7 @@
   (defvar +aider--backend-setup-done nil)
   ;; backends里设置的是lambda函数，不存储数据。llm-cache清理，也不用重置，无需注册
   ;; (add-hook '+llm-cache-clearers (lambda () (setq +aider--backend-setup-done nil)) 'append)
-  
+
   (defun +aider--backend-setup (&optional backend)
     "Setup backend for aidermacs."
     (interactive)

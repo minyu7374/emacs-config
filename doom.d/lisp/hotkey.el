@@ -45,6 +45,12 @@
 
 ;; evil
 (map! :nv "：" #'evil-ex)
+;; 保持和lazyvim中一致的快捷键
+(map! :n  "gsd" #'evil-surround-delete
+      :n  "gsr" #'evil-surround-change
+      ;; gs(a/A) 原本绑定到了 evilem--motion-function-evil-(forward/backward)-arg，这里直接覆盖掉
+      :nv "gsa" #'evil-surround-region
+      :nv "gsA" #'evil-Surround-region)
 
 ;; window move
 ;; 和emacs本身的快捷键产生冲突，不使用了

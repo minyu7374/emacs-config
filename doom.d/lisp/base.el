@@ -60,7 +60,7 @@
 ;;         (yaml       . ("https://github.com/ikatyang/tree-sitter-yaml"))
 ;;         (toml       . ("https://github.com/tree-sitter/tree-sitter-toml"))
 ;;         (zig        . ("https://github.com/GrayJack/tree-sitter-zig"))))
-;; 
+;;
 ;; (setq major-mode-remap-alist
 ;;       '((c-mode          . c-ts-mode)
 ;;         (c++-mode        . c++-ts-mode)
@@ -78,7 +78,7 @@
 ;;         (json-mode       . json-ts-mode)
 ;;         (conf-toml-mode  . toml-ts-mode)
 ;;         (yaml-mode       . yaml-ts-mode)))
-;; 
+;;
 ;; ;; (defun my/copy-hooks-to-ts-modes ()
 ;; ;;   "把 `major-mode-remap-alist` 的原 mode hook 全部加到对应的 ts-mode hook."
 ;; ;;   (dolist (pair major-mode-remap-alist)
@@ -91,10 +91,10 @@
 ;; ;;         (dolist (fn (symbol-value orig-hook))
 ;; ;;           (unless (member fn (symbol-value ts-hook))
 ;; ;;             (add-hook ts-hook fn)))))))
-;; 
+;;
 ;; ;; ;; 自动在 Doom 初始化语言模块后执行
 ;; ;; (add-hook 'doom-after-modules-config-hook #'my/copy-hooks-to-ts-modes)
-;; 
+;;
 ;; (defun my/install-all-treesit-languages ()
 ;;   "自动安装所有treesit解析器."
 ;;   (interactive)
