@@ -14,6 +14,7 @@
        :desc "Clear equations at point" :nv "P" #'math-preview-clear-at-point))
 
 (after! markdown-mode
+  (setq os-open-cmd (if (eq system-type 'gnu/linux) "xdg-open" "open"))
   (setq markdown-split-window-direction 'right)
 
   (defun marp-preview()

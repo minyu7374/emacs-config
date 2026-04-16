@@ -15,8 +15,6 @@
   ;; otherwise, make sure that the codeium.el file is on load-path
 
   :init
-  (setq codeium/metadata/api_key (+llm-get-provider-conf 'codeium :key))
-  (setq codeium-delay 0.020)
   ;; use globally
   (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
   ;; or on a hook
@@ -35,14 +33,16 @@
   ;; optionally set a timer, which might speed up things as the
   ;; codeium local language server takes ~0.2s to start up
   (add-hook 'emacs-startup-hook
-            (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+            (lambda () (run-with-idle-timer 0.3 nil #'codeium-init)))
 
-  ;; :defer t ;; lazy loading, if you want
+  :defer t ;; lazy loading, if you want
   :config
+  ;; (setq codeium-delay 0.020)
   (setq use-dialog-box nil) ;; do not use popup boxes
 
   ;; if you don't want to use customize to save the api-key
   ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+  (setq codeium/metadata/api_key (+llm-get-provider-conf 'codeium :key))
 
   ;; get codeium status in the modeline
   (setq codeium-mode-line-enable

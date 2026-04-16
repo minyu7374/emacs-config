@@ -10,6 +10,7 @@
   ;; :ensure t
   ;; :custom
   ;; (gt-langs '(en zh))
+  :commands (gt-translate gt-setup)
 
   :config
   ;; 指定客户端和代理

@@ -42,7 +42,7 @@
 
 ;; (package! benchmark-init)
 
-(package! fcitx :ignore (not (eq system-type 'gnu/linux)))
+;; (package! fcitx :ignore (not (eq system-type 'gnu/linux)))
 (package! rime)
 ;; (package! pyim)
 ;; (package! pyim-greatdict :recipe (:host github :repo "tumashu/pyim-greatdict"))

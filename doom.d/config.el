@@ -103,6 +103,6 @@
 (require 'lsp-conf)
 (require 'syntax-check)
 (require 'format-conf)
-(require 'auto-insert-conf)
+;; (require 'auto-insert-conf)
 
 ;; (require 'eaf-conf)

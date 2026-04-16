@@ -12,15 +12,20 @@
   (when (zerop (buffer-size))                   ; 确保文件为空
     (yas-expand-snippet (yas-lookup-snippet "header" major-mode))))
 
-(auto-insert-mode 1)
-;; (setq auto-insert-query nil)                    ; 自动插入时不询问
-(setq auto-insert-alist
-      (append '((("\\.c\\'" . "C header") . auto-insert-header)
-                (("\\.cpp\\'" . "C++ header") . auto-insert-header)
-                (("\\.go\\'" . "Go header") . auto-insert-header)
-                (("\\.py\\'" . "Python header") . auto-insert-header)
-                (("\\.sh\\'" . "Shell header") . auto-insert-header))
-              auto-insert-alist))
+(defun auto-insert-setting()
+  (auto-insert-mode 1)
+
+  ;; (setq auto-insert-query nil)                    ; 自动插入时不询问
+  (setq auto-insert-alist
+        (append '((("\\.c\\'" . "C header") . auto-insert-header)
+                  (("\\.cpp\\'" . "C++ header") . auto-insert-header)
+                  (("\\.go\\'" . "Go header") . auto-insert-header)
+                  (("\\.py\\'" . "Python header") . auto-insert-header)
+                  (("\\.sh\\'" . "Shell header") . auto-insert-header))
+                auto-insert-alist)))
+
+(add-hook 'emacs-startup-hook
+          (lambda () (run-with-idle-timer 0.2 nil #'auto-insert-setting)))
 
 (provide 'auto-insert-conf)
 
