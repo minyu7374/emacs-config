@@ -39,7 +39,6 @@ fi
 
 function pre_task() {
     cabal update
-    pip install --upgrade pip
 
     npm_install="npm install -g"
     which pnpm >/dev/null && npm_install="pnpm add -g"
@@ -105,7 +104,7 @@ function for_c() {
         brew install llvm ccls
         ;;
     esac
-    # pip install cmake-language-server
+    # uv tool install cmake-language-server
     # cmake-language-server维护状态不行了, 改用neocmakelsp
     cargo install neocmakelsp
 }
@@ -167,7 +166,7 @@ function for_markdown() {
     # sudo gem install mdl
 
     ## General (natural language)
-    pip install proselint
+    uv tool install proselint
     $npm_install textlint
 
     ## MarkedJS
@@ -204,17 +203,22 @@ function for_markdown() {
 }
 
 function for_python() {
-    pip install nose
-    pip install pytest
+    uv tool install nose
+    uv tool install pytest
 
-    pip install autopep8 pylint yapf
-    pip install black isort
-    pip install pipenv poetry
-    pip install "python-language-server[all]"
-    pip install "python-lsp-server[all]"
+    uv tool install autopep8
+    uv tool install pylint
+    uv tool install yapf
+    uv tool install black
+    uv tool install isort
+    uv tool install uv
+    uv tool install toolenv
+    uv tool install poetry
+    # uv tool install "python-language-server[all]"
+    uv tool install "python-lsp-server[all]"
     # $npm_install pyright
-    pip install basedpyright
-    pip install cython
+    uv tool install basedpyright
+    uv tool install cython
     uv tool install ruff@latest
 }
 
