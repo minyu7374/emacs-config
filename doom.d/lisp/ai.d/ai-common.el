@@ -30,26 +30,18 @@ Returns the token string."
      :token ,(lambda () (+llm--get-token "gemini/token" "GEMINI_API_KEY")))
     (codeium
      :key ,(lambda () (+llm--get-token "codeium/key" "CODEIUM_API_KEY")))
-    (chatanywhere
-     :host ,(lambda () (+llm--get-host "CHATANYWHERE_API_HOST" "api.chatanywhere.tech"))
-     :token ,(lambda () (+llm--get-token "chatanywhere/token" "CHATANYWHERE_API_KEY")))
     (nvidia
      :host ,(lambda () (+llm--get-host "NVIDIA_NIM_API_HOST" "integrate.api.nvidia.com"))
      :token ,(lambda () (+llm--get-token "nvidia/token" "NVIDIA_NIM_API_KEY")))
     (zai
      :host ,(lambda () (+llm--get-host "ZAI_API_HOST" "open.bigmodel.cn/api/paas/v4"))
+     :coding-host ,(lambda () (+llm--get-host "ZAI_CODING_API_HOST" "open.bigmodel.cn/api/coding/paas/v4"))
      :claude-host ,(lambda () (+llm--get-host "ZAI_CLAUDE_API_HOST" "open.bigmodel.cn/api/anthropic"))
      :token ,(lambda () (+llm--get-token "zai/token" "ZAI_API_KEY")))
     (ccr
      :host ,(lambda () (+llm--get-host "CCR_API_HOST" "127.0.0.1:3456"))
      :token ,(lambda () (+llm--get-token "ccr/token" "CCR_API_KEY"))
-     :protocol "http")
-    (minyu-ds
-     :host ,(lambda () (+llm--get-host "MINYU_DEEPSEEK_API_HOST" "openai.wminyu.top:433/deepseek"))
-     :token ,(lambda () (+llm--get-token "deepseek/web-token" "DEEPSEEK_WEB_API_KEY")))
-    (minyu-qwen
-     :host ,(lambda () (+llm--get-host "MINYU_QWEN_API_HOST" "openai.wminyu.top:433/qwen"))
-     :token ,(lambda () (+llm--get-token "qwen/web-token" "QWEN_WEB_API_KEY"))))
+     :protocol "http"))
   "Alist of LLM API backend configurations.
 Each entry is a list (BACKEND-NAME :KEY-TYPE (lambda () (GET-FUNCTION ...))).
 Supported KEY-TYPEs are :host, :claude-host, :token and :protocol.")

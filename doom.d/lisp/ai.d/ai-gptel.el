@@ -14,43 +14,24 @@
 (add-hook '+llm-cache-clearers (lambda () (setq +gptel--backend-setup-done nil)) 'append)
 
 (defun +gptel--backend-setup (&optional backend)
-  "Setup backend for gptel."
+  "Setup backend to BACKEND for gptel."
   (interactive)
   (unless +gptel--backend-setup-done
     (setq +gptel--backends
-          `((gemini . (,(gptel-make-gemini "Gemini" :key (+llm-get-provider-conf 'gemini :token) :stream t) gemini-2.5-flash))
+          `((gemini . (,(gptel-make-gemini "Gemini" :key (+llm-get-provider-conf 'gemini :token) :stream t) gemini-3-flash-preview))
 
             (nvidia . (,(gptel-make-openai "Nvidia"
                           :host (+llm-get-provider-conf 'nvidia :host)
                           :key (+llm-get-provider-conf 'nvidia :token)
-                          :models '(z-ai/glm4.7 minimaxai/minimax-m2.1)
-                          :stream t) minimaxai/minimax-m2.1))
+                          :models '(z-ai/glm5 minimaxai/minimax-m2.5)
+                          :stream t) minimaxai/minimax-m2.5))
 
             (zai . (,(gptel-make-openai "Zai"
                        :host (+llm-get-provider-conf 'zai :host)
                        :key (+llm-get-provider-conf 'zai :token)
                        :endpoint "/chat/completions"
-                       :models '(glm-5 glm-4.7 glm-4.6v glm-4.5 glm-4.5-air)
-                       :stream t) glm-4.5-air))
-
-            (chatanywhere . (,(gptel-make-openai "ChatAnyWhere"
-                                :host (+llm-get-provider-conf 'chatanywhere :host)
-                                :key (+llm-get-provider-conf 'chatanywhere :token)
-                                :models '(gpt-5.1 gpt-5-mini gpt-4 gpt-4o gpt-4o-mini)
-                                :stream t) gpt-5-mini))
-
-            ;; web页面逆向api部署本地，nginx反向代理
-            ;; (minyu-ds . (,(gptel-make-openai "MinyuDeepseek"
-            ;;                 :host (+llm-get-provider-conf 'minyu-ds :host)
-            ;;                 :key (+llm-get-provider-conf 'minyu-ds :token)
-            ;;                 :models '(deepseek-chat deepseek-coder deepseek-reasoner)
-            ;;                 :stream t) deepseek-chat))
-
-            (minyu-qwen . (,(gptel-make-openai "MinyuQwen"
-                              :host (+llm-get-provider-conf 'minyu-qwen :host)
-                              :key (+llm-get-provider-conf 'minyu-qwen :token)
-                              :models '(qwen-max qwen-plus qwen-coder)
-                              :stream t) qwen-plus))))
+                       :models '(glm-4.7-flash)
+                       :stream t) glm-4.7-flash))))
 
     (setq +gptel--backend-setup-done t))
   (+gptel--switch-backend (or backend +gptel--active-backend (caar +gptel--backends))))
