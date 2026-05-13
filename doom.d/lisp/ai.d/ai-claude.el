@@ -23,7 +23,10 @@
     (interactive)
     (unless +claude--backend-setup-done
       (setq +claude--backends
-            `((gemini . ,(lambda()
+            `((claude . ,(lambda ()
+                           (setenv "ANTHROPIC_BASE_URL" nil)
+                           (setenv "ANTHROPIC_AUTH_TOKEN" nil)))
+              (gemini . ,(lambda()
                            ;; 支持gemini
                            (setenv "GEMINI_API_KEY" (+llm-get-provider-conf 'gemini :token))))
               (ccr . ,(lambda ()
