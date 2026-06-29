@@ -15,7 +15,7 @@
 (require 'ai-copilot)
 (require 'ai-codeium)
 (require 'ai-claude)
-(require 'ai-aider)
+;;(require 'ai-aider)
 
 (provide 'ai)
 ;;; ai.el ends here.

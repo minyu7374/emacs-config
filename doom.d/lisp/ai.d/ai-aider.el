@@ -28,13 +28,12 @@
                            (setenv "GEMINI_API_KEY" (+llm-get-provider-conf 'gemini :token))
                            ;; (setenv "AIDER_MODEL" "gemini/gemini-3-flash-preview")
                            ;; (setenv "AIDER_WEAK_MODEL" "gemini/gemini-2.5-flash")
-                           (setq aidermacs-default-model "gemini/gemini-3-flash-preview")))
+                           (setq aidermacs-default-model "gemini/gemini-3.5-flash")))
 
               (nvidia . ,(lambda ()
                            (setenv "OPENAI_API_BASE" (format "https://%s/v1" (+llm-get-provider-conf 'nvidia :host)))
                            (setenv "OPENAI_API_KEY" (+llm-get-provider-conf 'nvidia :token))
-                           (setq aidermacs-default-model "openai/z-ai/glm5")
-                           (setq aidermacs-weak-model "openai/minimaxai/minimax-m2.5")))
+                           (setq aidermacs-default-model "openai/minimaxai/minimax-m3")))
 
               (zai . ,(lambda ()
                         (setenv "OPENAI_API_BASE" (format "https://%s" (+llm-get-provider-conf 'zai :host-coding)))

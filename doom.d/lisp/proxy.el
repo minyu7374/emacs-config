@@ -50,15 +50,14 @@
 
   (if proxy-status (proxy-off) (proxy-on)))
 
-;; 现在使用chatgpt，启动emacs就按默认值开启代理
-(_proxy-on default-proxy-ip default-proxy-port nil)
+;; (_proxy-on default-proxy-ip default-proxy-port nil)
 
 (global-set-key (kbd "\C-ctp") 'proxy-toggle)
 (map! :leader
       (:prefix ("yp" . "proxy")
-               :desc "proxy toggle" :nv "t" #'proxy-toggle
-               :desc "proxy on" :nv "o" #'proxy-on
-               :desc "proxy off" :nv "f" #'proxy-off))
+       :desc "proxy toggle" :nv "t" #'proxy-toggle
+       :desc "proxy on" :nv "o" #'proxy-on
+       :desc "proxy off" :nv "f" #'proxy-off))
 
 (provide 'proxy)
 

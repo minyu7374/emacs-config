@@ -8,68 +8,30 @@
 
 ;;; Code:
 
-;; https://github.com/cpoile/claudemacs
-(use-package! claudemacs
-  :commands (claudemacs-start-menu claudemacs-resume-menu claudemacs-transient-menu)   ;; 运行命令才加载
-  :init
-  (defvar +claude--backends nil "Claude backends list.")
-  (defvar +claude--active-backend nil "Current Active Claude backend.")
-  (defvar +claude--backend-setup-done nil)
-  ;; backends里设置的是lambda函数，不存储数据。llm-cache清理，也不用重置，无需注册
-  ;; (add-hook '+llm-cache-clearers (lambda () (setq +claude--backend-setup-done nil)) 'append)
-
-  (defun +claude--backend-setup (&optional backend)
-    "Setup backend for claude-code."
-    (interactive)
-    (unless +claude--backend-setup-done
-      (setq +claude--backends
-            `((claude . ,(lambda ()
-                           (setenv "ANTHROPIC_BASE_URL" nil)
-                           (setenv "ANTHROPIC_AUTH_TOKEN" nil)))
-              (gemini . ,(lambda()
-                           ;; 支持gemini
-                           (setenv "GEMINI_API_KEY" (+llm-get-provider-conf 'gemini :token))))
-              (ccr . ,(lambda ()
-                        (setenv "ANTHROPIC_BASE_URL" (format "%s://%s" (+llm-get-provider-protocol 'ccr) (+llm-get-provider-conf 'ccr :host)))
-                        (setenv "ANTHROPIC_AUTH_TOKEN" (+llm-get-provider-conf 'ccr :token))))
-              (zai . ,(lambda ()
-                        ;; (setenv "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-4.5-air")
-                        ;; (setenv "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-4.7")
-                        ;; (setenv "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4.7")
-                        (setenv "ANTHROPIC_BASE_URL" (format "%s://%s" (+llm-get-provider-protocol 'zai) (+llm-get-provider-conf 'zai :claude-host)))
-                        (setenv "ANTHROPIC_AUTH_TOKEN" (+llm-get-provider-conf 'zai :token))))))
-      (setq +claude--backend-setup-done t))
-    (+claude--switch-backend (or backend +claude--active-backend (caar +claude--backends))))
-
-  ;; switch 函数拆分为两份：一份仅设置选中的后端，另一份才执行后端配置，在eat启动时运行，保证环境变量更好地继承
-  (defun +claude--switch-backend (backend)
-    "Switch claudemacs backend to BACKEND."
-    (interactive
-     (list (intern (completing-read "Select backend: " (mapcar #'car +claude--backends) nil t))))
-    (setq +claude--active-backend backend)
-    (message "Claudemacs active backend switch to: %s" +claude--active-backend))
-
-  (defun +claude--set-backend (&rest _)
-    (let ((func (alist-get +claude--active-backend +claude--backends)))
-      (when func
-        (funcall func)
-        (message "Claudemacs backend success set to: %s" +claude--active-backend))))
-
-  (dolist (cmd '(claudemacs-start-menu claudemacs-resume-menu claudemacs-transient-menu))
-    (advice-add cmd :before #'+claude--set-backend))
-
+;; https://github.com/stevemolitor/claude-code.el
+;; 从 claudemacs 切回：claude-code 功能更完整（CLI hooks、plan/auto-accept 模式循环、fork 等）。
+;; claudemacs 的多 agent 曾是卖点，但 codex 实测体验差，多端优势不成立，故只集成 claude。
+(use-package! claude-code
+  :commands (claude-code claude-code-resume claude-code-continue claude-code-transient)   ;; 运行命令才加载
+  :bind-keymap ("\C-cc" . claude-code-command-map)   ;; C-c c 进入 claude-code 命令前缀
   :config
-  (+claude--backend-setup 'ccr))
+  ;; 后端保持默认 eat，实际使用体验优于 vterm
+  ;; (setq claude-code-terminal-backend 'vterm)
+  (claude-code-mode))
 
-(global-set-key (kbd "\C-cc") 'claudemacs-transient-menu) ;; C-c c 原本绑定comment-line，但平时都用 SPC c SPC，这里覆盖掉也没事
+;; 供应商切换由外部 cc-switch 管理，Emacs 内不再做后端管控逻辑。
+
+;; C-c c 原为 comment-line，这里覆盖；平时用 SPC c SPC 注释，不冲突。
 (map! :leader
-      (:prefix ("yc" . "Claudemacs")
-       :desc "Claudemacs start"            :nv "c" #'claudemacs-start-menu
-       :desc "Claudemacs resume"           :nv "r" #'claudemacs-resume-menu
-       :desc "Quit Claudemacs"             :nv "q" #'claudemacs-kill
-       :desc "Claudemacs backend setup"    :nv "b" #'+claude--backend-setup
-       :desc "Switch Claudemacs backend"   :nv "s" #'+claude--switch-backend
-       :desc "Claudemacs transient menu"   :nv "m" #'claudemacs-transient-menu))
+      (:prefix ("yc" . "Claude Code")
+       :desc "Start Claude"            :nv "c" #'claude-code
+       :desc "Resume session"          :nv "r" #'claude-code-resume
+       :desc "Continue session"        :nv "C" #'claude-code-continue
+       :desc "Toggle window"           :nv "t" #'claude-code-toggle
+       :desc "Send region/buffer"      :nv "s" #'claude-code-send-region
+       :desc "Fix error at point"      :nv "e" #'claude-code-fix-error-at-point
+       :desc "Kill session"            :nv "q" #'claude-code-kill
+       :desc "Transient menu"          :nv "m" #'claude-code-transient))
 
 (provide 'ai-claude)
 

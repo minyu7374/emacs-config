@@ -2,7 +2,6 @@
 
 个人 emacs 配置文件及相关资源
 
-+ emacs 版本: GNU Emacs 28.2
 + spacemacs 分支: develop
 + doom 分支: master
 
