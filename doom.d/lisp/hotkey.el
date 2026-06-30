@@ -17,7 +17,6 @@
 ;;   (global-unset-key k))
 
 ;; comment
-(global-set-key (kbd "\C-cc") 'comment-line)
 (map! :leader (:prefix "c"
                ;;和vim中NERDCommenter快捷键保持一致
                :desc "Comment line toggle" :nv "SPC" #'comment-line

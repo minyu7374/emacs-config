@@ -13,7 +13,7 @@
 ;; xref/tree-sitter/imenu/project 暴露成工具给它调用。
 (use-package! claude-code-ide
   :commands (claude-code-ide claude-code-ide-menu claude-code-ide-resume claude-code-ide-continue)   ;; 运行命令才加载
-  :bind ("\C-cc" . claude-code-ide-menu)   ;; C-c c 原为 comment-line，这里覆盖；平时用 SPC c SPC 注释，不冲突
+  :bind ("\C-cc" . claude-code-ide-menu)
   :config
   ;; (setq claude-code-ide-terminal-backend 'eat)   ;; 默认 vterm
   (claude-code-ide-emacs-tools-setup))            ;; 启用 xref/tree-sitter/imenu/project 等 MCP 工具
