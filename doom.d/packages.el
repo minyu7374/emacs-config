@@ -83,10 +83,10 @@
 ;; (package! aider :recipe (:host github :repo "tninja/aider.el"))
 (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))
 
-(package! eat) ;; claude-code 默认终端后端，实测比 vterm 稳；切换见 ai-claude.el
-;; (package! monet :recipe (:host github :repo "stevemolitor/monet")) ;; 可选：Emacs 内显示 diff/诊断
-(package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
-;; (package! claudemacs :recipe (:host github :repo "cpoile/claudemacs")) ;; 切回 claude-code
+(package! eat) ;; 终端后端，实测比 vterm 稳；切换见 ai-claude.el
+(package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el")) ;; 基于 MCP 的 IDE 集成（ediff 审查、暴露 Emacs 工具给 Claude）
+;; (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el")) ;; 切到 claude-code-ide
+;; (package! claudemacs :recipe (:host github :repo "cpoile/claudemacs"))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...

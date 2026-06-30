@@ -8,30 +8,29 @@
 
 ;;; Code:
 
-;; https://github.com/stevemolitor/claude-code.el
-;; 从 claudemacs 切回：claude-code 功能更完整（CLI hooks、plan/auto-accept 模式循环、fork 等）。
-;; claudemacs 的多 agent 曾是卖点，但 codex 实测体验差，多端优势不成立，故只集成 claude。
-(use-package! claude-code
-  :commands (claude-code claude-code-resume claude-code-continue claude-code-transient)   ;; 运行命令才加载
-  :bind-keymap ("\C-cc" . claude-code-command-map)   ;; C-c c 进入 claude-code 命令前缀
+;; https://github.com/manzaltu/claude-code-ide.el
+;; 基于 MCP 的 IDE 集成：Claude 改动走 ediff 审查，诊断/选区自动共享，并把 Emacs 的
+;; xref/tree-sitter/imenu/project 暴露成工具给它调用。
+(use-package! claude-code-ide
+  :commands (claude-code-ide claude-code-ide-menu claude-code-ide-resume claude-code-ide-continue)   ;; 运行命令才加载
+  :bind ("\C-cc" . claude-code-ide-menu)   ;; C-c c 原为 comment-line，这里覆盖；平时用 SPC c SPC 注释，不冲突
   :config
-  ;; 后端保持默认 eat，实际使用体验优于 vterm
-  ;; (setq claude-code-terminal-backend 'vterm)
-  (claude-code-mode))
+  ;; (setq claude-code-ide-terminal-backend 'eat)   ;; 默认 vterm
+  (claude-code-ide-emacs-tools-setup))            ;; 启用 xref/tree-sitter/imenu/project 等 MCP 工具
 
 ;; 供应商切换由外部 cc-switch 管理，Emacs 内不再做后端管控逻辑。
 
-;; C-c c 原为 comment-line，这里覆盖；平时用 SPC c SPC 注释，不冲突。
 (map! :leader
-      (:prefix ("yc" . "Claude Code")
-       :desc "Start Claude"            :nv "c" #'claude-code
-       :desc "Resume session"          :nv "r" #'claude-code-resume
-       :desc "Continue session"        :nv "C" #'claude-code-continue
-       :desc "Toggle window"           :nv "t" #'claude-code-toggle
-       :desc "Send region/buffer"      :nv "s" #'claude-code-send-region
-       :desc "Fix error at point"      :nv "e" #'claude-code-fix-error-at-point
-       :desc "Kill session"            :nv "q" #'claude-code-kill
-       :desc "Transient menu"          :nv "m" #'claude-code-transient))
+      (:prefix ("yc" . "Claude Code IDE")
+       :desc "Start Claude"            :nv "c" #'claude-code-ide
+       :desc "Resume session"          :nv "r" #'claude-code-ide-resume
+       :desc "Continue session"        :nv "C" #'claude-code-ide-continue
+       :desc "Toggle window"           :nv "t" #'claude-code-ide-toggle
+       :desc "Send prompt"             :nv "s" #'claude-code-ide-send-prompt
+       :desc "Send region as @"        :nv "@" #'claude-code-ide-insert-at-mentioned
+       :desc "List sessions"           :nv "l" #'claude-code-ide-list-sessions
+       :desc "Stop session"            :nv "q" #'claude-code-ide-stop
+       :desc "Menu"                    :nv "m" #'claude-code-ide-menu))
 
 (provide 'ai-claude)
 
