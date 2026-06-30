@@ -100,7 +100,11 @@
 (require 'cc-conf)
 ;; (require 'java-conf)
 (require 'ampl-mode)
-(require 'lsp-conf)
+;; LSP 后端二选一：init.el 的 lsp 模块带 +eglot 则加载 eglot-conf，否则 lsp-conf。
+;; 切到 eglot 时记得把 init.el 的 (treemacs +lsp) 去掉 +lsp（lsp-treemacs 仅支持 lsp-mode）。
+(if (modulep! :tools lsp +eglot)
+    (require 'eglot-conf)
+  (require 'lsp-conf))
 (require 'syntax-check)
 (require 'format-conf)
 ;; (require 'auto-insert-conf)

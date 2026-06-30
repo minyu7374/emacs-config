@@ -60,6 +60,11 @@
 
 ;; (package! treemacs-evil)
 
+;; eglot 方案：childframe 悬浮文档（lsp-ui-doc 的替代，见 eglot-conf.el）。
+;; consult-eglot / flycheck-eglot 由 tools/lsp +eglot 自动按需安装，无需在此声明。
+(when (modulep! :tools lsp +eglot)
+  (package! eldoc-box))
+
 ;; Mac GUI需要单独加载shell变量
 (package! exec-path-from-shell :ignore (not (eq system-type 'darwin)))
 
