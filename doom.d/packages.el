@@ -95,6 +95,10 @@
 (package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el")) ;; 基于 MCP 的 IDE 集成（ediff 审查、暴露 Emacs 工具给 Claude）
 ;; (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el")) ;; 切到 claude-code-ide
 ;; (package! claudemacs :recipe (:host github :repo "cpoile/claudemacs"))
+;; Codex 对应物（纯 buffer 客户端，见 ai-codex.el）；bin/ 是 Emacs MCP 桥脚本，
+;; 排除仓库自带的陈旧 autoloads（straight 会重新生成）。
+(package! codex-ide :recipe (:host github :repo "dgillis/emacs-codex-ide"
+                             :files (:defaults "bin" (:exclude "*-autoloads.el"))))
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...

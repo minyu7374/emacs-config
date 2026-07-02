@@ -15,6 +15,7 @@
 (require 'ai-copilot)
 (require 'ai-codeium)
 (require 'ai-claude)
+(require 'ai-codex)
 ;;(require 'ai-aider)
 
 (provide 'ai)
