@@ -60,13 +60,12 @@
 
 ;; (package! treemacs-evil)
 
-;; eglot 方案：childframe 悬浮文档（lsp-ui-doc 的替代，见 eglot-conf.el）。
-;; consult-eglot / flycheck-eglot 由 tools/lsp +eglot 自动按需安装，无需在此声明。
-(when (modulep! :tools lsp +eglot)
-  (package! eldoc-box))
+;; eglot 悬浮文档的 childframe 渲染（见 eglot-conf.el）。
+;; consult-eglot 由 tools/lsp +eglot 自动按需安装；诊断走 checkers/syntax +flymake 直通。
+(package! eldoc-box)
 
-;; Mac GUI需要单独加载shell变量
-(package! exec-path-from-shell :ignore (not (eq system-type 'darwin)))
+;; shell 环境改用 `doom env` 快照（见 mac-opt.el），exec-path-from-shell 可弃用。
+;; (package! exec-path-from-shell :ignore (not (eq system-type 'darwin)))
 
 ;; GitLens
 (package! blamer :recipe (:host github :repo "artawower/blamer.el"))
@@ -89,7 +88,7 @@
 
 ;; ;; (package! transient)  ;; tool/magit 中已添加
 ;; (package! aider :recipe (:host github :repo "tninja/aider.el"))
-(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))
+;; (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))
 
 (package! eat) ;; 终端后端，实测比 vterm 稳；切换见 ai-claude.el
 (package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el")) ;; 基于 MCP 的 IDE 集成（ediff 审查、暴露 Emacs 工具给 Claude）

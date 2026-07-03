@@ -1,127 +1,102 @@
-;;; java-conf.el -- Java Language Support
+;;; java-conf.el -- Java Language Support  -*- lexical-binding: t; -*-
 ;;; Commentary:
-;;;      java语言支持相关配置
+;;      java 语言支持（eglot + jdtls）。
+;;      - lombok 以 javaagent 注入 jdtls（jar 缺失时首次连接自动下载）。
+;;      - maven user settings 走 eglot-workspace-configuration，
+;;        +java/maven-switch 切换后对已连接 server 即时生效。
+;;      - JDK 切换是纯环境变量操作（优先用 direnv 按项目管理，此处仅全局兜底）。
+;;      启用：init.el 开启 (java +lsp +tree-sitter)，config.el 取消注释
+;;      (require 'java-conf)，并确保 jdtls 可执行文件在 PATH 上。
 
 ;;; Code:
 
 (require 'cl-lib)
 
-(after! lsp-java
-  ;; jdk8 isn't supported in latest version
-  ;; https://github.com
-  ;; (setq lsp-java-jdt-download-url "https://download.eclipse.org/jdtls/milestones/0.57.0/jdt-language-server-0.57.0-202006172108.tar.gz")
+;; 前向声明：eglot 延迟加载，消除字节编译的 free-function 告警。
+(declare-function eglot-current-server "eglot")
+(declare-function eglot-signal-didChangeConfiguration "eglot")
 
-  ;; 通过direnv控制不同项目的环境变量即可
-  ;; (if (string= (getenv "EMACS_WORK_PRIORITY") "1")
-  ;;   (progn
-  ;;     (setq lsp-java-configuration-runtimes '[
-  ;;                                             ;; (:name "JavaSE-1.8" :path "/opt/oraclejdk-bin-8")
-  ;;                                             (:name "JavaSE-11" :path "/opt/openjdk-bin-11" :default t)
-  ;;                                             (:name "JavaSE-17" :path "/opt/openjdk-bin-17")
-  ;;                                             ])
-  ;;     (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-work.xml"))
-  ;;   (progn
-  ;;     (setq lsp-java-configuration-runtimes '[
-  ;;                                             ;; (:name "JavaSE-1.8" :path "/opt/oraclejdk-bin-8")
-  ;;                                             (:name "JavaSE-17" :path "/opt/openjdk-bin-11")
-  ;;                                             (:name "JavaSE-11" :path "/opt/openjdk-bin-17" :default t)
-  ;;                                             ])
-  ;;     (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-default.xml")))
+;;;; Server（jdtls + lombok）
 
-  (setq lombok-library-path (concat doom-data-dir "lombok.jar"))
-  (unless (file-exists-p lombok-library-path)
-    (url-copy-file "https://projectlombok.org/downloads/lombok.jar" lombok-library-path))
+;; contact 用函数以延迟求值：lombok 下载发生在首次打开 java buffer 连接时，
+;; 而非配置加载时。
+(set-eglot-client! '(java-mode java-ts-mode) #'+java--jdtls-contact)
 
-  (setq lsp-java-vmargs 
-        '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms100m"))
-  (push (concat "-javaagent:"
-                (expand-file-name lombok-library-path))
-        lsp-java-vmargs)
+(defun +java--jdtls-contact (&optional _interactive)
+  "Build the jdtls command, injecting lombok and JVM tuning args."
+  `("jdtls"
+    ,(concat "--jvm-arg=-javaagent:" (+java--ensure-lombok))
+    "--jvm-arg=-XX:+UseParallelGC"
+    "--jvm-arg=-XX:GCTimeRatio=4"
+    "--jvm-arg=-XX:AdaptiveSizePolicyWeight=90"
+    "--jvm-arg=-Dsun.zip.disableMemoryMapping=true"
+    "--jvm-arg=-Xmx4G"
+    "--jvm-arg=-Xms100m"))
 
-  ;; Spring boot support (Experimental)
-  ;; (require 'lsp-java-boot)
-  ;; (add-hook 'lsp-mode-hook #'lsp-lens-mode)
-  ;; (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
-  )
+(defvar +java-lombok-jar (concat doom-data-dir "lombok.jar")
+  "Path to the lombok jar loaded into jdtls as a javaagent.")
 
-;; (defun java-env-oraclejdk8()
-;;   "OracleJDK8 Java environment variables."
-;;   (interactive)
+(defun +java--ensure-lombok ()
+  "Return `+java-lombok-jar', downloading it first if missing."
+  (unless (file-exists-p +java-lombok-jar)
+    (url-copy-file "https://projectlombok.org/downloads/lombok.jar"
+                   +java-lombok-jar))
+  (expand-file-name +java-lombok-jar))
 
-;;   (_remove-java-home-from-path)
-;;   (setenv "JAVA_HOME" "/opt/oraclejdk-bin-8")
-;;   (setenv "JDK_HOME" "/opt/oraclejdk-bin-8")
-;;   (setenv "PATH" (concat "/opt/oraclejdk-bin-8:" (getenv "PATH")))
-;;   )
+;;;; Maven settings 切换（jdtls workspace configuration）
 
-(defun java-env-openjdk11()
-  "OpenJDK11 Java environment variables."
+(defvar +java-maven-settings
+  '(("Default" . "~/.m2/settings-default.xml")
+    ("Work"    . "~/.m2/settings-work.xml"))
+  "Selectable Maven user-settings files, as (LABEL . PATH).")
+
+(defun +java/maven-switch ()
+  "Switch the Maven user settings used by jdtls."
   (interactive)
+  (let* ((choice (completing-read "Select Maven settings: "
+                                  (mapcar #'car +java-maven-settings) nil t))
+         (path (expand-file-name (cdr (assoc choice +java-maven-settings)))))
+    (setq-default eglot-workspace-configuration
+                  `(:java (:configuration (:maven (:userSettings ,path)))))
+    ;; 已连接的 jdtls 即时下发新配置；未连接则在下次连接时随初始化生效。
+    (when-let ((server (and (fboundp 'eglot-current-server)
+                            (eglot-current-server))))
+      (eglot-signal-didChangeConfiguration server))
+    (message "Maven settings → %s" path)))
 
-  (_remove-java-home-from-path)
-  (setenv "JAVA_HOME" "/opt/openjdk-bin-11")
-  (setenv "JDK_HOME" "/opt/openjdk-bin-11")
-  (setenv "PATH" (concat "/opt/openjdk-bin-11:" (getenv "PATH"))))
+;;;; JDK 环境切换（全局环境变量，与 LSP 无关）
 
-(defun java-env-openjdk17()
-  "OpenJDK17 Java environment variables."
+(defvar +java-jdk-paths
+  '(("OpenJDK 11" . "/opt/openjdk-bin-11")
+    ("OpenJDK 17" . "/opt/openjdk-bin-17"))
+  "Selectable JDK installations, as (LABEL . PATH).")
+
+(defun +java/env-switch ()
+  "Switch JAVA_HOME/JDK_HOME/PATH to a JDK from `+java-jdk-paths'.
+切换后已连接的 jdtls 需 M-x eglot-reconnect 才会使用新 JDK。"
   (interactive)
+  (let* ((choice (completing-read "Select Java version: "
+                                  (mapcar #'car +java-jdk-paths) nil t))
+         (path (cdr (assoc choice +java-jdk-paths))))
+    (+java--strip-jdk-from-path)
+    (setenv "JAVA_HOME" path)
+    (setenv "JDK_HOME" path)
+    (setenv "PATH" (concat path ":" (getenv "PATH")))
+    (message "JAVA_HOME → %s" path)))
 
-  (_remove-java-home-from-path)
-  (setenv "JAVA_HOME" "/opt/openjdk-bin-17")
-  (setenv "JDK_HOME" "/opt/openjdk-bin-17")
-  (setenv "PATH" (concat "/opt/openjdk-bin-17:" (getenv "PATH"))))
-
-(defun maven-set-default()
-  "Set Default Maven config."
-  (interactive)
-
-  (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-default.xml"))
-
-(defun maven-set-work()
-  "Set Work Maven config."
-  (interactive)
-
-  (setq lsp-java-configuration-maven-user-settings "~/.m2/settings-work.xml"))
-
-(defun java-env-switch()
-  "Switch between different Java environments."
-  (interactive)
-  (let ((choice (completing-read
-                 "Select Java version: "
-                 ;; '("OracleJDK 8" "OpenJDK 11" "OpenJDK 17"))))
-                 '("OpenJDK 11" "OpenJDK 17"))))
-    (cond
-     ;; ((string-equal choice "OracleJDK 8") (java-env-oraclejdk8))
-     ((string-equal choice "OpenJDK 11") (java-env-openjdk11))
-     ((string-equal choice "OpenJDK 17") (java-env-openjdk17))
-     (t (message "Invalid choice")))))
-
-(defun maven-set-switch()
-  "Switch between different Maven settings."
-  (interactive)
-  (let ((choice (completing-read
-                 "Select Maven settings: "
-                 '("Default" "Work"))))
-    (cond
-     ((string-equal choice "Default") (maven-set-default))
-     ((string-equal choice "Work") (maven-set-work))
-     (t (message "Invalid choice")))))
-
-(defun _remove-java-home-from-path ()
-  "Remove all OracleJDK or OpenJDK paths from PATH."
-  (let ((path-list (split-string (getenv "PATH") ":")))
-    (setenv "PATH"
-            (mapconcat 'identity
-                       (cl-remove-if (lambda (path)
-                                       (or (string-match-p "oraclejdk" path)
-                                           (string-match-p "openjdk" path)))
-                                     path-list) ":"))))
+(defun +java--strip-jdk-from-path ()
+  "Remove all OracleJDK/OpenJDK entries from PATH."
+  (setenv "PATH"
+          (mapconcat #'identity
+                     (cl-remove-if (lambda (path)
+                                     (string-match-p "oraclejdk\\|openjdk" path))
+                                   (split-string (getenv "PATH") ":"))
+                     ":")))
 
 (map! :leader
       (:prefix ("yj" . "java")
-       :desc "java environment switch" :nv "e" #'java-env-switch
-       :desc "maven config switch" :nv "m" #'maven-set-switch))
+       :desc "java environment switch" :nv "e" #'+java/env-switch
+       :desc "maven config switch"     :nv "m" #'+java/maven-switch))
 
 (provide 'java-conf)
 

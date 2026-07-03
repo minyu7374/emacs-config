@@ -83,8 +83,8 @@
 ;; (add-to-list 'load-path (expand-file-name "lisp" (file-name-directory (or load-file-name buffer-file-name))))
 (add-to-list 'load-path (expand-file-name "lisp" doom-user-dir))
 
-(if (eq system-type 'darwin)
-    (require 'mac-opt))
+;; (if (eq system-type 'darwin)
+;;     (require 'mac-opt))
 
 (require 'base)
 (require 'font)
@@ -100,11 +100,7 @@
 (require 'cc-conf)
 ;; (require 'java-conf)
 (require 'ampl-mode)
-;; LSP 后端二选一：init.el 的 lsp 模块带 +eglot 则加载 eglot-conf，否则 lsp-conf。
-;; 切到 eglot 时记得把 init.el 的 (treemacs +lsp) 去掉 +lsp（lsp-treemacs 仅支持 lsp-mode）。
-(if (modulep! :tools lsp +eglot)
-    (require 'eglot-conf)
-  (require 'lsp-conf))
+(require 'eglot-conf)
 (require 'syntax-check)
 (require 'format-conf)
 ;; (require 'auto-insert-conf)

@@ -20,9 +20,6 @@
 ;;   (unless (eq 'nongnu-elpa (car recipe))
 ;;     (funcall fn recipe)))
 
-;; ;; lsp-mode: plist`s provide better performance in deserialization and also put less presure than `hash-table`s.
-;; (setenv "LSP_USE_PLISTS" "true")
-
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
        ;;chinese
@@ -99,8 +96,7 @@
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       ;; syntax              ; tasing you for every semicolon you forget
-       (syntax +childframe) ; tasing you for every semicolon you forget
+       (syntax +childframe +flymake) ; tasing you for every semicolon you forget
        ;;(spell +flyspell) ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
@@ -117,8 +113,7 @@
        lookup              ; navigate your code and its documentation
        ;; (lookup +dictionary +offline)              ; navigate your code and its documentation
        llm               ; when I said you needed friends, I didn't mean...
-       (lsp +eglot +peek)      ; M-x vscode
-       ;;(lsp +peek)       ; M-x vscode
+       (lsp +eglot)      ; M-x vscode
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds

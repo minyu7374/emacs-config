@@ -4,23 +4,24 @@
 
 ;;; Code:
 
-;; Mac(GUI) 只有基础的环境变量集，需加载shell环境变量
-(use-package! exec-path-from-shell
-  :custom
-  ;; (exec-path-from-shell-arguments (if (string-match-p "emacs-plus" invocation-directory) '("-l") nil))
-  (exec-path-from-shell-arguments '("-l"))
-  (exec-path-from-shell-variables '("PATH" "GOPATH" "PNPM_HOME"))
-  :config
-  ;; (when (not (boundp 'mac-carbon-version-string)) ;; emacs-mac 独有变量
-  (when (not (eq window-system 'mac))                ;; 常规eamcs上对应值为ns
-    (exec-path-from-shell-initialize)))
+;; Mac(GUI) 只有基础的环境变量集，shell 环境用 Doom 的 envvar 快照：
+;; `doom sync --env` 生成 elisp 格式快照（.local/etc/init.d/05-doom-env.load.el，
+;; 机器本地文件，不入库），启动时直接 load——比 exec-path-from-shell 少一次启动期
+;; 子进程，且是完整快照。之后 `doom sync` 会自动重新生成；shell 环境变量
+;; 变动后重跑一次即可。弃用exec-path-from-shell
+;; (use-package! exec-path-from-shell
+;;   :custom
+;;   ;; (exec-path-from-shell-arguments (if (string-match-p "emacs-plus" invocation-directory) '("-l") nil))
+;;   (exec-path-from-shell-arguments '("-l"))
+;;   (exec-path-from-shell-variables '("PATH" "GOPATH" "PNPM_HOME"))
+;;   :config
+;;   ;; (when (not (boundp 'mac-carbon-version-string)) ;; emacs-mac 独有变量
+;;   (when (not (eq window-system 'mac))                ;; 常规eamcs上对应值为ns
+;;     (exec-path-from-shell-initialize)))
 
-;; mac下shell脚本自动补全比较慢(应该也和扫描/opt/homebrew有关)
+;; mac下shell脚本自动补全比较慢(可能和扫描/opt/homebrew有关，macports下现在似乎没问题了)
 ;; (after! sh-script
 ;;  (set-company-backend! '(sh-mode bash-ts-mode) nil))
-
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-file-watch-ignored-directories "/opt/homebrew"))
 
 ;;; 调整 Emacs GUI 选项
 ;; (setq mac-allow-anti-aliasing nil)              ;; 禁用字体抗锯齿，减少渲染压力

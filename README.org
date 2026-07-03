@@ -1,59 +1,83 @@
 * emacs-config
 
-个人 emacs 配置文件及相关资源
+个人 emacs 配置文件及相关资源。当前直接使用 Doom Emacs（安装于 =~/.config/emacs= ），
+不再经由 chemacs 做配置切换。
 
-+ spacemacs 分支: develop
-+ doom 分支: master
++ Emacs: 跟随最新稳定版 GNU Emacs（不锁定版本）
++ doom 分支: master （*当前主力配置*）
++ spacemacs 分支: develop （⚠️ *已弃用，仅作存档，不再维护*）
 
-** chemacs
-
-eamcs配置切换
-
-#+begin_src bash
-git clone https://github.com/plexus/chemacs.git
-cd chemacs
-./install.sh
-#+end_src
-
-+ =emacs-profiles.el= -> =~/.emacs-profile.el=: emacs配置列表
-+ =emacs-profile= -> =~/.emacs-profile=: 选择使用哪一个配置
-
-** spacemacs.d
-
-spacemacs 配置，目标路径: =~/.spacemacs.d=
-
-+ =init.el=: 主配置文件, 主要是各种 =layer= 的加载以及引入 =cofig-lisp= 目录里的配置
-+ =layers=: 自定义的layer
-  + =minyu=: 个人配置layer，主要是 =liberime= (pyim使用rime)相关的配置
-  + =tabnine=: 基于AI的自动补全
-+ =config-lisp=: 自定义的一些配置
-  + =personal-preference.el=: 一些基础的个人配置(包括快捷键绑定、输入法等)
-  + =graphic-xterm.el=: 图形界面和文本界面的一些针对性配置
-  + =bash-completion.el=: bash脚本的自动补全
-  + =auto-insert-header.el=: 新建一些编程语言的文件自动些文件头
-  + =exec-path-from-shell.el=: 加载环境变量，针对mac需要特殊处理下
-  + =hook.el=: 一些 =mode= 下的钩子
+#+begin_quote
+⚠️ *Spacemacs 与 chemacs 均已弃用*：日常使用已全面迁移到 Doom Emacs，不再需要
+多配置切换。=spacemacs.d/= 、=chemacs/= 及相关说明仅作历史存档保留（见文末），
+不再随新特性更新。新配置请参考 =doom.d/=。
+#+end_quote
 
 ** doom.d
 
-doom-emacs 配置，目标路径: =~/.doom.d=
+doom-emacs 配置（主力），目标路径: =~/.doom.d=
 
-+ =init.el=: 主配置文件，主要是各种 =module= 的加载
-+ =config.el=: 个人配置，会引入 =lisp= 目录里的配置
-+ =package.el=: 一些个人额外安装的 =package=
-+ =custom.el=: 个人定制的变量参数，一般是doom自动写入的
-+ =lisp=: 主要存放一些单独整理出的配置块
-  + =font.el=: 动态字体配置（可参考example文件创建 =font-spec.el= 自行配置合适值）
-  + =display.el=: 针对图形和文本界面显示相关的配置
-  + =input.el=: 输入法配置，这次直接使用了 =emacs-rime= ，感觉比 =pyim+liberime= 的方案好用
-  + =markdown.el=: markdown相关的配置，这里做了一些使用外部软件预览和导出为ppt的功能
-  + =eaf-conf.el=: =emacs-application-framework= 相关的配置，这个比较重，默认在 =init.el= 里不进行require
++ =init.el=: 模块开关配置，主要是各种 =module= 的启用（LSP 后端当前为 =(lsp +eglot)=）
++ =config.el=: 个人配置入口，按顺序 =require= 引入 =lisp= 目录里的各个模块
++ =packages.el=: 一些个人额外安装的 =package=
++ =custom.el=: doom 自动写入的定制变量，不要手动编辑
++ =lisp=: 按功能拆分的配置模块，命名约定为 =*-conf.el= / =<功能>.el=
+  + =mac-opt.el=: macOS 专属调整（在 base 之前加载）
+  + =base.el=: 基础配置（编码、鼠标、折行等）
+  + =font.el=: 基于显示 DPI 的动态字体（可参考 =font-spec.el.example= 创建本地
+    =font-spec.el= 覆盖，该文件不纳入版本管理）
+  + =hotkey.el=: 自定义快捷键
+  + =display.el=: 图形/文本界面显示相关配置
+  + =proxy.el=: 代理开关
+  + =input.el=: 输入法配置，使用 =emacs-rime= （比 =pyim+liberime= 方案更好用）
+  + =translate.el=: 翻译工具
+  + =ai.el= + =ai.d/=: AI 工具集成（见下）
+  + =git.el=: git 集成（blamer 等）
+  + =markdown-conf.el=: markdown 增强（外部软件预览、导出 ppt 等）
+  + =cc-conf.el=: C/C++ 配置（clangd、ccls）
+  + =ampl-mode.el=: AMPL 优化建模语言支持
+  + =eglot-conf.el=: LSP（eglot）配置，server 注册与悬浮文档（eldoc-box）
+  + =syntax-check.el=: flymake 语法检查（eglot 诊断直通）
+  + =format-conf.el=: 代码格式化
+  + =java-conf.el= / =auto-insert-conf.el= / =eaf-conf.el=: 随包提供但默认在
+    =config.el= 中被注释，按需取消注释启用
++ =snippets=: 新建文件时自动插入的文件头模板（c / c++ / go / python / sh 等模式）
+
+*** AI 集成（=lisp/ai.d/=）
+
+各 AI 工具模块化，共享统一的 LLM provider 体系：
+
++ =ai-common.el=: 共享的 LLM provider 配置与缓存（token 优先 GNU Pass，回退环境变量）
++ =ai.el=: AI 模块顶层加载器
++ =ai-gptel.el=: GPTel（通用对话）
++ =ai-copilot.el=: GitHub Copilot
++ =ai-codeium.el=: Codeium 补全
++ =ai-claude.el=: Claude Code 集成（基于 =claude-code-ide.el=，MCP 方式）
++ =ai-codex.el=: OpenAI Codex 集成（基于 =emacs-codex-ide=）
++ =ai-aider.el=: Aidermacs
+
+*** 常用命令
+
+#+begin_src bash
+doom sync      # 修改 init.el / packages.el 后同步模块与包
+doom build     # 重新编译配置
+doom upgrade   # 升级 doom 与包
+doom doctor    # 检查配置问题
+doom clean     # 清理过时的字节码
+#+end_src
+
+** script
+
+安装语言服务器、工具及 tree-sitter 语法：
+
++ =lang_dep.sh=: 自动识别系统与包管理器，安装 LSP/linter/formatter
+  （如 =script/lang_dep.sh c go rust= 只装指定语言）
++ =treesit_parser.sh=: 编译并安装 tree-sitter 语法到 =~/.local/lib/treesit=
 
 ** rime
 
-rime 配置，目标路径：
+rime 配置（供 =emacs-rime= 使用），目标路径：
 
-+ =spacemacs=: =~/.spacemacs/rime=
 + =doom=: =~/.doom/.local/rime=
 
 librime 安装，可参考：[[https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org][Emacs Rime 安装与使用方法]]
@@ -68,3 +92,38 @@ librime 安装，可参考：[[https://github.com/DogLooksGood/emacs-rime/blob/m
 ** colorscheme
 
 配色方案
+
+** 已弃用（存档）
+
+以下内容随迁移到"直接使用 Doom Emacs"而弃用，仅作历史存档。
+
+*** chemacs （⚠️ 已弃用）
+
+原先用 chemacs 在 doom / spacemacs 两套配置间切换；弃用 spacemacs 后只剩单一
+配置，chemacs 也随之不再需要——Doom 直接安装在 =~/.config/emacs= 。
+
+#+begin_src bash
+git clone https://github.com/plexus/chemacs.git
+cd chemacs
+./install.sh
+#+end_src
+
++ =emacs-profiles.el= -> =~/.emacs-profile.el=: emacs 配置列表
++ =emacs-profile= -> =~/.emacs-profile=: 选择使用哪一个配置（=doom= 或 =spacemacs=）
+
+*** spacemacs.d （⚠️ 已弃用）
+
+spacemacs 配置，目标路径: =~/.spacemacs.d= 。已迁移至 doom：
+
++ =init.el=: 主配置文件，主要是各种 =layer= 的加载以及引入 =config-lisp= 目录里的配置
++ =layers=: 自定义的 layer
+  + =minyu=: 个人配置 layer，主要是 =liberime= (pyim 使用 rime)相关的配置
+  + =tabnine=: 基于 AI 的自动补全
++ =config-lisp=: 自定义的一些配置
+  + =personal-preference.el=: 一些基础的个人配置(包括快捷键绑定、输入法等)
+  + =graphic-xterm.el=: 图形界面和文本界面的一些针对性配置
+  + =bash-completion.el=: bash 脚本的自动补全
+  + =auto-insert-header.el=: 新建一些编程语言的文件自动写文件头
+  + =exec-path-from-shell.el=: 加载环境变量，针对 mac 需要特殊处理下
+  + =hook.el=: 一些 =mode= 下的钩子
++ rime 配置目标路径（spacemacs 侧）: =~/.spacemacs/rime=
