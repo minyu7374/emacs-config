@@ -6,6 +6,11 @@
 
 ;;; Code:
 
+(defun gt/reload-default-translator ()
+  "Pick default translator based on the current frame's display type."
+  (let ((trans (if (display-graphic-p) 'ts-posframe 'ts-overlay)))
+    (setq gt-default-translator (alist-get trans gt-preset-translators))))
+
 (use-package! gt
   ;; :ensure t
   ;; :custom
@@ -56,14 +61,13 @@
         "ESC"    #'gt-delete-render-overlays
         "<escape>" #'gt-delete-render-overlays)
 
-  (let ((trans (if (display-graphic-p) 'ts-posframe 'ts-overlay)))
-    (setq gt-default-translator (alist-get trans gt-preset-translators))))
+  (gt/reload-default-translator))
 
-(add-hook 'after-make-frame-functions
-          (lambda (frame)
-            (with-selected-frame frame
-              (let ((trans (if (display-graphic-p frame) 'ts-posframe 'ts-overlay)))
-                (setq gt-default-translator (alist-get trans gt-preset-translators))))))
+(with-eval-after-load 'gt
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (with-selected-frame frame
+                (gt/reload-default-translator)))))
 
 (global-set-key (kbd "\C-ctt") 'gt-translate)
 (map! :leader

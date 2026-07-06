@@ -44,6 +44,9 @@
 
 (add-hook 'doom-load-theme-hook (lambda() (if (display-graphic-p) (doom/reload-custom-font))))
 
+(map! :map help-map
+      "rF" #'doom/reload-custom-font)
+
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
@@ -67,26 +70,6 @@
                 (progn
                   (setq doom-theme 'doom-one)
                   (menu-bar-mode -1))))))
-
-;; (map! :leader
-;;       (:prefix ("hrc" . "custom")
-;;        :desc "set custom font for doom theme" :nv "f" #'doom/reload-custom-font))
-
-(map! :map help-map
-      "rc" nil
-      "rcf" #'doom/reload-custom-font)
-
-(after! which-key
-  ;; (which-key-add-key-based-replacements "SPC h r c" "custom"))
-  ;; 从doom源码help-map部分抄写，新增 rc 的描述
-  (let ((prefix-re (regexp-opt (list doom-leader-key doom-leader-alt-key))))
-    (cl-pushnew `((,(format "\\`\\(?:<\\(?:\\(?:f1\\|help\\)>\\)\\|C-h\\|%s h\\) r c\\'" prefix-re))
-                  nil . "custom")
-                which-key-replacement-alist)))
-
-;; icons
-(after! dired
-  (add-hook! 'dired-mode 'all-the-icons-dired-mode))
 
 ;; 光标离窗口顶部或底部多少行时，Emacs 将自动滚动窗口，以使光标保持在指定的行数之外，改善阅读体验
 (setq scroll-margin 5)
