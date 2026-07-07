@@ -97,7 +97,8 @@
 
        :checkers
        (syntax +childframe +flymake) ; tasing you for every semicolon you forget
-       ;;(spell +flyspell) ; tasing you for misspelling mispelling
+       ;; (spell +flyspell +hunspell) ; tasing you for misspelling mispelling(适合中英文混合)
+       spell ; tasing you for misspelling mispelling(默认 spell-fu + aspell，英文质量高)
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools

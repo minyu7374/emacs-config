@@ -83,8 +83,15 @@
 ;;     (fcitx-default-setup)))
 
 ;; 拼写检查
-;;(setq ispell-program-name "aspell")
-;;(setq ispell-dictionary "en_US")
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "en")
+;; spell-fu 仅当个人词典文件存在时才注册可写词典，否则 `zg' 报“无词典可添加”；
+;; Doom 已算好路径 <data>/ispell/en.pws 但不创建，这里在 ispell 加载后补上。
+(after! ispell
+  (when (and ispell-personal-dictionary
+             (not (file-exists-p ispell-personal-dictionary)))
+    (make-directory (file-name-directory ispell-personal-dictionary) t)
+    (write-region “personal_ws-1.1 en 0\n” nil ispell-personal-dictionary nil 0)))
 
 (provide 'input)
 
