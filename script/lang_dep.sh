@@ -32,9 +32,8 @@ if [ "$OS" == Linux ]; then
 fi
 
 if [ "$OS" == Mac ]; then
-    for cmd in port brew; do
-        which $cmd 2>/dev/null && DISTRO="MacPorts" && break
-    done
+    which port >/dev/null 2>&1 && DISTRO="MacPorts"
+    [ -z "$DISTRO" ] && which brew >/dev/null 2>&1 && DISTRO="Homebrew"
 fi
 
 function pre_task() {
@@ -143,7 +142,7 @@ function for_go() {
 function for_haskell() {
     case "$DISTRO" in
     # Gentoo)
-        # # sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
+        # sudo emerge --update ghc haskell-language-server hoogle hlint #app-emacs/haskell-mode
         # cabal install hlint hoogle
         # ;;
     Arch)
@@ -153,7 +152,8 @@ function for_haskell() {
         sudo zypper in -y ghc ghc-hlint cabal-install
         ;;
     *)
-        # ghcup install ghc cabal hls stack
+        curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+        ghcup install ghc cabal hls stack
         cabal install hlint hoogle
         #cabal install haskell-mode
         ;;
@@ -302,8 +302,8 @@ function for_graph() {
 }
 
 function for_json() {
-    # $npm_install vscode-langservers-extracted
-    $npm_install vscode-json-languageserver
+    $npm_install vscode-langservers-extracted
+    # $npm_install vscode-json-languageserver
 }
 
 function for_docker() {
