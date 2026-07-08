@@ -88,6 +88,7 @@
 
 (require 'base)
 (require 'font)
+(require 'evil-conf)
 (require 'hotkey)
 (require 'display)
 (require 'proxy)
