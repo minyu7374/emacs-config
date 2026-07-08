@@ -37,6 +37,11 @@
 (add-hook! '(go-mode-hook go-ts-mode-hook) #'apheleia-mode)
 (add-hook! '(lisp-mode-hook emacs-lisp-mode-hook) #'apheleia-mode)
 
+;; buf format 不吃 stdin，且会扫目标文件所在目录（在 macOS TMPDIR 根会撞到受限的
+;; TemporaryItems 而失败），故用 apheleia 的 `file` 直接格式化项目内真实文件
+(set-formatter! 'buf '("buf" "format" file) :modes '(protobuf-ts-mode))
+;; (add-hook! '(protobuf-ts-mode-hook protobuf-mode-hook) #'apheleia-mode)
+
 ;; 按C/C++多行注释风格进行注释
 (defun comment-region-in-clike-multi-line-style (beg end)
   "Comment the region from BEG to END using C-like multi-line style."

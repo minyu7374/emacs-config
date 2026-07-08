@@ -55,6 +55,9 @@
 (package! mermaid-mode)
 (package! d2-mode)
 
+;; Protobuf: tree-sitter 编辑模式（LSP/格式化走 buf CLI，见 protobuf-conf.el / format-conf.el）
+(package! protobuf-ts-mode)
+
 ;; (package! gmpl-mode)
 ;; (package! tmux-pane)
 

@@ -314,11 +314,17 @@ function for_docker() {
     go install github.com/jessfraz/dockfmt@latest
 }
 
+function for_protobuf() {
+    # buf 内置 language server（buf lsp serve，需 buf ≥ 1.59）、格式化与 lint 一把梭
+    go install github.com/bufbuild/buf/cmd/buf@latest
+    buf --version
+}
+
 pre_task
 
 [ -z "$*" ] &&
     # grep -oP '(?<=for_).*(?=\(\) \{)' ./script/lang_dep.sh | xargs
-    set -- treesit c go haskell markdown python rust shell web graph json docker
+    set -- treesit c go haskell markdown python protobuf rust shell web graph json docker
 
 for lang in "$@"; do
     eval "for_$lang"

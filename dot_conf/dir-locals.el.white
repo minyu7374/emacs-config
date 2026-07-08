@@ -15,10 +15,10 @@
 ;;  (sql-mode     . ((eval . (apheleia-mode 1)))))
 
 ;; dolist
-((nil . ((eval . (dolist (mode '(c-mode c++-mode c-ts-mode c++-ts-mode 
-                                 python-mode python-ts-mode 
-                                 java-mode java-ts-mode 
-                                 json-mode json-ts-mode 
+((nil . ((eval . (dolist (mode '(c-mode c++-mode c-ts-mode c++-ts-mode
+                                 python-mode python-ts-mode
+                                 java-mode java-ts-mode
+                                 json-mode json-ts-mode
                                  sql-mode))
                    (when (derived-mode-p mode)
                      (apheleia-mode 1)))))))

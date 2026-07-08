@@ -102,6 +102,7 @@
 ;; (require 'java-conf)
 (require 'ampl-mode)
 (require 'eglot-conf)
+(require 'protobuf-conf)
 (require 'syntax-check)
 (require 'format-conf)
 ;; (require 'auto-insert-conf)
