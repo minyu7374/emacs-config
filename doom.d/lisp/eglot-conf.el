@@ -52,7 +52,7 @@ it in its :origin property."
 ;; 是否在 eglot buffer 自动开启光标处悬浮文档：k 只切当前 buffer，K 切它并即时应用到
 ;; 所有 eglot buffer（取代旧的 global minor mode——那种写法开启时会污染全部 buffer、
 ;; 关闭又对新 buffer 不生效）。
-(defvar +eglot-doc-hover t
+(defvar +eglot-doc-hover nil
   "When non-nil, auto-enable at-point documentation in eglot buffers.")
 
 ;; 前向声明：命令里会读 eldoc-box 的悬浮开关状态与内部清理定时器，
@@ -129,6 +129,12 @@ Works whether or not the auto hover (`eldoc-box-hover-mode') is on."
       "C-c l e" #'flymake-show-buffer-diagnostics
       "C-c l i" #'consult-imenu
       "C-c l R" #'eglot-reconnect)
+
+;; hover-mode 开关
+(map! :leader
+      (:prefix "t"
+       :desc "Toggle doc hover" :nv "h" #'eldoc-box-hover-mode
+       :desc "Toggle doc hover (all)" :nv "H" #'+eglot/toggle-doc-hover-globally))
 
 (provide 'eglot-conf)
 
