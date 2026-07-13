@@ -67,6 +67,12 @@
 ;; consult-eglot 由 tools/lsp +eglot 自动按需安装；诊断走 checkers/syntax +flymake 直通。
 (package! eldoc-box)
 
+;; 禁用 package-lint-flymake：它只对要发布到 MELPA 的 elisp 包（校验 header/依赖规范）
+;; 有意义。lang/emacs-lisp 模块用 `:after flymake` 加载它，而 *scratch*（lisp-interaction-mode）
+;; 启动即开 flymake，导致它连带 require 整个 package.el + url + auth-source 栈（约 25ms）。
+;; 内置的 elisp-flymake-byte-compile / checkdoc 检查不依赖它，禁用后日常检查不受影响。
+(package! package-lint-flymake :disable t)
+
 ;; shell 环境改用 `doom env` 快照（见 mac-opt.el），exec-path-from-shell 可弃用。
 ;; (package! exec-path-from-shell :ignore (not (eq system-type 'darwin)))
 
