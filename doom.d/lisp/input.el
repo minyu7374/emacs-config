@@ -57,7 +57,7 @@
   (setq rime-translate-keybindings
         '("C-f" "C-b" "C-n" "C-p" "C-a" "C-e" "C-d" "C-k" "C-h" "C-g"
           "<left>" "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>"
-          "C-!" "C-@" "C-#" "C-$" "C-%" "C-^" "C-&"))
+          "C-!" "C-@" "C-#" "C-$" "C-%" "C-^" "C-&" "C-*"))
 
   (global-set-key (kbd "C-,") 'rime-inline-ascii)
   (global-set-key (kbd "C-.") 'rime-force-enable)
