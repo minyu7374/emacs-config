@@ -175,6 +175,9 @@ function for_markdown() {
     ## latex math preview
     $npm_install git+https://gitlab.com/matsievskiysv/math-preview
 
+    # mermaid
+    $npm_install @mermaid-js/mermaid-cli
+
     # mdopen go-grip grip
     go install github.com/chrishrb/go-grip@latest
 
