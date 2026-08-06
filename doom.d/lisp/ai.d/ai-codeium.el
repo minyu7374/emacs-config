@@ -14,26 +14,26 @@
   ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
   ;; otherwise, make sure that the codeium.el file is on load-path
 
-  :init
-  ;; use globally
-  (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
-  ;; or on a hook
-  ;; (add-hook 'python-mode-hook
-  ;;     (lambda ()
-  ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
+  ;; :init
+  ;; ;; use globally
+  ;; (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+  ;; ;; or on a hook
+  ;; ;; (add-hook 'python-mode-hook
+  ;; ;;     (lambda ()
+  ;; ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
 
-  ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
-  ;; (add-hook 'python-mode-hook
-  ;;     (lambda ()
-  ;;         (setq-local completion-at-point-functions
-  ;;             (list (cape-capf-super #'codeium-completion-at-point #'lsp-completion-at-point)))))
-  ;; an async company-backend is coming soon!
+  ;; ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
+  ;; ;; (add-hook 'python-mode-hook
+  ;; ;;     (lambda ()
+  ;; ;;         (setq-local completion-at-point-functions
+  ;; ;;             (list (cape-capf-super #'codeium-completion-at-point #'lsp-completion-at-point)))))
+  ;; ;; an async company-backend is coming soon!
 
-  ;; codeium-completion-at-point is autoloaded, but you can
-  ;; optionally set a timer, which might speed up things as the
-  ;; codeium local language server takes ~0.2s to start up
-  (add-hook 'emacs-startup-hook
-            (lambda () (run-with-idle-timer 0.3 nil #'codeium-init)))
+  ;; ;; codeium-completion-at-point is autoloaded, but you can
+  ;; ;; optionally set a timer, which might speed up things as the
+  ;; ;; codeium local language server takes ~0.2s to start up
+  ;; (add-hook 'emacs-startup-hook
+  ;;           (lambda () (run-with-idle-timer 0.3 nil #'codeium-init)))
 
   :defer t ;; lazy loading, if you want
   :config
@@ -72,6 +72,24 @@
   ;; (setq codeium/document/text 'my-codeium/document/text)
   ;; (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
   )
+
+;; 默认关闭，和 copilot 的默认关闭 + 手动开关保持一致（codeium 启动时会连接本地
+;; language server，之前误触发过代理转发报错）；需要时用全局开关打开
+(defvar +codeium-enabled nil)
+
+(defun +codeium-toggle ()
+  "全局开关 Codeium 补全."
+  (interactive)
+  (if (setq +codeium-enabled (not +codeium-enabled))
+      (progn
+        (codeium-init)
+        (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+        (message "Codeium enabled"))
+    (setq completion-at-point-functions (delq #'codeium-completion-at-point completion-at-point-functions))
+    (message "Codeium disabled")))
+
+(map! :leader
+      :desc "Toggle Codeium" "t m" #'+codeium-toggle)
 
 (provide 'ai-codeium)
 
