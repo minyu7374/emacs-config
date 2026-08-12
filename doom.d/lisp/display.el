@@ -70,6 +70,13 @@
 ;; 光标离窗口顶部或底部多少行时，Emacs 将自动滚动窗口，以使光标保持在指定的行数之外，改善阅读体验
 (setq scroll-margin 5)
 
+;; 打字时推迟着色。font-lock 默认在每次改动后同步重新着色，成本取决于 major mode
+;; 的匹配函数要扫多大范围——凡是需要跨行匹配的标记，都可能把单键成本放大到整个块。
+;; 比如 markdown-mode 的 markdown-match-bold 会从所在块的块首一路扫到光标，一张
+;; 30 行、加粗密集的表格实测 50ms/键。设成非 nil 后改为空闲 0.05s 才上色，
+;; 输入不再被着色阻塞。
+(setq jit-lock-defer-time 0.05)
+
 ;; 缩进提示
 (after! indent-bars
   (setq indent-bars-treesit-support t)  ;; 使用 treesit AST 判断缩进
