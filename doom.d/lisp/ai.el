@@ -10,11 +10,12 @@
 
 (add-to-list 'load-path (expand-file-name "ai.d" (file-name-directory (or load-file-name buffer-file-name))))
 
-(require 'ai-common)
-(require 'ai-gptel)
-(require 'ai-copilot)
-(require 'ai-codeium)
-(require 'ai-claude)
+;; (require 'ai-common)
+;; (require 'ai-gptel)
+;; (require 'ai-copilot)
+;; (require 'ai-codeium)
+;; (require 'ai-claude)
+(require 'ai-gptel-openai)
 (require 'ai-codex)
 ;;(require 'ai-aider)
 

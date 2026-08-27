@@ -90,17 +90,17 @@
 ;; (package! chatgpt-shell
 ;;   :recipe (:host github :repo "xenodium/chatgpt-shell" :files ("chatgpt-shell*.el")))
 
-;; AI code completion
-(package! copilot
-  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
-(package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
+;; ;; AI code completion
+;; (package! copilot
+;;   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 
 ;; ;; (package! transient)  ;; tool/magit 中已添加
 ;; (package! aider :recipe (:host github :repo "tninja/aider.el"))
 ;; (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))
 
-(package! eat) ;; 终端后端，实测比 vterm 稳；切换见 ai-claude.el
-(package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el")) ;; 基于 MCP 的 IDE 集成（ediff 审查、暴露 Emacs 工具给 Claude）
+;; (package! eat) ;; 终端后端，实测比 vterm 稳；切换见 ai-claude.el
+;; (package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el")) ;; 基于 MCP 的 IDE 集成（ediff 审查、暴露 Emacs 工具给 Claude）
 ;; (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el")) ;; 切到 claude-code-ide
 ;; (package! claudemacs :recipe (:host github :repo "cpoile/claudemacs"))
 ;; Codex 对应物（纯 buffer 客户端，见 ai-codex.el）；bin/ 是 Emacs MCP 桥脚本，
