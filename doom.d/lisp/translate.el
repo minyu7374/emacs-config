@@ -55,11 +55,23 @@
                                    (gt-google-engine))
                          :render (gt-buffer-render)))))
 
-  ;; 原本只有鼠标退出，这里添加q/esc退出
+  ;; Overlay 的 keymap 只在光标位于原文覆盖范围内生效，不作用于 posframe。
   (map! :map gt-overlay-render-map
         "q"      #'gt-delete-render-overlays
         "ESC"    #'gt-delete-render-overlays
         "<escape>" #'gt-delete-render-overlays)
+
+  ;; 图形界面默认用 posframe；gt 的 Evil 关闭键默认是带前缀的 ", q"。
+  ;; 每次初始化都会重建局部 keymap，因此在 hook 中为浮窗单独绑定退出键。
+  (add-hook 'gt-posframe-pop-render-init-hook
+            (lambda ()
+              (let ((quit (lambda ()
+                            (interactive)
+                            (posframe-delete gt-posframe-pop-render-buffer))))
+                (map! :map gt-buffer-render-local-map
+                      :nviem "q" quit
+                      :nviem "ESC" quit
+                      :nviem "<escape>" quit))))
 
   (gt/reload-default-translator))
 

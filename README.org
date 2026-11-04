@@ -30,7 +30,8 @@ doom-emacs 配置（主力），目标路径: =~/.doom.d=
   + =display.el=: 图形/文本界面显示相关配置
   + =proxy.el=: 代理开关
   + =input.el=: 输入法配置，使用 =emacs-rime= （比 =pyim+liberime= 方案更好用）
-  + =translate.el=: 翻译工具
+  + =translate.el=: 翻译工具；图形界面默认使用 posframe，焦点在翻译浮窗内时
+    可按 =q= / =Esc= 关闭（gt 原有的 =, q= 也保留）；终端默认使用 overlay
   + =ai.el= + =ai.d/=: AI 工具集成（见下）
   + =git.el=: git 集成（blamer 等）
   + =markdown-conf.el=: markdown 增强（外部软件预览、导出 ppt 等）
